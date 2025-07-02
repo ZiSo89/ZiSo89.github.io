@@ -1,0 +1,102 @@
+Here is the raw knowledge file:
+
+```text
+# SRC System Knowledge Base
+
+## I. Quiz Questions and Answers (from quizs all merged.pdf)
+
+### Quiz Entry 1
+**Question:** Where does gcs store its configuration information in the database?
+**Answer:** schema "syslog", table "gcs_bindings"
+
+### Quiz Entry 2
+**Question:** Why are we tied to an Oracle database, and cannot use another DBMS (database management system)?
+**Answer:** A lot of business logic is implemented in database code, and would have to be rewritten
+
+### Quiz Entry 3
+**Question:** Which of the following statements about lifts are correct?
+**Answer:**
+* The difference between twin lifts and quad lifts is that quad lifts have two platforms instead of one.
+* Classic lifts stand in the aisle and serve two racks at a time.
+* Twin lifts stand in front of a rack, so you need two lifts per aisle.
+* In an OSR Evo 2D system, you could have fewer lifts than racks.
+
+### Quiz Entry 4
+**Question:** Match the below mentioned processes and the descriptions of their functionality to get correct statements.
+* opa → controls the picking stations
+* hio_status → reports status changes to the host system
+* naming → provides for inter-process communication by maintaining IP addresses and ports
+* gcs → maintains the configurations of all processes in the SRC system
+* steuer → is responsible for the prezone
+
+### Quiz Entry 5
+**Question:** Which version control system do we use at KNAPP for maintaining the SRC source code?
+**Answer:** git
+
+## II. SRC Database and System Information (from SRC database_merged.pdf)
+
+### II.A. Overview and General Concepts
+* SRC (and KiSoft One) uses an Oracle database to persist data for reports.
+* Data is accessible via a standardized SQL interface, e.g., using `sqlplus` or external applications like Toad/SQL Developer.
+* In platform 13, there is one common DB instance ("KISOFT1") for both SRC and KiSoft One, unlike platform 12 which had separate instances.
+
+### II.B. Database Schemas
+The Oracle instance for SRC includes several schemas:
+* **osr schema**: The main schema for the SRC system. It holds all relevant master data (e.g., products, containers, locations) and variable data (e.g., order lines, container locations). It contains approximately 250 tables, 170 views, many packages, and nearly 350 triggers.
+* **syslog schema**: Stores configurations managed by the `gcs` process, and logging information from the SRC system (log messages, errors). It also stores version information about the SRC system and its components, crucial for troubleshooting, compatibility, and tracking changes.
+* **osr_aq schema**: Utilizes Oracle's "Advanced Queuing" (AQ) feature to allow processes to notify each other of events. Its sole purpose is event notification, not data storage. It eliminates periodic polling for new data by allowing messages to be "enqueued" (sent) and "dequeued" (received).
+    * **Architecture**: Employs messages, queues, senders, and recipients.
+    * **Queues**: `osr_order_aq` and `orderstart_aq` (the latter used with an `os` process).
+    * **Configuration tables**: Used for configuring queues and queue tables, typically accessed by DB administration tools.
+* **osr_af schema**: Used for connection to the KiSoft Navigator, not covered in the document.
+
+### II.C. Naming Conventions (osr schema)
+* **General**: Database objects (tables, packages, triggers) generally have the prefix "osr_" (stands for "Oracle SCM Runtime").
+* **Tables**:
+    * Descriptive names; master data tables usually single word, child/related tables multi-word separated by underscores.
+    * Tables for history information end in "_HIST" (e.g., `CONTAINER_LOCATION_HIST`).
+    * `gcs` tables (Global Configuration Service) also follow "gcs_" convention (e.g., `gcs_bindings`, `gcs_configs`).
+    * Communication tables between SRC and the Oracle DB also follow "osr_" (e.g., `osr_host_msg`, `osr_dialog`).
+    * Exceptions (pre-convention): `article_data`, `article_stock_data`, `process_variable`.
+* **Columns**: Usually prefixed with a 3- to 4-character abbreviation identifying the table (e.g., `LOC_` for `LOCATIONS` table columns).
+* **Primary Keys**: Numeric, named `<tablename>_ID`. Foreign keys are suffixed with "_ID".
+* **Packages**: Suffix "_PKG" for business logic, "_CONST" for constants, "_OT"/"_INTERFACE" for interfaces.
+* **Triggers**: Suffix/infix indicates when trigger fires.
+    * "B" (Before) / "A" (After) DML operation.
+    * "I" (INSERT) / "U" (UPDATE) / "D" (DELETE) for relevant operation(s).
+    * "R" (Row) / "S" (Statement) for execution scope.
+    * Example: "BIR" = "before INSERT for each row"; "_AIUDR" = "after INSERT, UPDATE or DELETE for each row".
+
+### II.D. Architecture and Database Code
+* All database interaction from SRC is via PL/SQL packages, not direct table access. This provides separation of concerns, maintainability, and encapsulation.
+* SRC relies heavily on PL/SQL code implemented within the database for business logic, including DML operations (INSERT, UPDATE, DELETE) encapsulated in packages and triggers.
+* This reliance on PL/SQL ties SRC software to Oracle, preventing the use of other database suites.
+* All database code is maintained in Git for version control, traceability, and collaboration, deployed via CI/CD pipeline.
+
+### II.E. Important Tables (osr schema)
+* **CONTAINERS**: Holds main information on source trays/containers used for OSR storage. Primary key is `CONT_ID` (combined with OSR ID), a VARCHAR2(64), also used for barcode labels. Entries created when WCS sends a transport order with incoming containers. `CONT_TYPE_ID` is foreign key to `CONTAINER_TYPES`.
+    * Child table: `CONTAINER_LOCATIONS` (current storage location).
+* **SLOTS**: Holds entries for all compartments within containers. One entry for "single-slot container" (full tray), two for one separator, etc. Child table to `CONTAINERS`, references with `SLOT_TRAY_ID`. `SLOT_TYPE` is foreign key to `SLOT_TYPES`.
+    * Common slot types: "16R" (single slot/full), "8R" (2 compartments/half), "3R" (3 compartments), "4R" (4 compartments).
+    * Child table: `SLOT_CONTENTS` (products stored in slots).
+* **LOCATIONS**: Contains all possible container locations (storage, shuttle LHDs, lift buffers, pools). Populated when `osr_create_instance_<osrid>.sh` script runs. `LOC_EXTERNAL_CODE` holds human-readable names (e.g., S01.002.0054.L for Aisle 1, Level 2, Position 54, Left rack).
+* **PRODUCT_INFOS**: Master information on articles used in the warehouse.
+    * Child table: `PRODUCTS` (detailed product variants).
+* **TRANSPORTERS**: Holds all transporters (shuttles, lifts, entrances, exits, STEUER transporter).
+* **PROPERTY_DEFS / OSR_PROPERTIES**:
+    * `PROPERTY_DEFS`: Defines system configuration parameters set in the database (name, description, default value; ~300 entries).
+    * `OSR_PROPERTIES`: Stores settings that deviate from default values for a specific OSR instance.
+
+### II.F. Startup of the SRC System
+To start the SRC system after an instance is created:
+1.  `sudo systemctl start osr` (Requires `sudo` rights; password is for "osr" user, typically "syslog").
+2.  `osr1` (alias to switch to the correct OSR instance).
+3.  `cfg` (alias to navigate to an instance's config directory).
+4.  `for i in *py ; do ./$i ; done` (executes all Python files in the directory).
+5.  `osr_start`
+6.  `svci` (SRC command to show status of all processes).
+
+**To restart**: `osr_stop` then `osr_start`.
+**To check status**: `svci`.
+**To stop**: `osr_stop`.
+```

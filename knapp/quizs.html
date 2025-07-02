@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Answers</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f9fc; /* Very light blue-gray */
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 950px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08); /* Slightly more prominent shadow */
+        }
+        .question-block {
+            margin-bottom: 35px;
+            border: 1px solid #c8e6c9; /* Pastel green border */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px;
+            background-color: #e8f5e9; /* Pastel green background */
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.03); /* Light inner shadow */
+            transition: all 0.3s ease-in-out;
+        }
+        .question-block:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); /* Enhanced shadow on hover */
+            transform: translateY(-3px); /* Slight lift effect */
+        }
+        .question-content {
+            font-size: 1.1em;
+            color: #4a4a4a;
+            margin-bottom: 15px;
+        }
+        .question-title {
+            font-size: 1.35em; /* Slightly larger for emphasis */
+            color: #3f51b5; /* Pastel blue for titles */
+            margin-bottom: 15px;
+            font-weight: 700; /* Bolder */
+            border-bottom: 2px solid #a7c0d8; /* Underline effect */
+            padding-bottom: 8px;
+            display: inline-block; /* To make border-bottom fit content */
+        }
+        .answer-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        .answer-item {
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 7px; /* Slightly more rounded answer items */
+            font-size: 0.95em;
+            transition: background-color 0.2s ease;
+        }
+        .correct-answer {
+            background-color: #dcedc8; /* Lighter pastel green */
+            border: 1px solid #aed581; /* Matching border */
+            color: #33691e;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2; /* Lighter pastel red */
+            border: 1px solid #ef9a9a; /* Matching border */
+            color: #b71c1c;
+            opacity: 0.9;
+        }
+        pre {
+            background-color: #f0f4f7; /* Light grey-blue for code blocks */
+            border: 1px solid #d4e0eb; /* Subtle border */
+            border-left: 5px solid #64b5f6; /* Blue left border for emphasis */
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto; /* For horizontal scrolling if code is too long */
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; /* Monospaced font for code */
+            font-size: 0.9em;
+            color: #3a4750;
+            white-space: pre-wrap; /* Ensures line wrapping for long lines */
+            word-wrap: break-word; /* Prevents overflow */
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .quiz-summary {
+            background-color: #e3f2fd; /* Pastel blue */
+            border: 1px solid #90caf9; /* Matching border */
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 40px;
+            font-size: 0.9em;
+            color: #1976d2;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .quiz-summary p {
+            margin: 5px 0;
+        }
+
+        /* Responsive media query for small screens */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px auto;
+                padding: 15px;
+            }
+            .question-block {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            .question-title {
+                font-size: 1.2em;
+                margin-bottom: 10px;
+            }
+            .question-content {
+                font-size: 1em;
+            }
+            .answer-item {
+                padding: 8px 10px;
+                font-size: 0.9em;
+            }
+            pre {
+                padding: 10px;
+                font-size: 0.85em;
+            }
+            .quiz-summary {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Where does gcs store its configuration information in the database?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. schema "syslog", table "gcs_bindings"</li>
+                <li class="answer-item incorrect-answer">b. schema "osr_aq", table "gcs_config"</li>
+                <li class="answer-item incorrect-answer">c. schema "osr", tables "gcs_defs" and "gcs_properties"</li>
+                <li class="answer-item incorrect-answer">d. schema "osr", table "gcs_configs"</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Why are we tied to an Oracle database, and cannot user another DBMS (database management system)?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. A lot of business logic is implemented in database code, and would have to be rewritten</li>
+                <li class="answer-item incorrect-answer">a. Only Oracle provides the performance that we require for our software</li>
+                <li class="answer-item incorrect-answer">c. This statement is incorrect; we can also use MSSQL and mySQL</li>
+                <li class="answer-item incorrect-answer">d. Oracle is the cheapest database option for warehouses</li>
+                <li class="answer-item incorrect-answer">e. Oracle is included with the Linux system, so we have no efforts and costs</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What does the code below do? Check all options that apply:</p>
+            <pre>
+BEGIN
+set_context('srcrookie', 'osr1');
+debug_pkg.info('delete_container', debug_pkg.DBG_VERBOSE, 'Deleting movement orders for container %1', 'CONT70001');
+DELETE FROM movement orders
+WHERE mvo container 'CONT70001'
+COMMIT;
+$AND~mvo\_osr\_id=ct\times\_pkg\cdot get\_os~r\_id();$
+scnt_pkg.g_create_empty_allowed: false;
+cont_pkg.remove_container('CONT70001', 0);
+COMMIT;
+END;
+            </pre>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. A transport order for a container is removed from the database through SQL</li>
+                <li class="answer-item correct-answer">h. Information for a container is removed from the database by calling a package procedure</li>
+                <li class="answer-item correct-answer">f. Debug information is written in the ora logs via a package procedure</li>
+                <li class="answer-item correct-answer">e. In total, 4 different packages are called from this code</li>
+                <li class="answer-item correct-answer">d. All operations are carried out on instance of OSR1</li>
+                <li class="answer-item incorrect-answer">a. Data changes are NOT saved in the database</li>
+                <li class="answer-item incorrect-answer">c. None of these actions will be visible when entering "ktf ora"</li>
+                <li class="answer-item incorrect-answer">g. A new container CONT70001 is inserted into the database</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What happens when the last designated recipient of a message consumes the message?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. The message is removed from the queue</li>
+                <li class="answer-item incorrect-answer">a. The message is deleted from AQ MESSAGE_TYPES</li>
+                <li class="answer-item incorrect-answer">c. WCS is informed about the message consumption</li>
+                <li class="answer-item incorrect-answer">d. The message is recorded in the MESSAGE_ARCHIVE queue</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which agents do you expect to find in the "AQ_AGENTS" table?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">e. HIOStatus</li>
+                <li class="answer-item correct-answer">d. steuer</li>
+                <li class="answer-item correct-answer">b. spider</li>
+                <li class="answer-item incorrect-answer">a. shuttle</li>
+                <li class="answer-item incorrect-answer">c. plc</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Some entries in database tables can hold specific values (like e.g. "10" in the "occupied" column). Where could you look up what these values mean?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. In database packages named "<...>_CONST"</li>
+                <li class="answer-item incorrect-answer">b. In the dbconn_cfg.py</li>
+                <li class="answer-item incorrect-answer">c. In the "constants.ini" file in the config directory</li>
+                <li class="answer-item incorrect-answer">d. In the OSR_PROPERTIES table</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What does the following error message tell you when trying to delete one LOCATION entry from the database?</p>
+            <pre>
+ERROR at line 1:
+ORA-02292: integrity constraint (OSR.FK_LZ_LOCATIONS) violated child record found
+            </pre>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">c. There is a foreign key from another table (LOCATION_ZONES) to LOCATIONS, and there are child records</li>
+                <li class="answer-item incorrect-answer">a. The LOCATIONS table is already empty; there is nothing to delete</li>
+                <li class="answer-item incorrect-answer">b. You misspelled the table name</li>
+                <li class="answer-item incorrect-answer">d. The tablespace is full; there is no space left for this operation</li>
+                <li class="answer-item incorrect-answer">e. The database table is currently locked by another user. You have to try again later.</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">In a warehouse with multiple OSRs, how is the database organized to deal with several instances?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. Most of the tables have a column "..._osr_id" which refers to the OSR instance</li>
+                <li class="answer-item incorrect-answer">a. The primary keys of all tables have specific ranges for each OSR instance</li>
+                <li class="answer-item incorrect-answer">b. Each OSR instance has its own database schema</li>
+                <li class="answer-item incorrect-answer">c. Each OSR instance has its own database</li>
+                <li class="answer-item incorrect-answer">e. Each OSR instance has its own set of database tables</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">In which database table does SRC store information about sources and targets that cannot be reached temporarily because a transporter is unavailable?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">c. CLOSED_ROUTES</li>
+                <li class="answer-item incorrect-answer">a. INACCESSIBLE_POSITIONS</li>
+                <li class="answer-item incorrect-answer">b. LOCKED_LOCATIONS</li>
+                <li class="answer-item incorrect-answer">d. NO_MOVE</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What do column names in tables of the OSR schema usually start with?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">e. An abbreviation of the table name</li>
+                <li class="answer-item incorrect-answer">a. There is no convention at all</li>
+                <li class="answer-item incorrect-answer">b. The string "OSR_"</li>
+                <li class="answer-item incorrect-answer">c. The string "COL_"</li>
+                <li class="answer-item incorrect-answer">d. The numeric ID of the OSR instance</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which of the following statements concerning adapter processes are correct? Check all that apply:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">c. Adapter processes provide an interface between main processes and some hardware devices</li>
+                <li class="answer-item correct-answer">b. Adapter processes do not connect to the OSR database</li>
+                <li class="answer-item incorrect-answer">a. The adapter processes are the last ones to start during SRC startup</li>
+                <li class="answer-item incorrect-answer">d. Every adapter process needs access to the wh_model.xml file</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">In an Evo system, there is a direct communication between spider and shuttle.</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">False</li>
+                <li class="answer-item incorrect-answer">True</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which process will only exist in an Evo 2D system?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">e. cruise control</li>
+                <li class="answer-item incorrect-answer">a. grid</li>
+                <li class="answer-item incorrect-answer">b. shuttle</li>
+                <li class="answer-item incorrect-answer">c. evo2 shuttle</li>
+                <li class="answer-item incorrect-answer">d. two_d</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which of the statements below are correct for shuttle related processes? Check all that apply:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">h. The shuttle process must be able to reach the shuttles on network level</li>
+                <li class="answer-item correct-answer">e. For Evo systems, the grid adapter is between spider and shuttle</li>
+                <li class="answer-item correct-answer">d. Most of the configurations in the shuttle config are entered by shuttle commissioning</li>
+                <li class="answer-item correct-answer">c. The shuttle adapter process needs to read the wh_model.xml</li>
+                <li class="answer-item correct-answer">g. In a simulator environment, it is ok to remove the "!TODO!" entries from the shuttle config</li>
+                <li class="answer-item incorrect-answer">a. Each OSR level has its own shuttle configuration file</li>
+                <li class="answer-item incorrect-answer">b. Routing information is configured in the grid_cfg.py</li>
+                <li class="answer-item incorrect-answer">f. Shuttle configuration is not stored within gcs, but in shuttle_cfg.xml</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">When you are unsure if the RackStation from the example below is the correct station type or generally if you want to know which station types for PLC stations are valid -- in which file could you look this up?</p>
+            <pre>
+##### Rack Admin Station #####
+#Depending on the inspection set-up of the PLC, only one or one per
+#CPU is needed.
+If more than one is needed, the ids have to be
+# different.
+#If configured, then shuttle stations are not necessary.
+createPlcStation (9999, OSR.PlcAdapterCfg.RackStation, "Logging Stations from SPS", "MESSAGE-STATION"),
+            </pre>
+            <p class="answer-item correct-answer">The correct answer is: plc_adapter_cfg.idl</p>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What does a "1" as the "second digit in the number of a prezone PLC station tell you?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. This is the lower conveyor line, so it will be for targets</li>
+                <li class="answer-item incorrect-answer">b. This is an entrance to an aisle</li>
+                <li class="answer-item incorrect-answer">c. This is a lift station</li>
+                <li class="answer-item incorrect-answer">d. This station belongs to OSR1</li>
+                <li class="answer-item incorrect-answer">e. This station is next to a picking station</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">In what sequence do messages appear in a PLC log file for a station in the prezone?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">announceContainer</li>
+                <li class="answer-item correct-answer">containerProcessed</li>
+                <li class="answer-item correct-answer">deleteContainer</li>
+                <li class="answer-item correct-answer">containerClamped</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Following the standard nomenclature for PLC station numbers, match the stations below to their corresponding types:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">12900: lift entrance reading</li>
+                <li class="answer-item correct-answer">11601: OSR lift</li>
+                <li class="answer-item correct-answer">21600: OSR lift</li>
+                <li class="answer-item correct-answer">12403: prezone helper station</li>
+                <li class="answer-item correct-answer">12502: diversion to an aisle</li>
+                <li class="answer-item correct-answer">12802: picking station</li>
+                <li class="answer-item correct-answer">11704: diversion to picking station</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">How many plc processes exist in an OSR instance?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. As many processes as there are PLC CPUs</li>
+                <li class="answer-item incorrect-answer">a. One process per level of the warehouse building</li>
+                <li class="answer-item incorrect-answer">b. One per connected PLC station</li>
+                <li class="answer-item incorrect-answer">c. One maximum</li>
+                <li class="answer-item incorrect-answer">e. Two maximum</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What direction instructions are usually sent from SRC to a PLC station in the prezone?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. 0 (stay on route) / -1 (divert)</li>
+                <li class="answer-item incorrect-answer">a. 0 (go straight) / 1 (go left) / 2 (go right)</li>
+                <li class="answer-item incorrect-answer">b. 0 (keep going) / 1 (divert)</li>
+                <li class="answer-item incorrect-answer">c. S (straight) / D (divert)</li>
+                <li class="answer-item incorrect-answer">e. -0 (go left) / +0 (go right)</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which command can show you the current configurations that gcs holds in a simple text format?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. gls</li>
+                <li class="answer-item incorrect-answer">a. cfg_all</li>
+                <li class="answer-item incorrect-answer">b. SELECT * FROM gcs_configs</li>
+                <li class="answer-item incorrect-answer">c. gcs --show</li>
+                <li class="answer-item incorrect-answer">e. gcs_show</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which statements about SRC base processes are correct? Check all that apply:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">c. gcs and naming may only exist once in an overall SRC system</li>
+                <li class="answer-item correct-answer">g. gcs writes its configurations to a specific database schema</li>
+                <li class="answer-item correct-answer">a. naming uses CORBA as the basis for the communication</li>
+                <li class="answer-item correct-answer">h. naming serves as a kind of "phone book" for the other processes</li>
+                <li class="answer-item correct-answer">e. gcs stores the configurations for all SRC processes</li>
+                <li class="answer-item incorrect-answer">b. gcs and naming are only required for 2D OSRs</li>
+                <li class="answer-item incorrect-answer">d. gcs and naming must be tied to the OSR1 instance</li>
+                <li class="answer-item incorrect-answer">f. naming controls if all SRC processes are up and running</li>
+                <li class="answer-item incorrect-answer">i. Every OSR instance must have its own gcs and naming</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What is a simple tool to browse through naming's information?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. nmg</li>
+                <li class="answer-item incorrect-answer">a. naming --browse</li>
+                <li class="answer-item incorrect-answer">b. ssvc -d naming</li>
+                <li class="answer-item incorrect-answer">c. naming_show_infos</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What will happen when you start an SRC process, and gcs is not running?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. The process will not start up</li>
+                <li class="answer-item incorrect-answer">a. The process will start with a default configuration</li>
+                <li class="answer-item incorrect-answer">b. The process will run slower</li>
+                <li class="answer-item incorrect-answer">c. The process will read its Python config file</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What will any SRC process - e.g. plc - do when it starts up?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. It asks gcs for its configuration</li>
+                <li class="answer-item incorrect-answer">a. It asks naming for its configuration</li>
+                <li class="answer-item incorrect-answer">b. It reads the configuration database table to find its configuration</li>
+                <li class="answer-item incorrect-answer">c. It reads its Python config file</li>
+                <li class="answer-item incorrect-answer">e. It checks if all processes are up</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What does "gcs" stand for?</p>
+            <p class="answer-item correct-answer">global configuration service</p>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Where is the dependency from one process on another (most notable every process' dependency on naming and gcs) defined?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">c. In a "run" file of the process' directory underneath "site/inst/osr&lt;id&gt;/_service"</li>
+                <li class="answer-item incorrect-answer">a. In the "process_dependencies" table in the database</li>
+                <li class="answer-item incorrect-answer">b. In the gcs config file</li>
+                <li class="answer-item incorrect-answer">d. In the process' config file</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">When you take a look at a process log file like with "ktf plc", and all you see is the below messages, what does this tell you?</p>
+            <pre>
+****************************************************************
+SYSLOG Order Storage and Retrieval Software
+KiSoft SRC - Storage and Retrieval Controller
+Java PLC adapter
+****************************************************************
+            </pre>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. naming and/or gcs is not running</li>
+                <li class="answer-item incorrect-answer">b. process configuration is wrong</li>
+                <li class="answer-item incorrect-answer">c. The database is not running</li>
+                <li class="answer-item incorrect-answer">d. The PLC stations are not running yet</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Where does gcs store the process configurations?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. In its own database schema</li>
+                <li class="answer-item incorrect-answer">a. In the configs.xml file</li>
+                <li class="answer-item incorrect-answer">c. In the wh_model.xml</li>
+                <li class="answer-item incorrect-answer">d. In the Python config files</li>
+                <li class="answer-item incorrect-answer">e. In the cfg/gcs directory</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">How do you save the current state of your code into the git version control?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. By committing the staged changes with git commit!</li>
+                <li class="answer-item incorrect-answer">b. By adding all changes and staging them with git stage!</li>
+                <li class="answer-item incorrect-answer">c. By adding all changes and staging them with git add!</li>
+                <li class="answer-item incorrect-answer">d. By creating a new commit with git push!</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which of the following commands will stage your entire directory and every non-empty directory inside your current directory?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. git add .</li>
+                <li class="answer-item correct-answer">d. git stage --all</li>
+                <li class="answer-item incorrect-answer">a. git fetch all</li>
+                <li class="answer-item incorrect-answer">c. git commit all</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What is a Git Pull Request?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. Pull requests are essential for facilitating code reviews, encouraging collaboration, and maintaining a clean, well-documented codebase.</li>
+                <li class="answer-item correct-answer">d. A pull request, often abbreviated as PR, serves as a proposal to merge changes made in one branch of a repository into another.</li>
+                <li class="answer-item incorrect-answer">b. A pull request is needed to clone a repository into your workspace.</li>
+                <li class="answer-item incorrect-answer">c. A pull request is done to switch from current branch to another.</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What comes first, staging with git add . or committing with git commit?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. Staging your changes with git add .</li>
+                <li class="answer-item incorrect-answer">a. Committing with git commit</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which commands are prohibited? Select the commands we should never use.</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. git push --force</li>
+                <li class="answer-item incorrect-answer">b. git cherry-pick &lt;commit-Id&gt;</li>
+                <li class="answer-item incorrect-answer">c. git branch -b &lt;Branch-Name&gt;</li>
+                <li class="answer-item incorrect-answer">d. git branch -a</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What's the git command that downloads your repository from GitHub to your computer?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. git clone</li>
+                <li class="answer-item incorrect-answer">a. git push</li>
+                <li class="answer-item incorrect-answer">b. git pull</li>
+                <li class="answer-item incorrect-answer">c. git commit</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">How do you stage files for a commit?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. git add</li>
+                <li class="answer-item incorrect-answer">a. git commit</li>
+                <li class="answer-item incorrect-answer">c. git stage</li>
+                <li class="answer-item incorrect-answer">d. git push</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">We've just created a new file called knapp.xml. Which of the following commands will stage this one file so we can commit it later?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">c. git add knapp.xml</li>
+                <li class="answer-item incorrect-answer">a. git add new</li>
+                <li class="answer-item incorrect-answer">b. git commit knapp.xml</li>
+                <li class="answer-item incorrect-answer">d. git push knapp.xml</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What does "git" stand for:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. Random three-letter combination that is pronounceable, and not actually used by any common UNIX command. The fact that it is a mispronunciation of "get" may or may not be relevant.</li>
+                <li class="answer-item incorrect-answer">b. "git" can mean anything, depending on your mood.</li>
+                <li class="answer-item incorrect-answer">c. "Global information tracker": you're in a good mood, and it actually works for you. Angels sing, and a light suddenly fills the room.</li>
+                <li class="answer-item incorrect-answer">d. "Goddamn idiotic tracker": when it breaks.</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Below are several git commit commands. Some are valid, some aren't. Select the valid commands.</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. git commit -am 'remove unused files'</li>
+                <li class="answer-item correct-answer">b. git commit -a -m 'remove unused files'</li>
+                <li class="answer-item correct-answer">c. git commit -m 'remove unused files'</li>
+                <li class="answer-item incorrect-answer">d. git commit all</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">You can type git status at any point while in a git controlled directory to check the status of your files.</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">True</li>
+                <li class="answer-item incorrect-answer">False</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What's a shortcut to only staging all the changes you have?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. git add .</li>
+                <li class="answer-item incorrect-answer">a. git commit .</li>
+                <li class="answer-item incorrect-answer">b. git commit add .</li>
+                <li class="answer-item incorrect-answer">c. git push -am "Message"</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">How do you supply a commit message to a commit?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. git commit -m "I'm configuring"</li>
+                <li class="answer-item incorrect-answer">b. ,0 ,31 203</li>
+                <li class="answer-item incorrect-answer">c. git commit "I'm coding"</li>
+                <li class="answer-item incorrect-answer">d. git add "I'm coding"</li>
+                <li class="answer-item incorrect-answer">e. git message "I'm coding"</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">How would you commit this with the message "adding new station to knapp.xml"?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. git commit -m "adding new station to knapp.xml"</li>
+                <li class="answer-item incorrect-answer">a. git add message "adding new station to knapp.xml"</li>
+                <li class="answer-item incorrect-answer">b. git commit "adding new station to knapp.xml"</li>
+                <li class="answer-item incorrect-answer">c. git commit .</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What is the correct commit syntax for all changes with a message?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. git commit -am "I'm configuring"</li>
+                <li class="answer-item incorrect-answer">b. git add -a "I'm configuring"</li>
+                <li class="answer-item incorrect-answer">c. git message -am "I'm configuring"</li>
+                <li class="answer-item incorrect-answer">d. git commit -a "I'm configuring"</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">How do you submit a solution to Learn?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. By creating a Pull Request through the Azure DevOps interface.</li>
+                <li class="answer-item incorrect-answer">b. git pull-request</li>
+                <li class="answer-item incorrect-answer">c. git submit</li>
+                <li class="answer-item incorrect-answer">d. git commit -am "Done with Configuring"</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What's the opposite of git clone, that instead of downloading your code from GitHub, uploads your changes and code back to GitHub?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. git push</li>
+                <li class="answer-item incorrect-answer">b. git add</li>
+                <li class="answer-item incorrect-answer">c. git pull</li>
+                <li class="answer-item incorrect-answer">d. git status</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which information which is relevant for the WH model configuration will you find in the "DS_Definitions" file in Doxis?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. Container types</li>
+                <li class="answer-item incorrect-answer">a. Orientation information for the OSR</li>
+                <li class="answer-item incorrect-answer">c. Number of levels</li>
+                <li class="answer-item incorrect-answer">d. Missing locations</li>
+                <li class="answer-item incorrect-answer">e. Number of aisles</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which statement concerning levels in an OSR is true?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. Within an aisle, the level structure to the left and right must match</li>
+                <li class="answer-item incorrect-answer">a. All levels in an OSR must have the same height</li>
+                <li class="answer-item incorrect-answer">c. The level structure over all aisles of an OSR must be the same</li>
+                <li class="answer-item incorrect-answer">d. Modules on the north side are reserved for levels of greater height</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What are the consequences of executing the wh_model_cfg.py? Check all applicable answers.</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. A wh_model.xml output file is generated</li>
+                <li class="answer-item correct-answer">g. If configured, a map drawing of all levels will be generated</li>
+                <li class="answer-item correct-answer">f. A copy of the configuration is written to the executed_configs folder</li>
+                <li class="answer-item correct-answer">c. If configured, a file for the simulator will be written</li>
+                <li class="answer-item incorrect-answer">a. All relevant processes are restarted automatically</li>
+                <li class="answer-item incorrect-answer">b. The warehouse config is written to the GCS service</li>
+                <li class="answer-item incorrect-answer">e. The configuration is written to the database</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">In the OSR, we use the cardinal system for orientation. How do we define the orientation?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. The lifts are in the South</li>
+                <li class="answer-item incorrect-answer">b. The first aisle is in the West</li>
+                <li class="answer-item incorrect-answer">c. The export conveyors are in the North</li>
+                <li class="answer-item incorrect-answer">d. The shuttle service area is in the East</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which statements for the warehouse model are correct? Check all that apply:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">i. All physical dimensions are done in millimeter</li>
+                <li class="answer-item correct-answer">b. Physical measurements are done by shuttle commissioning</li>
+                <li class="answer-item correct-answer">h. The "aisles_increasing" variable defines if aisle numbering is left to right or right to left</li>
+                <li class="answer-item correct-answer">c. For multi-deep storage, z_position entries in the location types are used</li>
+                <li class="answer-item correct-answer">d. Missing locations defined after instance creation must be manually deleted from the LOCATIONS table</li>
+                <li class="answer-item incorrect-answer">a. Only one container type definition may exist per OSR</li>
+                <li class="answer-item incorrect-answer">e. For a triple deep storage position, 3 entries are written in the LOCATIONS table</li>
+                <li class="answer-item incorrect-answer">f. The database is updated when the wh_model_cfg.py is executed</li>
+                <li class="answer-item incorrect-answer">g. Every missing location must be enumerated individually (e.g. "S01.003.0064.L")</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">When defining the OSR structure in the warehouse model, there is a hierarchy of the units used. Bring the elements below in the correct order, going from the smallest to the largest.</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">location type</li>
+                <li class="answer-item correct-answer">module type</li>
+                <li class="answer-item correct-answer">sector type</li>
+                <li class="answer-item correct-answer">aisle layout</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What steps need to be taken to save a warehouse model definition into the database?</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">Adapt the wh_model_cfg.py script, and save it</li>
+                <li class="answer-item correct-answer">Execute the wh_model_cfg.py script</li>
+                <li class="answer-item correct-answer">Run the osr_create_instance.sh script</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">For an OSR with the parameters below, how many entries will be generated in the LOCATIONS table for the storage locations?</p>
+            <pre>
+2 aisles
+10 levels
+5 modules à 4 locations
+triple-deep storage in the rack
+the last module (all levels) in the northeast side holds the shuttle lift
+            </pre>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">760</li>
+                <li class="answer-item incorrect-answer">800</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What does the following code tell you?</p>
+            <pre>
+missing_locations = [
+# aisle, level, module, module_pos, side
+(None, range(1, 6), 2, None, l),
+]
+            </pre>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">e. A complete module on levels 1 to 5 is missing in all aisles on the left side</li>
+                <li class="answer-item incorrect-answer">a. A complete module on levels 1 to 6 is missing in all aisles on the left side</li>
+                <li class="answer-item incorrect-answer">b. Positions 1 and 6 are missing in module 2 in all aisles</li>
+                <li class="answer-item incorrect-answer">c. There are no missing locations ("None")</li>
+                <li class="answer-item incorrect-answer">d. 2 positions of a module are missing in all aisles on the left side</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">In order to identify a container within the system, what needs to be applied on the container?</p>
+            <p class="answer-item correct-answer">barcode</p>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Select all correct statements concerning the OSR below:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. For safety reasons, the OSR is surrounded by a fence</li>
+                <li class="answer-item correct-answer">f. The OSR is physically divided into aisles and levels</li>
+                <li class="answer-item correct-answer">b. Containers are moved vertically by lifts</li>
+                <li class="answer-item correct-answer">e. Import/export conveyors connect the OSR to the prezone</li>
+                <li class="answer-item incorrect-answer">c. All levels within the OSR have to be of the same height</li>
+                <li class="answer-item incorrect-answer">d. A shuttle can load and store several boxes at the same time</li>
+                <li class="answer-item incorrect-answer">g. Only standardized plastic containers are allowed to be stored in the OSR</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">What order picking principles exist in a warehouse? Select all correct principles:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">a. person to goods</li>
+                <li class="answer-item correct-answer">b. goods to person</li>
+                <li class="answer-item incorrect-answer">c. pick by chance</li>
+                <li class="answer-item incorrect-answer">d. pick by order</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">The OSR implements the goods to person principle (talking about a "regular" OSR without specific racks).</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">True</li>
+                <li class="answer-item incorrect-answer">False</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Complete the below entries to form correct statements:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">WMS is positioned at a higher level and → deals with article stock and orders</li>
+                <li class="answer-item correct-answer">KiSoft One comprises → WMS and WCS functionality</li>
+                <li class="answer-item correct-answer">While KNAPP has more than one software suite for WMS/WCS, → KiSoft One is the major software</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which areas does the SRC system control? Pick all correct answers:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">b. prezone</li>
+                <li class="answer-item correct-answer">d. picking stations</li>
+                <li class="answer-item correct-answer">e. OSR</li>
+                <li class="answer-item incorrect-answer">a. decanting</li>
+                <li class="answer-item incorrect-answer">c. dispatch</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Map the main SRC processes to the correct area each of them controls:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">OSR → spider</li>
+                <li class="answer-item correct-answer">prezone → steuer</li>
+                <li class="answer-item correct-answer">picking stations → opa</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which statements about OSR lifts are correct? Select all that apply:</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">d. The difference between twin lifts and quad lifts is that quad lifts have two platforms instead of one</li>
+                <li class="answer-item correct-answer">g. Classic lifts stand in the aisle and serve two racks at a time</li>
+                <li class="answer-item correct-answer">a. Twin lifts stand in front of a rack, so you need two lifts per aisle</li>
+                <li class="answer-item correct-answer">b. In an OSR Evo 2D system, you could have fewer lifts than racks</li>
+                <li class="answer-item incorrect-answer">c. Quad lift platforms must be exactly the height of one level apart</li>
+                <li class="answer-item incorrect-answer">e. The platforms of a quad lift can move independently from each other</li>
+                <li class="answer-item incorrect-answer">f. A classic lift is only available with an OSR Classic</li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Which version control system do we use at KNAPP for maintaining the SRC source code?</p>
+            <p class="answer-item correct-answer">git</p>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title"></div>
+            <p class="question-content">Match the below mentioned processes and the descriptions of their functionality to get correct statements.</p>
+            <ul class="answer-list">
+                <li class="answer-item correct-answer">opa → controls the picking stations</li>
+                <li class="answer-item correct-answer">hio_status → reports status changes to the host system</li>
+                <li class="answer-item correct-answer">naming → provides for inter-process communication by maintaining IP addresses and ports</li>
+                <li class="answer-item correct-answer">gcs → maintains the configurations of all processes in the SRC system</li>
+                <li class="answer-item correct-answer">steuer → is responsible for the prezone</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
