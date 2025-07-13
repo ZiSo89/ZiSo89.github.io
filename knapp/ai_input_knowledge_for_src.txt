@@ -1,102 +1,238 @@
-Here is the raw knowledge file:
+# KNAPP SRC SYSTEM KNOWLEDGE BASE FOR AI MODELS
 
-```text
-# SRC System Knowledge Base
+# SECTION 1: FUNDAMENTAL CONCEPTS
 
-## I. Quiz Questions and Answers (from quizs all merged.pdf)
+## 1.1: Logistics & Warehouse
+- **Concept: Logistics**
+  - **Definition:** All processes concerning the flow of goods, materials, or people.
+  - **Core Goal:** To make required resources available effectively and efficiently.
+  - **The "6 Rights":** Correct material, correct place, correct time, correct quality, correct quantity, correct costs.
 
-### Quiz Entry 1
-**Question:** Where does gcs store its configuration information in the database?
-**Answer:** schema "syslog", table "gcs_bindings"
+- **Concept: Intralogistics**
+  - **Definition:** Logistic processes that occur exclusively within the premises of one organization (e.g., inside a warehouse).
+  - **KNAPP's Specialization:** KNAPP is a solution provider for intralogistics.
 
-### Quiz Entry 2
-**Question:** Why are we tied to an Oracle database, and cannot use another DBMS (database management system)?
-**Answer:** A lot of business logic is implemented in database code, and would have to be rewritten
+- **Concept: Warehouse**
+  - **Definition:** A building used to store goods.
+  - **Users:** Manufacturers, import/export companies, wholesale distributors.
 
-### Quiz Entry 3
-**Question:** Which of the following statements about lifts are correct?
-**Answer:**
-* The difference between twin lifts and quad lifts is that quad lifts have two platforms instead of one.
-* Classic lifts stand in the aisle and serve two racks at a time.
-* Twin lifts stand in front of a rack, so you need two lifts per aisle.
-* In an OSR Evo 2D system, you could have fewer lifts than racks.
+- **Concept: Order Picking**
+  - **Definition:** The process of collecting articles from stock and compiling them for shipment. It is a critical warehouse process.
+  - **Principles:**
+    - **Person-to-Goods:** A human picker physically travels to the storage location to retrieve items.
+    - **Goods-to-Person:** Material is automatically retrieved and transported to a stationary picker at a workstation. This is the primary principle of the KNAPP OSR system.
 
-### Quiz Entry 4
-**Question:** Match the below mentioned processes and the descriptions of their functionality to get correct statements.
-* opa → controls the picking stations
-* hio_status → reports status changes to the host system
-* naming → provides for inter-process communication by maintaining IP addresses and ports
-* gcs → maintains the configurations of all processes in the SRC system
-* steuer → is responsible for the prezone
+- **Concept: Warehouse Software**
+  - **WMS (Warehouse Management System):** A high-level software application that manages warehouse stock, orders, and overall optimization.
+  - **WCS (Warehouse Control System):** A software application responsible for directing the real-time material flow and controlling the automated equipment.
+  - **KNAPP Software Suite:** KiSoft One provides both WMS and WCS functionalities.
 
-### Quiz Entry 5
-**Question:** Which version control system do we use at KNAPP for maintaining the SRC source code?
-**Answer:** git
+---
 
-## II. SRC Database and System Information (from SRC database_merged.pdf)
+# SECTION 2: OSR (ORDER STORAGE & RETRIEVAL) SYSTEM
 
-### II.A. Overview and General Concepts
-* SRC (and KiSoft One) uses an Oracle database to persist data for reports.
-* Data is accessible via a standardized SQL interface, e.g., using `sqlplus` or external applications like Toad/SQL Developer.
-* In platform 13, there is one common DB instance ("KISOFT1") for both SRC and KiSoft One, unlike platform 12 which had separate instances.
+## 2.1: OSR - Core Definition
+- **Acronym: OSR**
+  - **Stands For:** Order Storage and Retrieval.
+- **System Type:** Automated Storage and Retrieval System (AS/RS).
+- **Function:** Automates the storage and retrieval of goods in a high-density rack system.
+- **Control Software:** The OSR hardware is controlled by the SRC (Storage and Retrieval Controller) software.
+- **Typical Use Case:** Slow-moving to medium-moving products in sectors like retail, pharmaceuticals, and fashion.
 
-### II.B. Database Schemas
-The Oracle instance for SRC includes several schemas:
-* **osr schema**: The main schema for the SRC system. It holds all relevant master data (e.g., products, containers, locations) and variable data (e.g., order lines, container locations). It contains approximately 250 tables, 170 views, many packages, and nearly 350 triggers.
-* **syslog schema**: Stores configurations managed by the `gcs` process, and logging information from the SRC system (log messages, errors). It also stores version information about the SRC system and its components, crucial for troubleshooting, compatibility, and tracking changes.
-* **osr_aq schema**: Utilizes Oracle's "Advanced Queuing" (AQ) feature to allow processes to notify each other of events. Its sole purpose is event notification, not data storage. It eliminates periodic polling for new data by allowing messages to be "enqueued" (sent) and "dequeued" (received).
-    * **Architecture**: Employs messages, queues, senders, and recipients.
-    * **Queues**: `osr_order_aq` and `orderstart_aq` (the latter used with an `os` process).
-    * **Configuration tables**: Used for configuring queues and queue tables, typically accessed by DB administration tools.
-* **osr_af schema**: Used for connection to the KiSoft Navigator, not covered in the document.
+## 2.2: OSR - Physical Structure & Components
+- **Safety:** The OSR is a self-contained, fenced-in area to protect personnel from fast-moving automated components.
+- **Component: Racks**
+  - **Function:** The physical shelving structure where containers are stored.
+- **Component: Aisles**
+  - **Function:** Passageways between racks where shuttles travel horizontally.
+- **Component: Levels**
+  - **Function:** The vertical tiers within the racks. Level heights can be varied to accommodate different container sizes.
+- **Component: Lifts**
+  - **Function:** Responsible for the vertical transport of containers between levels and the conveyor system.
+  - **Types:** Classic, Twin Lift, Quad Lift.
+- **Component: Shuttles**
+  - **Function:** Robotic carriages that travel horizontally within an aisle to store and retrieve containers from the racks.
+- **Component: Containers (Totes)**
+  - **Requirement:** All goods must be placed in containers for automated handling.
+  - **Identification:** Each container requires a unique **barcode label** for system recognition.
+  - **Types:** Can be cardboard boxes or plastic containers.
+  - **Compartments:** Containers can be divided into smaller compartments, known as "slots," using separators.
+- **Component: Prezone**
+  - **Definition:** The conveyor system located outside the OSR.
+  - **Function:** Connects the OSR to other warehouse areas, such as picking stations. It has separate conveyor lines for source and target containers.
+  - **Control:** Often controlled by the SRC's `steuer` process.
+- **Component: PLC (Programmable Logic Controller)**
+  - **Function:** Industrial computer that controls the physical hardware of the conveyor system (e.g., motors, light gates, scanners, diverters). The SRC software interfaces with the PLC to direct container flow.
 
-### II.C. Naming Conventions (osr schema)
-* **General**: Database objects (tables, packages, triggers) generally have the prefix "osr_" (stands for "Oracle SCM Runtime").
-* **Tables**:
-    * Descriptive names; master data tables usually single word, child/related tables multi-word separated by underscores.
-    * Tables for history information end in "_HIST" (e.g., `CONTAINER_LOCATION_HIST`).
-    * `gcs` tables (Global Configuration Service) also follow "gcs_" convention (e.g., `gcs_bindings`, `gcs_configs`).
-    * Communication tables between SRC and the Oracle DB also follow "osr_" (e.g., `osr_host_msg`, `osr_dialog`).
-    * Exceptions (pre-convention): `article_data`, `article_stock_data`, `process_variable`.
-* **Columns**: Usually prefixed with a 3- to 4-character abbreviation identifying the table (e.g., `LOC_` for `LOCATIONS` table columns).
-* **Primary Keys**: Numeric, named `<tablename>_ID`. Foreign keys are suffixed with "_ID".
-* **Packages**: Suffix "_PKG" for business logic, "_CONST" for constants, "_OT"/"_INTERFACE" for interfaces.
-* **Triggers**: Suffix/infix indicates when trigger fires.
-    * "B" (Before) / "A" (After) DML operation.
-    * "I" (INSERT) / "U" (UPDATE) / "D" (DELETE) for relevant operation(s).
-    * "R" (Row) / "S" (Statement) for execution scope.
-    * Example: "BIR" = "before INSERT for each row"; "_AIUDR" = "after INSERT, UPDATE or DELETE for each row".
+## 2.3: OSR - Shuttle Details
+- **Mechanism:** Shuttles use extendable telescopic arms equipped with "flaps" to push or pull containers.
+- **Power:** Powered by electrical rails integrated into the rack system.
+- **Communication:** Communicate with the SRC via Wi-Fi. Each shuttle has its own IP address.
+- **Product Evolution:**
+  - **Shuttle 15:** First generation, for containers up to 15 kg, single-deep storage.
+  - **Shuttle 32:** Successor, handled heavier containers, single-deep only.
+  - **Shuttle 35:** Very common version, handles up to 50 kg, supports up to triple-deep storage.
+  - **Shuttle Evo:** Latest generation. Has a **1D** version (lengthwise travel only) and a **2D** version.
+    - **Evo 2D Shuttles:** Can move sideways between aisles via "traverse aisles". They have an additional set of wheels for this and use supercapacitors to cross intersections lacking power rails. A single Evo 2D shuttle can service multiple aisles on one level.
+  - **Vario Shuttles:** A specialized type capable of handling containers of different widths due to a movable telescope arm.
 
-### II.D. Architecture and Database Code
-* All database interaction from SRC is via PL/SQL packages, not direct table access. This provides separation of concerns, maintainability, and encapsulation.
-* SRC relies heavily on PL/SQL code implemented within the database for business logic, including DML operations (INSERT, UPDATE, DELETE) encapsulated in packages and triggers.
-* This reliance on PL/SQL ties SRC software to Oracle, preventing the use of other database suites.
-* All database code is maintained in Git for version control, traceability, and collaboration, deployed via CI/CD pipeline.
+## 2.4: OSR - Picking Stations
+- **Definition:** Ergonomic workstations where the Goods-to-Person picking process occurs.
+- **Common Types:**
+  - **Pick-it-Easy (PiE) Health:** For small items. Source containers are located above target containers.
+  - **Pick-it-Easy (PiE) Shop:** For larger, heavier items. Source and target containers are on the same level.
+  - **Pick-it-Easy (PiE) Evo:** Newer, updated version of the PiE stations.
+  - **Pick-it-Easy (PiE) Robot:** A fully automated picking station using a robot, requiring no human operator.
 
-### II.E. Important Tables (osr schema)
-* **CONTAINERS**: Holds main information on source trays/containers used for OSR storage. Primary key is `CONT_ID` (combined with OSR ID), a VARCHAR2(64), also used for barcode labels. Entries created when WCS sends a transport order with incoming containers. `CONT_TYPE_ID` is foreign key to `CONTAINER_TYPES`.
-    * Child table: `CONTAINER_LOCATIONS` (current storage location).
-* **SLOTS**: Holds entries for all compartments within containers. One entry for "single-slot container" (full tray), two for one separator, etc. Child table to `CONTAINERS`, references with `SLOT_TRAY_ID`. `SLOT_TYPE` is foreign key to `SLOT_TYPES`.
-    * Common slot types: "16R" (single slot/full), "8R" (2 compartments/half), "3R" (3 compartments), "4R" (4 compartments).
-    * Child table: `SLOT_CONTENTS` (products stored in slots).
-* **LOCATIONS**: Contains all possible container locations (storage, shuttle LHDs, lift buffers, pools). Populated when `osr_create_instance_<osrid>.sh` script runs. `LOC_EXTERNAL_CODE` holds human-readable names (e.g., S01.002.0054.L for Aisle 1, Level 2, Position 54, Left rack).
-* **PRODUCT_INFOS**: Master information on articles used in the warehouse.
-    * Child table: `PRODUCTS` (detailed product variants).
-* **TRANSPORTERS**: Holds all transporters (shuttles, lifts, entrances, exits, STEUER transporter).
-* **PROPERTY_DEFS / OSR_PROPERTIES**:
-    * `PROPERTY_DEFS`: Defines system configuration parameters set in the database (name, description, default value; ~300 entries).
-    * `OSR_PROPERTIES`: Stores settings that deviate from default values for a specific OSR instance.
+---
 
-### II.F. Startup of the SRC System
-To start the SRC system after an instance is created:
-1.  `sudo systemctl start osr` (Requires `sudo` rights; password is for "osr" user, typically "syslog").
-2.  `osr1` (alias to switch to the correct OSR instance).
-3.  `cfg` (alias to navigate to an instance's config directory).
-4.  `for i in *py ; do ./$i ; done` (executes all Python files in the directory).
-5.  `osr_start`
-6.  `svci` (SRC command to show status of all processes).
+# SECTION 3: SRC (STORAGE & RETRIEVAL CONTROLLER)
 
-**To restart**: `osr_stop` then `osr_start`.
-**To check status**: `svci`.
-**To stop**: `osr_stop`.
-```
+## 3.1: SRC - Core Concepts
+- **Acronym: SRC**
+  - **Stands For:** Storage and Retrieval Controller.
+- **Function:** The KNAPP software suite that controls the OSR, prezone, and associated picking stations.
+- **Relationship to WCS:** Acts as a subsystem to a higher-level WCS (like KiSoft One), receiving orders and sending status updates.
+- **Technology Stack:**
+  - **Core Language:** Java.
+  - **Configuration Language:** Python.
+  - **Database:** Oracle.
+  - **Version Control:** git.
+  - **Host Communication:** XML over TCP/IP.
+- **Concept: OSR Instance**
+  - **Definition:** A complete, independent set of SRC processes, database entries, and file system structures required to control one physical OSR. A single server can run multiple OSR instances.
+
+## 3.2: SRC - System Architecture
+- **Server Architectures (High-Availability):**
+  - **SXA (Server Linux Advanced):** For small/medium systems. Two mirrored servers for application and database.
+  - **MA (Maximum Availability):** For large systems. Four servers (primary/backup for application, primary/backup for database).
+  - **MAG (MA with dedicated GUI servers):** For very large systems. Six servers (adds a primary/backup server pair for GUI client connections).
+  - **Virtualization:** VMWare is a supported platform.
+- **Software Platforms:**
+  - **Definition:** A specific, unified combination of OS, database, and language versions.
+  - **Platform 13.1 (Latest):** Based on Oracle Linux 8.2 and Oracle Database 19c.
+  - **Platform 12 (Older):** Based on Oracle Linux 7.2 and Oracle Database 12c.
+
+## 3.3: SRC - Processes
+The SRC is a modular system of interconnected processes.
+
+### 3.3.1: Base Processes (Global, one per system)
+- **Process: gcs**
+  - **Name:** Global Configuration Service.
+  - **Function:** The central repository for all process configurations. It stores these configurations in the Oracle database (in the `syslog` schema). All other processes query `gcs` on startup to get their configuration.
+- **Process: naming**
+  - **Function:** Acts as a "phone book" or communication dispatcher. It uses CORBA to maintain a central registry of process and station network addresses (IPs and ports), allowing them to discover and communicate with each other.
+
+### 3.3.2: Main Processes (One set per OSR Instance)
+- **Process: spider**
+  - **Function:** The primary process controlling the OSR itself. It manages all transporters (lifts, shuttles) and coordinates all storage and retrieval jobs inside the rack system.
+- **Process: steuer**
+  - **Function:** Controls the prezone conveyor system. It is responsible for routing containers between the OSR and the picking stations.
+- **Process: opa**
+  - **Function:** Controls the picking stations. A separate `opa` process runs for each station, managing the UI, peripherals (scanners, scales), and communication with the `p2l` process.
+
+### 3.3.3: Host Communication Processes
+- **Process: hio_cmd**
+  - **Function:** Handles incoming commands (e.g., `pick_order`, `transport_order`) from the host system.
+  - **Protocol:** Listens on a TCP/IP port (default: 9803) for XML messages.
+- **Process: hio_status**
+  - **Function:** Sends status updates (e.g., `pick_order_finished`) back to the host system.
+  - **Protocol:** Sends XML messages over a TCP/IP port (default: 9804).
+
+### 3.3.4: Adapter Processes (Hardware Interfaces)
+- **Process: plc**
+  - **Function:** The interface to the Programmable Logic Controllers (PLCs). There is typically one `plc` process per physical PLC CPU in the system.
+- **Process: shuttle**
+  - **Function:** The direct communication adapter to the physical shuttles. It translates commands into low-level "telegrams" for the shuttles.
+- **Process: grid**
+  - **Used In:** OSR Evo systems.
+  - **Function:** Sits between `spider` and the `shuttle` adapter. It breaks down high-level drive commands from `spider` into smaller, sequential path segments for the shuttle to execute.
+- **Process: cruise_control**
+  - **Used In:** OSR Evo 2D systems ONLY.
+  - **Function:** Acts as a safety "traffic cop" to monitor shuttle paths and prevent collisions at intersections.
+
+### 3.3.5: Miscellaneous Processes
+- **Process: p2l:** Connects the `opa` process to the physical pick-to-light displays and buttons at the picking stations.
+- **Process: status_ec:** The OSR "event channel," which publishes important events (like a lift being suspended) that other services can listen to.
+- **Process: dblog:** Logs interactions with the Oracle database.
+- **Process: af:** Manages the connection to the KiSoft Navigator GUI.
+- **Process: os:** Used when the SRC, rather than the WCS, is responsible for starting pick orders (orderstart).
+
+## 3.4: SRC - Database
+- **DBMS:** Oracle Database is mandatory due to heavy reliance on its PL/SQL features.
+- **Schemas:**
+  - **osr:** The main schema. Contains all master and transactional data (e.g., tables like `CONTAINERS`, `LOCATIONS`, `SLOTS`, `PICK_ORDERS`).
+  - **osr_aq:** Uses Oracle Advanced Queuing for message-based, asynchronous communication between processes (e.g., `spider` sends an "MVO" (movement order finished) message, which `hio_status` listens for).
+  - **syslog:** Used exclusively by the `gcs` process to store configurations in the `GCS_BINDINGS` table.
+
+## 3.5: SRC - Configuration & Setup
+- **Installation User:** All SRC installation and operations are performed as the `osr` user.
+- **Installation Process:**
+  1. **git clone:** Download the SRC source code from the repository.
+  2. **git checkout:** Switch to the appropriate project or release branch.
+  3. **osr_setup.sh:** Run a shell script to create the necessary directory structure and environment aliases.
+  4. **ant install:** Compile all the Java source code.
+  5. **dbi.sh:** Run a shell script to initialize the database (create schemas, tables, users, etc.).
+  6. **Instance Creation:** Run the `wh_model_cfg.py` and `osr_create_instance.sh` scripts to populate the database with the specific OSR's layout and create the instance files.
+- **Key Configuration File: wh_model_cfg.py**
+  - **Purpose:** A Python script that defines the complete physical and logical structure of the OSR.
+  - **Output:** Generates a **wh_model.xml** file.
+  - **Importance:** The `wh_model.xml` file is used to create the OSR instance in the database and is also read at runtime by processes like `spider`, `grid`, and `shuttle` to understand the physical layout.
+- **Configuration Update Process:**
+  1. Adapt the Python configuration file (`*.py`).
+  2. Execute the configuration file (`./your_config.py`). This sends the configuration to the `gcs` service.
+  3. Restart the respective process for the changes to take effect (`ssvc -t <process_name>`).
+
+## 3.6: SRC - Essential Commands & Tools
+- **User:** `osr`
+- **Process Management:**
+  - **svci:** Check the status of all SRC processes.
+  - **osr_start / osr_stop:** Start/stop all processes for the active OSR instance.
+  - **ssvc -u/-d/-t <process>:** Start/stop/restart a single process.
+- **Log File Viewing:**
+  - **ktf <process>:** The primary tool to view and tail (`Shift+F`) log files. Log files are located in the `log` directory of the OSR instance.
+- **Spider Interaction:**
+  - **spider_status (ss):** Shows the status of all transporters (lifts, shuttles).
+  - **spider_status --orders (sso):** Shows all pending orders in the spider queue.
+  - **spider_command --enable/--disable <transporter> (sce/scd):** Enables/disables a transporter.
+- **Base Process Tools:**
+  - **gls:** Lists all configurations currently stored in `gcs`.
+  - **nmg:** A Java GUI tool to browse the objects registered in the `naming` service.
+
+---
+
+# SECTION 4: KISOFT SANDBOX (SIMULATOR)
+
+## 4.1: Sandbox - Core Concepts
+- **Product Name:** KiSoft Sandbox One.
+- **Function:** A software environment that simulates the physical warehouse hardware (conveyors, PLCs, OSR shuttles, lifts). It allows for functional testing of an SRC/WCS configuration without a physical connection to the hardware.
+- **Use Case:** Primarily used for in-house project preparation to test configurations and identify issues before going onsite.
+- **Limitation:** Cannot be used for performance or mass testing, as it does not simulate real-world physical constraints and timings.
+- **Installation User:** The simulator is installed and run as the `sandbox` user.
+
+## 4.2: Sandbox - Configuration & Setup
+- **Source of Configuration:** The simulator's configuration is generated directly from the SRC configuration to ensure they match.
+- **Configuration Workflow:**
+  1. In the SRC `wh_model_cfg.py`, set the parameter `create_simu = True`.
+  2. Execute the `wh_model_cfg.py` and `simuloop_cfg.py` scripts in the SRC environment.
+  3. This generates a set of XML files (e.g., `osr1-shelfs.xml`, `wf-osr1-trayloop.xml`).
+  4. These XML files must be copied from the `osr` user's directory to the `sandbox` user's configuration directory (`/kisoft/user/sandbox/cfg/simulator`).
+- **Network Setup:** The `hosts_manipulator.sh` script is used to add entries to the `/etc/hosts` file, creating dummy hostnames for the simulated hardware (PLCs, shuttles) so that the SRC processes can connect to them.
+- **Port Forwarding (Platform 13.1+):** The `xinetd` service is used to forward low-numbered ports to the ports the simulator is allowed to use.
+
+## 4.3: Sandbox - Usage & Commands
+- **User:** `sandbox`
+- **Starting/Stopping:**
+  - **Prerequisite:** The RMI registry must be running (`sudo systemctl start simulator-rmi.service`).
+  - **Start Command:** `simosr1 start` (the alias `simosr1` is created based on the `simosr1.properties` file for the specific instance).
+  - **Stop Command:** `simosr1 stop`
+  - **Status Command:** `simosr1 status`
+- **Interacting with the Simulation:**
+  - **Show Elements:** `simosr1 show` (lists all simulated elements like conveyors and their status).
+  - **Insert Carrier:** `simosr1 -i <element_name> <container_number>` (Places a virtual container on a simulated conveyor).
+  - **Remove Carrier:** `simosr1 -r <element_name> <container_number>`
+- **Log Viewing:**
+  - **simosr1log:** Views the simulator's event log.
+  - **simosr1trc:** Views the more detailed trace file for debugging.
+
+---
