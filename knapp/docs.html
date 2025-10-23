@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KNAPP KiSoft SRC - Πλήρης Τεχνική Τεκμηρίωση</title>
+    <title>KNAPP KiSoft SRC - Complete Technical Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Prism.js for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -88,9 +92,186 @@
             color: #2563eb;
             font-weight: 600;
         }
+
+        /* Search box styling */
+        .search-box {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.5rem 2.5rem 0.5rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .hidden-search {
+            display: none;
+        }
+
+        .no-results {
+            padding: 1rem;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.875rem;
+            font-style: italic;
+        }
+
+        /* Highlight search results */
+        .search-highlight {
+            background-color: #fef08a;
+            padding: 0.1rem 0.2rem;
+            border-radius: 2px;
+            font-weight: 500;
+        }
+
+        .section-has-matches {
+            animation: pulseHighlight 0.5s ease-in-out;
+        }
+
+        @keyframes pulseHighlight {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Copy button styling */
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.375rem;
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .copy-button.copied {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .prose pre {
+            position: relative;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 3rem 1rem 1rem 1rem;
+            overflow-x: auto;
+        }
+
+        /* Scroll progress indicator */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2563eb, #0ea5e9);
+            z-index: 1000;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            aside, .progress-bar, .copy-button, #menu-toggle {
+                display: none !important;
+            }
+            
+            main {
+                margin-left: 0 !important;
+                max-width: 100%;
+            }
+            
+            .prose h1, .prose h2 {
+                page-break-after: avoid;
+            }
+            
+            .prose pre, .prose table {
+                page-break-inside: avoid;
+            }
+            
+            .prose code {
+                color: #1e293b;
+                background-color: #f1f5f9;
+            }
+            
+            .prose pre {
+                background-color: #f8fafc;
+                border: 1px solid #cbd5e1;
+                color: #1e293b;
+            }
+        }
+
+        /* Mobile enhancements */
+        @media (max-width: 640px) {
+            .prose {
+                font-size: 0.95rem;
+            }
+            
+            .prose h1 {
+                font-size: 1.75rem;
+            }
+            
+            .prose h2 {
+                font-size: 1.5rem;
+            }
+            
+            .prose h3 {
+                font-size: 1.25rem;
+            }
+            
+            .prose pre {
+                font-size: 0.8rem;
+                padding: 2.5rem 0.75rem 0.75rem 0.75rem;
+            }
+            
+            .prose table {
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-700">
+
+    <!-- Scroll Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
 
     <!-- Backdrop for mobile sidebar -->
     <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 sm:hidden opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -98,18 +279,36 @@
     <div class="flex">
         <!-- Sidebar Navigation -->
         <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen bg-white transition-transform -translate-x-full sm:translate-x-0 border-r border-slate-200">
-            <div class="h-full px-3 py-4 overflow-y-auto">
+            <!-- Search Box -->
+            <div class="search-box">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search... (e.g. spider, PLC, steuer)" 
+                        autocomplete="off"
+                    />
+                    <svg class="search-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="h-full px-3 py-4 overflow-y-auto pb-24">
                 <h1 class="text-xl font-bold text-slate-800 mb-6 px-2">KiSoft SRC Docs</h1>
                 <ul id="sidebar-nav" class="space-y-2 font-medium">
-                    <li><a href="#overview" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Επισκόπηση</span></a></li>
-                    <li><a href="#wh_model" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Μοντέλο Αποθήκης</span></a></li>
-                    <li><a href="#plc" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Προσαρμογείς & PLC</span></a></li>
-                    <li><a href="#steuer" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Διαδικασία Steuer</span></a></li>
-                    <li><a href="#hio" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Διασύνδεση HIO</span></a></li>
-                    <li><a href="#spider" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Διαδικασία Spider</span></a></li>
-                    <li><a href="#opa" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Διαδικασία OPA</span></a></li>
-                    <li><a href="#linux" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Εντολές Linux & Setup</span></a></li>
+                    <li><a href="#overview" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Overview</span></a></li>
+                    <li><a href="#wh_model" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Warehouse Model</span></a></li>
+                    <li><a href="#plc" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Adapters & PLC</span></a></li>
+                    <li><a href="#steuer" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Steuer Process</span></a></li>
+                    <li><a href="#hio" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">HIO Interface</span></a></li>
+                    <li><a href="#spider" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Spider Process</span></a></li>
+                    <li><a href="#opa" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">OPA Process</span></a></li>
+                    <li><a href="#linux" class="flex items-center p-2 text-slate-700 rounded-lg hover:bg-slate-100 group"><span class="ml-3">Linux Commands & Setup</span></a></li>
                 </ul>
+                <div id="noResults" class="no-results" style="display: none;">
+                    No matching sections found
+                </div>
             </div>
         </aside>
 
@@ -127,9 +326,9 @@
             <div class="prose max-w-none">
                 
                 <section id="overview">
-                    <h1>Επισκόπηση Συστήματος KNAPP KiSoft SRC</h1>
-                    <p>Αυτή η σελίδα παρέχει μια ολοκληρωμένη τεχνική τεκμηρίωση για το σύστημα KNAPP KiSoft SRC (Shuttle Rack Controller). Το SRC είναι ένα υποσύστημα λογισμικού που διαχειρίζεται και ελέγχει αυτοματοποιημένες αποθήκες, συνήθως συστήματα OSR (Order Storage & Retrieval). Η τεκμηρίωση καλύπτει τα βασικά στοιχεία του συστήματος, από τον φυσικό σχεδιασμό της αποθήκης έως τις διαδικασίες λογισμικού που ελέγχουν τη ροή των εμπορευμάτων, την επικοινωνία με εξωτερικά συστήματα και τη ρύθμιση του συστήματος σε περιβάλλον Linux.</p>
-                    <p>Κάθε ενότητα παρακάτω αντιστοιχεί σε ένα βασικό στοιχείο ή διαδικασία του συστήματος SRC. Χρησιμοποιήστε το μενού πλοήγησης για να μεταβείτε απευθείας στην ενότητα που σας ενδιαφέρει.</p>
+                    <h1>KNAPP KiSoft SRC System Overview</h1>
+                    <p>This page provides comprehensive technical documentation for the KNAPP KiSoft SRC (Shuttle Rack Controller) system. SRC is a software subsystem that manages and controls automated warehouses, typically OSR (Order Storage & Retrieval) systems. The documentation covers the core components of the system, from the physical warehouse design to the software processes that control material flow, communication with external systems, and system configuration in a Linux environment.</p>
+                    <p>Each section below corresponds to a core component or process of the SRC system. Use the navigation menu to jump directly to the section of interest.</p>
                 </section>
 
                 <section id="wh_model">
@@ -1478,8 +1677,207 @@ END;
             
             // Initial check on page load
             updateActiveLink();
+
+            // --- Search Functionality ---
+            const searchInput = document.getElementById('searchInput');
+            const sidebarNav = document.getElementById('sidebar-nav');
+            const noResults = document.getElementById('noResults');
+            // Use the sections variable already declared at the top
+            
+            // Function to remove all highlights
+            function removeHighlights() {
+                document.querySelectorAll('.search-highlight').forEach(highlight => {
+                    const parent = highlight.parentNode;
+                    parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+                    parent.normalize();
+                });
+                sections.forEach(section => section.classList.remove('section-has-matches'));
+            }
+            
+            // Function to highlight text in an element
+            function highlightText(element, searchTerm) {
+                const walker = document.createTreeWalker(
+                    element,
+                    NodeFilter.SHOW_TEXT,
+                    {
+                        acceptNode: function(node) {
+                            // Skip script, style, and already highlighted elements
+                            if (node.parentElement.tagName === 'SCRIPT' || 
+                                node.parentElement.tagName === 'STYLE' ||
+                                node.parentElement.classList.contains('search-highlight')) {
+                                return NodeFilter.FILTER_REJECT;
+                            }
+                            return NodeFilter.FILTER_ACCEPT;
+                        }
+                    }
+                );
+                
+                const nodesToReplace = [];
+                while (walker.nextNode()) {
+                    const node = walker.currentNode;
+                    const text = node.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        nodesToReplace.push(node);
+                    }
+                }
+                
+                let matchCount = 0;
+                nodesToReplace.forEach(node => {
+                    const text = node.textContent;
+                    const regex = new RegExp(`(${searchTerm})`, 'gi');
+                    const parts = text.split(regex);
+                    
+                    if (parts.length > 1) {
+                        const fragment = document.createDocumentFragment();
+                        parts.forEach(part => {
+                            if (part.toLowerCase() === searchTerm) {
+                                const span = document.createElement('span');
+                                span.className = 'search-highlight';
+                                span.textContent = part;
+                                fragment.appendChild(span);
+                                matchCount++;
+                            } else if (part) {
+                                fragment.appendChild(document.createTextNode(part));
+                            }
+                        });
+                        node.parentNode.replaceChild(fragment, node);
+                    }
+                });
+                
+                return matchCount;
+            }
+            
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                const navItems = sidebarNav.querySelectorAll('li');
+                
+                // Remove previous highlights
+                removeHighlights();
+                
+                if (searchTerm === '') {
+                    // Show all items when search is empty
+                    navItems.forEach(item => {
+                        item.classList.remove('hidden-search');
+                    });
+                    noResults.style.display = 'none';
+                } else if (searchTerm.length >= 2) {
+                    // Search in content and sidebar
+                    let totalMatches = 0;
+                    const sectionsWithMatches = new Set();
+                    
+                    // Search in each section
+                    sections.forEach(section => {
+                        const matchCount = highlightText(section, searchTerm);
+                        if (matchCount > 0) {
+                            totalMatches += matchCount;
+                            sectionsWithMatches.add(section.id);
+                            section.classList.add('section-has-matches');
+                        }
+                    });
+                    
+                    // Filter sidebar based on matches
+                    let visibleCount = 0;
+                    navItems.forEach(item => {
+                        const link = item.querySelector('a');
+                        const targetId = link.getAttribute('href').substring(1);
+                        const linkText = item.textContent.toLowerCase();
+                        
+                        if (sectionsWithMatches.has(targetId) || linkText.includes(searchTerm)) {
+                            item.classList.remove('hidden-search');
+                            visibleCount++;
+                        } else {
+                            item.classList.add('hidden-search');
+                        }
+                    });
+                    
+                    // Show/hide "no results" message
+                    noResults.style.display = totalMatches === 0 ? 'block' : 'none';
+                    
+                    // Scroll to first match
+                    if (totalMatches > 0) {
+                        const firstHighlight = document.querySelector('.search-highlight');
+                        if (firstHighlight) {
+                            firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                }
+            });
+
+            // Clear search on ESC key
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    removeHighlights();
+                    const navItems = sidebarNav.querySelectorAll('li');
+                    navItems.forEach(item => item.classList.remove('hidden-search'));
+                    noResults.style.display = 'none';
+                    searchInput.blur();
+                }
+            });
+
+            // --- Scroll Progress Bar ---
+            const progressBar = document.getElementById('progressBar');
+            
+            const updateProgressBar = () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                progressBar.style.width = scrollPercent + '%';
+            };
+            
+            window.addEventListener('scroll', updateProgressBar);
+            updateProgressBar();
+
+            // --- Copy Button for Code Blocks ---
+            const codeBlocks = document.querySelectorAll('pre code');
+            
+            codeBlocks.forEach((codeBlock) => {
+                const pre = codeBlock.parentElement;
+                const button = document.createElement('button');
+                button.className = 'copy-button';
+                button.textContent = 'Copy';
+                button.setAttribute('aria-label', 'Copy code to clipboard');
+                
+                button.addEventListener('click', async () => {
+                    const code = codeBlock.textContent;
+                    
+                    try {
+                        await navigator.clipboard.writeText(code);
+                        button.textContent = '✓ Copied!';
+                        button.classList.add('copied');
+                        
+                        setTimeout(() => {
+                            button.textContent = 'Copy';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy:', err);
+                        button.textContent = 'Error';
+                        setTimeout(() => {
+                            button.textContent = 'Copy';
+                        }, 2000);
+                    }
+                });
+                
+                pre.style.position = 'relative';
+                pre.appendChild(button);
+            });
+
+            // --- Syntax Highlighting with Prism ---
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAll();
+            }
         });
     </script>
+
+    <!-- Prism.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
 
 </body>
 </html>

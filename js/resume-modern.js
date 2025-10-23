@@ -136,7 +136,7 @@ function initDarkMode() {
     }
     
     // Initialize language from saved preference
-    const savedLang = localStorage.getItem('preferredLanguage') || 'gr';
+    const savedLang = localStorage.getItem('preferredLanguage') || 'en';
     updateLanguage(savedLang);
 }
 

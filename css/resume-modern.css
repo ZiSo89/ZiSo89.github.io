@@ -88,6 +88,13 @@ p.lead {
     color: var(--text-secondary);
 }
 
+/* Education Section Icons - Same color as other icons */
+.fa-graduation-cap.text-primary,
+.fa-globe-europe.text-primary,
+.fa-laptop-code.text-primary {
+    color: var(--accent-color) !important; /* Cyan #0ea5e9 */
+}
+
 .subheading {
     font-weight: 600;
     font-family: 'Inter', sans-serif;
@@ -1337,6 +1344,48 @@ textarea.form-control {
 }
 
 /* ============================================
+   EXTRA SMALL DEVICES (≤ 360px) - Galaxy Fold, Small phones
+   ============================================ */
+@media (max-width: 360px) {
+    /* Compact mobile header */
+    #sideNav .navbar-brand {
+        font-size: 0.85rem;
+        padding: 0.5rem;
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .mobile-header-icons {
+        gap: 0.25rem;
+        margin-right: 0.25rem;
+    }
+    
+    .mobile-header-icons .btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.85rem;
+        min-width: 32px;
+    }
+    
+    .mobile-header-icons .btn i {
+        font-size: 0.9rem;
+    }
+    
+    #sideNav .navbar-toggler {
+        padding: 0.4rem 0.6rem;
+        font-size: 1rem;
+    }
+    
+    /* Prevent wrapping - make name shorter */
+    #sideNav .navbar-brand span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 140px;
+        display: inline-block;
+    }
+}
+
+/* ============================================
    UTILITY CLASSES
    ============================================ */
 .glass-card {
@@ -1362,6 +1411,8 @@ textarea.form-control {
 /* ============================================
    DARK MODE OVERRIDES
    ============================================ */
+
+/* === TEXT COLORS === */
 [data-theme="dark"] body,
 [data-theme="dark"] p,
 [data-theme="dark"] .lead,
@@ -1381,17 +1432,86 @@ textarea.form-control {
     color: #f1f5f9 !important; /* Πολύ ανοιχτό για headings */
 }
 
-/* Gradient text φαίνεται σωστά στο dark mode */
+/* === GRADIENT TEXT === */
 [data-theme="dark"] .gradient-text {
-    background: var(--gradient-primary);
+    background: var(--gradient-primary); /* Φωτεινό cyan gradient */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
-/* Text-primary class (ΖΗΣΟΓΛΟΥ) φωτεινό cyan */
+/* === TEXT-PRIMARY CLASS (ΖΗΣΟΓΛΟΥ στο όνομα) === */
 [data-theme="dark"] .text-primary {
-    color: var(--text-primary) !important;
+    color: #22d3ee !important; /* Φωτεινό cyan */
+}
+
+/* === ICONS: Education, Contact Info, Floating Card === */
+[data-theme="dark"] i.text-primary,
+[data-theme="dark"] .contact-badge i,
+[data-theme="dark"] .floating-item i {
+    color: #22d3ee !important; /* Φωτεινό cyan */
+}
+
+/* === SOCIAL ICONS === */
+[data-theme="dark"] .social-icons a {
+    color: #22d3ee !important; /* Cyan αντί για σκούρο μπλε */
+    border-color: rgba(34, 211, 238, 0.3);
+}
+
+[data-theme="dark"] .social-icons a:hover {
+    background: var(--gradient-primary);
+    color: #ffffff !important;
+}
+
+/* === DEV ICONS (Skills section) === */
+[data-theme="dark"] .dev-icons .list-inline-item i {
+    background: var(--gradient-primary); /* Φωτεινό cyan gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* === COMPANY LINKS (Experience section) === */
+[data-theme="dark"] .company-link {
+    color: #22d3ee !important; /* Φωτεινό cyan */
+}
+
+[data-theme="dark"] .company-link:hover {
+    color: #0ea5e9 !important; /* Πιο σκούρο cyan στο hover */
+}
+
+[data-theme="dark"] .company-link i {
+    color: #22d3ee !important;
+}
+
+/* === MOBILE HEADER ICONS === */
+[data-theme="dark"] .mobile-header-icons .btn {
+    background: rgba(34, 211, 238, 0.1);
+    border-color: rgba(34, 211, 238, 0.3);
+    color: #22d3ee;
+}
+
+[data-theme="dark"] .mobile-header-icons .btn:hover {
+    background: rgba(34, 211, 238, 0.2);
+    border-color: rgba(34, 211, 238, 0.5);
+}
+
+/* === DOWNLOAD BUTTON === */
+[data-theme="dark"] .download-cv-btn {
+    background: var(--gradient-primary);
+    color: #ffffff;
+    border: none;
+}
+
+[data-theme="dark"] .download-cv-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+}
+
+/* === TIMELINE DATES === */
+[data-theme="dark"] .timeline-date {
+    color: #22d3ee !important; /* Φωτεινό cyan για ημερομηνίες */
+    background: var(--bg-secondary);
+    border: 1px solid rgba(34, 211, 238, 0.3);
 }
 
 /* ============================================

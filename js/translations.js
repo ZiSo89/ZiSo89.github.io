@@ -4,7 +4,7 @@
  * Δίγλωσση Υποστήριξη: Αγγλικά & Ελληνικά
  */
 
-let currentLanguage = 'gr'; // Προεπιλογή: Ελληνικά - Default: Greek
+let currentLanguage = 'en'; // Προεπιλογή: Ελληνικά - Default: Greek
 
 const translations = {
     en: {
