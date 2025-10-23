@@ -2,36 +2,56 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Athanasios Zisoglou - Software Engineer with 8+ years in embedded systems, software development, and product integration. Specializing in C/C++, embedded software, and quality assurance.">
+    <meta name="author" content="Athanasios Zisoglou">
+    <meta name="keywords" content="Software Engineer, Embedded Systems, C++, C Programming, STM32, Software Development, Testing, Quality Assurance">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Athanasios Zisoglou - Software Engineer">
+    <meta property="og:description" content="Software Engineer specializing in embedded systems and software development">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ziso89.github.io">
+    
+    <title>Athanasios Zisoglou - Software Engineer</title>
 
-    <title>Resume - Zisoglou Athanasios</title>
-
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom fonts for this template -->
-    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
+    <!-- Font Awesome -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="css/resume.css" rel="stylesheet">
-
+    <!-- Custom styles -->
+    <link href="css/resume-modern.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
 
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
         <a class="navbar-brand js-scroll-trigger" href="#page-top">
-            <span class="d-block d-lg-none">Zisoglou Athanasios</span>
+            <span class="d-block d-lg-none">
+                <span data-lang="en">Athanasios Zisoglou</span>
+                <span data-lang="gr" style="display: none;">Αθανάσιος Ζησόγλου</span>
+            </span>
             <span class="d-none d-lg-block">
-                <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="img/profile3.jpg" alt="">
+                <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="img/profile2.jpg" alt="Athanasios Zisoglou Profile Picture">
             </span>
         </a>
+        <div class="mobile-header-icons d-lg-none">
+            <button id="lang-toggle-mobile" class="btn btn-sm btn-outline-primary" title="Change Language">
+                <i class="fas fa-globe"></i>
+            </button>
+            <button id="dark-mode-toggle-mobile" class="btn btn-sm btn-outline-primary" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -39,25 +59,40 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#about">About</a>
+                    <a class="nav-link js-scroll-trigger active" href="#about">
+                        <span data-lang="en">ABOUT ME</span>
+                        <span data-lang="gr" style="display: none;">ΣΧΕΤΙΚΑ ΜΕ ΕΜΕΝΑ</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#experience">Experience</a>
+                    <a class="nav-link js-scroll-trigger" href="#experience">
+                        <span data-lang="en">EXPERIENCE</span>
+                        <span data-lang="gr" style="display: none;">ΕΜΠΕΙΡΙΑ</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#education">Education</a>
+                    <a class="nav-link js-scroll-trigger" href="#education">
+                        <span data-lang="en">EDUCATION</span>
+                        <span data-lang="gr" style="display: none;">ΕΚΠΑΙΔΕΥΣΗ</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#projects">Projects</a>
+                    <a class="nav-link js-scroll-trigger" href="#projects">
+                        <span data-lang="en">PROJECTS</span>
+                        <span data-lang="gr" style="display: none;">ΕΡΓΑ</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#skills">Skills</a>
+                    <a class="nav-link js-scroll-trigger" href="#skills">
+                        <span data-lang="en">SKILLS</span>
+                        <span data-lang="gr" style="display: none;">ΔΕΞΙΟΤΗΤΕΣ</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#interests">Interests</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#awards">Awards</a>
+                    <a class="nav-link js-scroll-trigger" href="#interests">
+                        <span data-lang="en">LANGUAGES</span>
+                        <span data-lang="gr" style="display: none;">ΓΛΩΣΣΕΣ</span>
+                    </a>
                 </li>
             </ul>
         </div>
@@ -65,493 +100,783 @@
 
     <div class="container-fluid p-0">
 
+        <!-- About Section -->
         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
             <div class="w-100">
-                <h1 class="mb-0">Zisoglou
-                    <span class="text-primary">Athanasios</span>
-                </h1>
-                <div class="subheading mb-5"> Finkengasse 4 · Graz Austria, 8020 · +30
-                    6982344561 ·
-                    <a href="mailto:name@email.com">zisoglou@hotmail.gr</a>
+                <!-- Greek Version -->
+                <div data-lang="gr">
+                    <h1 class="mb-0">ΑΘΑΝΑΣΙΟΣ
+                        <span class="text-primary">ΖΗΣΟΓΛΟΥ</span>
+                    </h1>
+                    
+                    <!-- OPTION B: Contact Info Below Name -->
+                    <div class="contact-info-modern mt-4 mb-5">
+                        <div class="contact-badge">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:zisoglou@hotmail.gr">zisoglou@hotmail.gr</a>
+                        </div>
+                        <div class="contact-badge">
+                            <i class="fas fa-phone"></i>
+                            <span>+30 6982344561</span>
+                        </div>
+                        <div class="contact-badge">
+                            <i class="fas fa-birthday-cake"></i>
+                            <span>02.02.1989</span>
+                        </div>
+                        <div class="contact-badge">
+                            <i class="fas fa-flag"></i>
+                            <span id="nationalityModern">Ελληνική</span>
+                        </div>
+                    </div>
+                    
+                    <h2 class="gradient-text mb-3 mt-4">Περίληψη</h2>
+                    <p class="lead mb-5">
+                        Μηχανικός Λογισμικού με πάνω από <strong>8 χρόνια εμπειρίας στην ανάπτυξη λογισμικού</strong>, τα <strong>ενσωματωμένα συστήματα</strong> και τη <strong>διασύνδεση προϊόντων</strong>. 
+                        Διαθέτω συνδυασμό ισχυρών αναλυτικών ικανοτήτων και πρακτικής εμπειρίας στον προγραμματισμό, τη δοκιμή και την υποστήριξη προϊόντων λογισμικού. 
+                        Επικεντρώνομαι στην <strong>ποιότητα</strong>, την <strong>αποδοτικότητα</strong> και τη <strong>συνεχή βελτίωση</strong> των διαδικασιών ανάπτυξης.
+                    </p>
                 </div>
-                <p class="lead mb-5">Self-motivated, organized, and tech savvy 'Programmer' seeking a suitable
-                    position, to use my programming expertise for developing quality software products fitting to
-                    clients' requirements. I am also excited about the potential of artificial intelligence and eager to
-                    contribute to the development of innovative solutions in this field.</p>
-                <div class="social-icons">
-                    <a href="https://www.linkedin.com/in/athanasios-zisoglou-a3841561" target="_blank">
+
+                <!-- English Version -->
+                <div data-lang="en" style="display: none;">
+                    <h1 class="mb-0">ATHANASIOS
+                        <span class="text-primary">ZISOGLOU</span>
+                    </h1>
+                    
+                    <!-- OPTION B: Contact Info Below Name (English) -->
+                    <div class="contact-info-modern mt-4 mb-5">
+                        <div class="contact-badge">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:zisoglou@hotmail.gr">zisoglou@hotmail.gr</a>
+                        </div>
+                        <div class="contact-badge">
+                            <i class="fas fa-phone"></i>
+                            <span>+30 6982344561</span>
+                        </div>
+                        <div class="contact-badge">
+                            <i class="fas fa-birthday-cake"></i>
+                            <span>02.02.1989</span>
+                        </div>
+                        <div class="contact-badge">
+                            <i class="fas fa-flag"></i>
+                            <span>Greek</span>
+                        </div>
+                    </div>
+
+                    <h2 class="gradient-text mb-3 mt-4">Summary</h2>
+                    <p class="lead mb-5">
+                        Software Engineer with over <strong>8 years of experience in software development</strong>, <strong>embedded systems</strong>, and <strong>product integration</strong>. 
+                        Combines strong analytical thinking with hands-on coding and testing expertise. 
+                        Focused on <strong>quality</strong>, <strong>process efficiency</strong>, and <strong>continuous improvement</strong> in software delivery and performance.
+                    </p>
+                </div>
+
+                <div class="social-icons mb-4">
+                    <a href="https://www.linkedin.com/in/athanasios-zisoglou-a3841561" target="_blank" aria-label="LinkedIn">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
-                    <a href="https://github.com/ZiSo89" target="_blank">
+                    <a href="https://github.com/ZiSo89" target="_blank" aria-label="GitHub">
                         <i class="fab fa-github"></i>
                     </a>
-                    <a href="https://zisoglou.wordpress.com" target="_blank">
+                    <a href="https://zisoglou.wordpress.com" target="_blank" aria-label="WordPress Blog">
                         <i class="fab fa-wordpress-simple"></i>
                     </a>
-
                 </div>
+                <a href="files/Zisoglou-Athanasios-CV-GR.pdf" id="downloadCV" class="download-cv-btn" download="Zisoglou-Athanasios-CV-GR.pdf">
+                    <i class="fas fa-download"></i> <span id="downloadText">Κατέβασμα CV</span>
+                </a>
             </div>
         </section>
 
         <hr class="m-0">
 
+        <!-- Experience Section -->
         <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="experience">
             <div class="w-100">
+                <!-- Greek Version -->
+                <div data-lang="gr">
+                <h2 class="mb-5">Εμπειρία</h2>
+                
+                <div class="timeline">
+                    <!-- Knapp AG - Greek -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Ιούνιος 2025 – σήμερα</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Software Commissioning Engineer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.knapp.com" target="_blank" class="company-link">
+                                    Knapp AG <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Παραμετροποίηση και βελτιστοποίηση λογισμικού βάσει απαιτήσεων πελατών</li>
+                                <li>Εκτέλεση δοκιμών με προσομοιωτές και επιτόπιες δοκιμές ολοκλήρωσης</li>
+                                <li>Υποστήριξη πελατών κατά τη φάση έναρξης λειτουργίας και εκπαίδευσης</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> Software configuration, testing, customer integration, C++, automation systems
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sunlight Group - Greek -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Ιούνιος 2022 – Σεπτέμβριος 2024</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Embedded Software Engineer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.sunlight-group.com/" target="_blank" class="company-link">
+                                    Sunlight Group Storage Systems <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Ανάπτυξη και δοκιμή BMS λογισμικού για νέα προϊόντα</li>
+                                <li>Ανάλυση και βελτίωση υφιστάμενων modules σύμφωνα με απαιτήσεις πελατών</li>
+                                <li>Επίλυση σφαλμάτων και βελτίωση ποιότητας μέσω code review</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> C programming, STM32, CANopen, IAR Embedded Workbench, debugging, testing
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Displays - Greek -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Μάρτιος 2020 – Φεβρουάριος 2022</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Software Developer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.interactive-displays.de" target="_blank" class="company-link">
+                                    Interactive Displays GmbH <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Ανάπτυξη προϊόντων αφής με χρήση OpenCV και Qt framework</li>
+                                <li>Προγραμματισμός μικροελεγκτών (Arduino, Raspberry Pi)</li>
+                                <li>Επεξεργασία εικόνας βάθους με Intel RealSense</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> C++, Qt, OpenCV, Linux, Visual Studio
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intralot - Greek -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Οκτώβριος 2019 – Φεβρουάριος 2020</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Software Engineer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.intralot.com" target="_blank" class="company-link">
+                                    Intralot <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Παροχή υπηρεσιών υποστήριξης 3ου επιπέδου και αυτοματοποίηση ελέγχων εφαρμογών</li>
+                                <li>Αντιμετώπιση προβλημάτων και ανάπτυξη μόνιμων διορθώσεων λογισμικού</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> C, UNIX/Linux, Jira, troubleshooting
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kurt Hüttinger - Greek -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Ιανουάριος 2017 – Απρίλιος 2019</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Software Developer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.huettinger.de" target="_blank" class="company-link">
+                                    Kurt Hüttinger GmbH <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Συμμετοχή σε 50+ έργα διαδραστικών εκθεμάτων σε μουσεία επιστήμης και τεχνολογίας</li>
+                                <li>Ανάπτυξη εφαρμογών σε Arduino, Raspberry Pi και desktop περιβάλλοντα</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> Embedded systems, sensors, LED control, RS485, UART, SPI, I2C
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- English Experience -->
+                <div data-lang="en" style="display: none;">
                 <h2 class="mb-5">Experience</h2>
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Software Commissioning Engineer</h3>
-                        <div class="subheading mb-3">Knapp AG</div>
-                        <ul class="circle">
-                            <li>I model, parameterize and configure our software according to individual customer
-                                requirements</li>
-                            <li>I ensure software quality by testing the software with simulators</li>
-                            <li>I also ensure quality through on-site integration tests and support our customers with
-                                functional tests and training before the start-up phase</li>
-                            <li>The implementation of adaptations of our software according to the customer's needs is
-                                also my important task</li>
-                        </ul>
+                
+                <div class="timeline">
+                    <!-- Knapp AG - English -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Jun 2025 – Present</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Software Commissioning Engineer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.knapp.com" target="_blank" class="company-link">
+                                    Knapp AG <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Configured and optimized software based on specific customer requirements</li>
+                                <li>Executed simulation and on-site integration testing ensuring high software reliability</li>
+                                <li>Supported clients during commissioning and training phases</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> Software configuration, testing, customer integration, C++, automation systems
+                            </div>
+                        </div>
                     </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">Jun 2025 - present</span>
+
+                    <!-- Sunlight Group - English -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Jun 2022 – Sep 2024</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Embedded Software Engineer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.sunlight-group.com/" target="_blank" class="company-link">
+                                    Sunlight Group Storage Systems <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Developed and tested BMS software for new energy storage products</li>
+                                <li>Analyzed and extended existing modules based on client needs</li>
+                                <li>Fixed bugs and improved software quality through peer code reviews</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> C programming, STM32, CANopen, IAR Embedded Workbench, debugging, testing
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Displays - English -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Mar 2020 – Feb 2022</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Software Developer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.interactive-displays.de" target="_blank" class="company-link">
+                                    Interactive Displays GmbH <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Designed and implemented touch-enabled systems using OpenCV and Qt</li>
+                                <li>Developed microcontroller applications (Arduino, Raspberry Pi)</li>
+                                <li>Integrated Intel RealSense depth cameras for gesture detection</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> C++, Qt, OpenCV, Linux, Visual Studio
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intralot - English -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Oct 2019 – Feb 2020</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Software Engineer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.intralot.com" target="_blank" class="company-link">
+                                    Intralot <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Delivered 3rd-level software support and implemented automation controls</li>
+                                <li>Diagnosed and resolved software issues by deploying permanent fixes</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> C, UNIX/Linux, Jira, troubleshooting
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kurt Hüttinger - English -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Jan 2017 – Apr 2019</div>
+                        <div class="timeline-content">
+                            <h3 class="mb-0">Software Developer</h3>
+                            <div class="subheading mb-3">
+                                <a href="https://www.huettinger.de" target="_blank" class="company-link">
+                                    Kurt Hüttinger GmbH <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <ul class="circle">
+                                <li>Contributed to 50+ interactive exhibition projects across Europe</li>
+                                <li>Developed embedded and multimedia applications using Arduino and Raspberry Pi</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Skills:</strong> Embedded systems, sensors, LED control, RS485, UART, SPI, I2C
+                            </div>
+                        </div>
+                    </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">R&D Embedded Software Engineer</h3>
-                        <div class="subheading mb-3">Sunlight Group Energy Storage Systems</div>
-                        <ul class="circle">
-                            <li>Complete BMS SW product development (requirement analysis, detailed design, software
-                                development, testing) for new products</li>
-                            <li>Analysis and extension of existing software modules according to customer requirements
-                            </li>
-                            <li>Bug fixing in existing software components</li>
-                            <li>Troubleshooting and identifying issues on running battery systems</li>
-                            <li>Collaborating in a team environment across engineering disciplines</li>
-                            <li>Review code to improve quality and ensure compliance with certification standards</li>
-                            <li>IAR Embedded Workbench, STM32, C language, CANopen protocol </li>
-                        </ul>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">Jun 2022 - Sep 2024</span>
-                    </div>
                 </div>
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Software Engineer</h3>
-                        <div class="subheading mb-3">Interactive displays</div>
-                        <ul class="circle">
-                            <li>Product developer for new development of products in the touch area</li>
-                            <li>Experience in microcontroller programming (e.g. Raspi, Arduino)</li>
-                            <li>Depth image processing with the depth camera Intel RealSense</li>
-                            <li>Visual studio C++ openCV Qt</li>
-                        </ul>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">Mar 2020 - Mar 2022</span>
-                    </div>
-                </div>
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Software Engineer</h3>
-                        <div class="subheading mb-3">Intralot</div>
-                        <ul class="circle">
-                            <li>Provide 3rd level support services addressing incidents, problems and service requests
-                            </li>
-                            <li>Understand, implement, and automate application controls</li>
-                            <li>Reduce ticket backlog by implementing and delivering the permanent SW fix</li>
-                            <li>Familiar with Jira, UNIX- Linux, C programming language</li>
-                        </ul>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">Oct 2019 - Feb 2020</span>
-                    </div>
-                </div>
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Software Developer</h3>
-                        <div class="subheading mb-3">Kurt Hüttinger GmbH</div>
-                        <p> Switching to Software & Multi-media team;</p>
-                        <ul class="circle">
-                            <li>Participate in more than 50 projects (exhibits) <a
-                                    href="https://youtu.be/yeTGAfJ3MVA?si=usASeMgxW1BaclfS" target="_blank">video</a>
-                            </li>
-                            <li>Programming: Arduino, Raspberry Pi and desktop multimedia applications</li>
-                            <li>Software and Hardware integration</li>
-                            <li>Specialization in embedded systems, microcontrollers, sensors, actuators, digital
-                                displays, LED lighting systems.</li>
-                            <li>Electronic testing and implementation of improvements</li>
-                            <li>Communication protocols such as RS485, UART, SPI, I2C, UDP </li>
-                            <li>Processing, P5js Javascript, Unity 3D</li>
-                        </ul>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">Jan 2017 - Apr 2019</span>
-                    </div>
-                </div>
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Electronic & Electrician Engineer in Service & Installation Department </h3>
-                        <div class="subheading mb-3">Kurt Hüttinger GmbH</div>
-                        <p>Working on projects for Science & Technology Museums in EU and overseas (75% travel)</p>
-                        <ul class="circle">
-                            <li>Actively participating in preliminary project planning (determination of Know-how,
-                                materials, tools & technical aids) </li>
-                            <li>Documenting directing services, procurement of materials / services, effective forecast
-                                and reporting of all changes to exhibits on site </li>
-                            <li>Coordinating field technicians and engineers for improvements/changes upon customer
-                                request </li>
-                            <li>Successfully generating customer input, securing feedback circulation and supervising
-                                customer prior acceptance of service providers on site </li>
-                            <li>Programming Languages: Siemens Logo ! PLC, C Family, JavaScript</li>
-                        </ul>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">Aug 2015 – Jan 2017</span>
-                    </div>
-                </div>
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Internship as Software Developer</h3>
-                        <div class="subheading mb-3">Kurt Hüttinger GmbH</div>
-                        <p>First international business experience in a German based company specializing in Interactive
-                            Exhibitions
-                        </p>
-                        <ul class="circle">
-                            <li>Research on interfaces between PC-systems and programmable logic controls (PLC)</li>
-                            <li>Prototyping and test of such interfaces and implementation in customer projects</li>
-                        </ul>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary"> Oct 2014 – May 2015</span>
-                    </div>
-                </div>
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Internship as Computer and Network technician</h3>
-                        <div class="subheading mb-3">Prisma Electronics SA</div>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">Apr 2014 – Aug 2014</span>
-                    </div>
-                </div>
-
             </div>
-
         </section>
 
         <hr class="m-0">
 
+        <!-- Education Section -->
         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="education">
             <div class="w-100">
+                <!-- Greek Education -->
+                <div data-lang="gr">
+                <h2 class="mb-5">Εκπαίδευση</h2>
+
+                <div class="timeline">
+                    <!-- Bachelor's Degree - Greek -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2007 – 2015</div>
+                        <div class="timeline-content">
+                            <h4 class="mb-2"><i class="fas fa-graduation-cap text-primary mr-2"></i>B.Sc. Μηχανικός Υπολογιστών</h4>
+                            <div class="subheading mb-3">Ανατολική Μακεδονία & Θράκη, ΤΕΙ Ελλάδας</div>
+                            <p class="mb-2"><strong>Βασικά Μαθήματα:</strong></p>
+                            <ul class="circle">
+                                <li>Τεχνητή Νοημοσύνη & Ρομποτική</li>
+                                <li>Ενσωματωμένα Συστήματα & Μικροεπεξεργαστές</li>
+                                <li>Προγραμματισμός C++ & Assembly</li>
+                                <li>Βιομηχανικός Αυτοματισμός (PLC)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Erasmus - Greek -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2011 – 2012</div>
+                        <div class="timeline-content">
+                            <h4 class="mb-2"><i class="fas fa-globe-europe text-primary mr-2"></i>Erasmus Exchange Program</h4>
+                            <div class="subheading mb-3">Akademia Techniczno-Humanistyczna, Πολωνία</div>
+                            <p>Πρόγραμμα ανταλλαγής φοιτητών με εστίαση στα ενσωματωμένα συστήματα</p>
+                        </div>
+                    </div>
+
+                    <!-- MOOC - Greek -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023 – σήμερα</div>
+                        <div class="timeline-content">
+                            <h4 class="mb-2"><i class="fas fa-laptop-code text-primary mr-2"></i>Συνεχής Εκπαίδευση</h4>
+                            <div class="subheading mb-3">Coursera – Online Learning Platform</div>
+                            <p>Εξειδίκευση στην Τεχνητή Νοημοσύνη και Machine Learning μέσω διαπιστευμένων μαθημάτων από κορυφαία πανεπιστήμια</p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- English Education -->
+                <div data-lang="en" style="display: none;">
                 <h2 class="mb-5">Education</h2>
 
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Coursera (MOOC)</h3>
-                        <p>Used coursera, an online learning platform, to take courses offered by accredited
-                            instructors and training programs, to acquire skills in: Artificial Intelligence (AI)</p>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">Apr 2024 - present</span>
-                    </div>
-                </div>
-
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Military service</h3>
-                        <p>Obligatory by law 9-month military service in the Greek army forces </p>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">2012-2013</span>
-                    </div>
-                </div>
-
-
-
-
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between">
-                    <div class="resume-content">
-                        <h3 class="mb-0">B.Sc in Computer engineering</h3>
-                        <div class="subheading mb-3">Eastern Macedonia &Thrace Institute of Technology, Greece </div>
-                        <p>Relevant courses:</p>
-                        <ul class="circle">
-                            <li>Artificial Intelligence</li>
-                            <li>Robotics</li>
-                            <li>Operating systems</li>
-                            <li>Programming in C++</li>
-                            <li>Database Systems</li>
-                            <li>Software development processes</li>
-                            <li>Embedded Systems Technology</li>
-                            <li>Industrial Automation (PLC) </li>
-                            <li>Microprocessors (Assembly)</li>
-                            <li>Digital Systems (Altera FPGA)</li>
-                        </ul>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">2007-2015</span>
-                    </div>
-                </div>
-
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Erasmus Undergraduate Exchange Program</h3>
-                        <div class="subheading mb-3">Akademia Techniczno-Humanistyczna w Bielsku-Białej, Poland </div>
-                        <p>Field Study supervised by Bohdan Borowik (PhD) on the section of embedded systems.</p>
-                    </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">2011-2012</span>
-                    </div>
-                </div>
-
-
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Technical High School diploma in Informatics Technology</h3>
-                        <div class="subheading mb-3">Technological Vocational School (TEE) of Alexandroupoli, Greece
+                <div class="timeline">
+                    <!-- Bachelor's Degree - English -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2007 – 2015</div>
+                        <div class="timeline-content">
+                            <h4 class="mb-2"><i class="fas fa-graduation-cap text-primary mr-2"></i>B.Sc. in Computer Engineering</h4>
+                            <div class="subheading mb-3">Eastern Macedonia & Thrace Institute of Technology, Greece</div>
+                            <p class="mb-2"><strong>Key Courses:</strong></p>
+                            <ul class="circle">
+                                <li>Artificial Intelligence & Robotics</li>
+                                <li>Embedded Systems & Microprocessors</li>
+                                <li>C++ Programming & Assembly</li>
+                                <li>Industrial Automation (PLC)</li>
+                            </ul>
                         </div>
-                        <p>Elementary studies in Informatics combined with part-time student employment in a Greek
-                            Computing company (Futureland) </p>
                     </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary">2004-2006</span>
+
+                    <!-- Erasmus - English -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2011 – 2012</div>
+                        <div class="timeline-content">
+                            <h4 class="mb-2"><i class="fas fa-globe-europe text-primary mr-2"></i>Erasmus Exchange Program</h4>
+                            <div class="subheading mb-3">Akademia Techniczno-Humanistyczna, Poland</div>
+                            <p>Student exchange program focused on embedded systems development</p>
+                        </div>
                     </div>
+
+                    <!-- MOOC - English -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023 – Present</div>
+                        <div class="timeline-content">
+                            <h4 class="mb-2"><i class="fas fa-laptop-code text-primary mr-2"></i>Continuing Education</h4>
+                            <div class="subheading mb-3">Coursera – Online Learning Platform</div>
+                            <p>Specialization in Artificial Intelligence and Machine Learning through accredited courses from top universities</p>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </section>
 
         <hr class="m-0">
 
+        <!-- Projects Section -->
         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="projects">
             <div class="w-100">
-                <h2 class="mb-5">PROJECTS</h2>
-                <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="resume-content">
-                        <h3 class="mb-0">Automated Coffee Machine</h3>
-                        <h3 class="mb-0">Field Study Project as part of the Diploma Thesis</h3>
-                        <div class="subheading mb-3">Eastern Macedonia &Thrace Institute of Technology, Greece </div>
-                        <p>Development of a “Full automatic coffee machine” that produces coffee in the Greek way. The
-                            user can order the type of the coffee via Bluetooth, from an Android smart phone. The
-                            mechanical parts are from recyclable broken printers,
-                            pumps from cars etc. The project is using two Atmega328 microprocessors. Programming was in
-                            Arduino language C and the Android application for ordering the coffee was created with
-                            Eclipse (java). Project Link:
-                            <a href="http://coffemake.wordpress.com/" target="_blank">wordpress</a>
-                        </p>
-
-                        <h3 class="mb-0">Mirotouch</h3>
-                        <h3 class="mb-0">an innovative product in touch area</h3>
-                        <div class="subheading mb-3">Interactive displays, Germany </div>
-                        <p>New development of products in the touch area:
-                            A project, with which you can turn any monitor/projector/Video-Wall into a touch screen with
-                            just one camera.
-                            Detects your moving finger towards the screen and translates it into touch actions with high
-                            accuracy and no latency.
-                            Any disturbances towards the invisible laser web caused by the movement of your finger in
-                            front of the screen will be detected by the sensor (camera) and translated into accurate and
-                            immediate mouse actions.
-                            <a href="https://vimeo.com/453252636" target="_blank">Vimeo</a>
-                        </p>
-                        <table id="skills">
-                            <tr>
-                                <th>Operating Systems</th>
-                                <td>Windows, Linux</td>
-                            </tr>
-                            <tr>
-                                <th>Progamming Language</th>
-                                <td>C++</td>
-                            </tr>
-                            <tr>
-                                <th>IDE</th>
-                                <td>Visual studio</td>
-                            </tr>
-                            <tr>
-                                <th>Framework</th>
-                                <td>Qt</td>
-                            </tr>
-                            <tr>
-                                <th>Libraries</th>
-                                <td>OpenCV</td>
-                            </tr>
-                            <tr>
-                                <th>Interface</th>
-                                <td>raw HID</td>
-                            </tr>
-                            <tr>
-                                <th>Depth camera</th>
-                                <td>Intel RealSense</td>
-                            </tr>
-                            <tr>
-                                <th>Micro-controller</th>
-                                <td>Teensy 3.2</td>
-                            </tr>
-                            <tr>
-                                <th>Linux mini PC</th>
-                                <td>Raspberry Pi 4</td>
-                            </tr>
-                        </table>
-
+                <!-- Greek Projects -->
+                <div data-lang="gr">
+                <h2 class="mb-5">Έργα</h2>
+                
+                <div class="project-card fade-in">
+                    <div class="project-card-header">
+                        <h4 class="mb-2">Mirotouch</h4>
+                        <div class="subheading">Interactive Displays GmbH</div>
                     </div>
-                    <div class="resume-date text-md-right">
-                        <span class="text-primary"> 2010-2011 </span>
+                    <div class="project-card-body">
+                        <p>Καινοτόμο προϊόν που μετατρέπει κάθε οθόνη σε επιφάνεια αφής με χρήση κάμερας βάθους Intel RealSense και Raspberry Pi.</p>
+                        <a href="https://vimeo.com/453252636" target="_blank" class="project-link">
+                            View Demo <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <div class="mt-3">
+                            <strong>Tech:</strong> C++, Qt, OpenCV, Linux
+                        </div>
                     </div>
+                </div>
 
+                <div class="project-card fade-in">
+                    <div class="project-card-header">
+                        <h4 class="mb-2">Automated Coffee Machine</h4>
+                        <div class="subheading">Πτυχιακή Εργασία</div>
+                    </div>
+                    <div class="project-card-body">
+                        <p>Αυτόματη μηχανή καφέ που ελέγχεται μέσω Bluetooth από Android εφαρμογή.</p>
+                        <a href="http://coffemake.wordpress.com/" target="_blank" class="project-link">
+                            View Project <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <div class="mt-3">
+                            <strong>Tech:</strong> Arduino (C++), Java, Atmega328
+                        </div>
+                    </div>
+                </div>
 
+                <!-- WordPress Portfolio - Greek -->
+                <div class="project-card fade-in mt-4">
+                    <div class="project-card-header">
+                        <h4 class="mb-2">WordPress Portfolio</h4>
+                        <div class="subheading">Web Development & E-Commerce</div>
+                    </div>
+                    <div class="project-card-body">
+                        <p class="mb-4">Στον ελεύθερό μου χρόνο, σχεδιάζω και αναπτύσσω custom WordPress websites για πελάτες, συνδυάζοντας δημιουργικότητα με τεχνική εξειδίκευση.</p>
+                        
+                        <div class="wordpress-grid">
+                            <a href="https://e-gata.gr" target="_blank" class="wordpress-card" style="text-decoration: none; color: inherit;">
+                                <div style="height: 200px; overflow: hidden;">
+                                    <img src="img/e-gata.gr aggelies 1.jpg" alt="Business Website" class="wordpress-card-image">
+                                </div>
+                                <div class="wordpress-card-content">
+                                    <h5>Business Websites</h5>
+                                    <p>Επαγγελματικά εταιρικά websites με custom themes και λειτουργικότητα</p>
+                                    <div class="mt-2">
+                                        <span class="project-tag">WordPress</span>
+                                        <span class="project-tag">PHP</span>
+                                    </div>
+                                </div>
+                            </a>
 
+                            <div class="wordpress-card">
+                                <div style="height: 200px; overflow: hidden;">
+                                    <img src="img/sea-buckthorn-shop.jpg" alt="E-Commerce Solution" class="wordpress-card-image">
+                                </div>
+                                <div class="wordpress-card-content">
+                                    <h5>E-Commerce Solutions</h5>
+                                    <p>Online καταστήματα με WooCommerce και ενσωμάτωση πληρωμών</p>
+                                    <div class="mt-2">
+                                        <span class="project-tag">WooCommerce</span>
+                                        <span class="project-tag">Payments</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wordpress-card">
+                                <div style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                                    <i class="fab fa-wordpress"></i>
+                                </div>
+                                <div class="wordpress-card-content">
+                                    <h5>Custom Development</h5>
+                                    <p>Προσαρμοσμένα themes με SEO optimization και responsive design</p>
+                                    <div class="mt-2">
+                                        <span class="project-tag">SEO</span>
+                                        <span class="project-tag">Responsive</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                </div>
+
+                <!-- English Projects -->
+                <div data-lang="en" style="display: none;">
+                <h2 class="mb-5">Projects</h2>
+                
+                <div class="project-card fade-in">
+                    <div class="project-card-header">
+                        <h4 class="mb-2">Mirotouch</h4>
+                        <div class="subheading">Interactive Displays GmbH</div>
+                    </div>
+                    <div class="project-card-body">
+                        <p>Innovative product turning any screen into a touch surface using Intel RealSense depth camera and Raspberry Pi.</p>
+                        <a href="https://vimeo.com/453252636" target="_blank" class="project-link">
+                            View Demo <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <div class="mt-3">
+                            <strong>Tech:</strong> C++, Qt, OpenCV, Linux
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-card-header">
+                        <h4 class="mb-2">Automated Coffee Machine</h4>
+                        <div class="subheading">Diploma Thesis</div>
+                    </div>
+                    <div class="project-card-body">
+                        <p>Fully automated coffee maker controlled via Bluetooth Android app.</p>
+                        <a href="http://coffemake.wordpress.com/" target="_blank" class="project-link">
+                            View Project <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <div class="mt-3">
+                            <strong>Tech:</strong> Arduino (C++), Java, Atmega328
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WordPress Portfolio - English -->
+                <div class="project-card fade-in mt-4">
+                    <div class="project-card-header">
+                        <h4 class="mb-2">WordPress Portfolio</h4>
+                        <div class="subheading">Web Development & E-Commerce</div>
+                    </div>
+                    <div class="project-card-body">
+                        <p class="mb-4">In my free time, I design and develop custom WordPress websites for clients, combining creativity with technical expertise.</p>
+                        
+                        <div class="wordpress-grid">
+                            <a href="https://e-gata.gr" target="_blank" class="wordpress-card" style="text-decoration: none; color: inherit;">
+                                <div style="height: 200px; overflow: hidden;">
+                                    <img src="img/e-gata.gr aggelies 1.jpg" alt="Business Website" class="wordpress-card-image">
+                                </div>
+                                <div class="wordpress-card-content">
+                                    <h5>Business Websites</h5>
+                                    <p>Professional corporate websites with custom themes and functionality</p>
+                                    <div class="mt-2">
+                                        <span class="project-tag">WordPress</span>
+                                        <span class="project-tag">PHP</span>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <div class="wordpress-card">
+                                <div style="height: 200px; overflow: hidden;">
+                                    <img src="img/sea-buckthorn-shop.jpg" alt="E-Commerce Solution" class="wordpress-card-image">
+                                </div>
+                                <div class="wordpress-card-content">
+                                    <h5>E-Commerce Solutions</h5>
+                                    <p>WooCommerce-powered online stores with payment integration</p>
+                                    <div class="mt-2">
+                                        <span class="project-tag">WooCommerce</span>
+                                        <span class="project-tag">Payments</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wordpress-card">
+                                <div style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                                    <i class="fab fa-wordpress"></i>
+                                </div>
+                                <div class="wordpress-card-content">
+                                    <h5>Custom Development</h5>
+                                    <p>Custom themes with SEO optimization and responsive design</p>
+                                    <div class="mt-2">
+                                        <span class="project-tag">SEO</span>
+                                        <span class="project-tag">Responsive</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </section>
 
         <hr class="m-0">
 
+        <!-- Skills Section - Removed (now under each experience) -->
         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="skills">
             <div class="w-100">
-                <h2 class="mb-5">Skills</h2>
-
-                <div class="subheading mb-3">Programming Languages &amp; Tools</div>
-                <ul class="list-inline dev-icons">
-                    <li class="list-inline-item">
-                        <i class="fab fa-html5"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-css3"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-js-square"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-angular"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-react"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-node-js"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-wordpress"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-npm"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-bootstrap"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab c-plus-plus"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-python"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-java"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-git"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-adobe"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-windows"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-ubuntu"></i>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fab fa-raspberry-pi"></i>
-                    </li>
-
+                <div data-lang="gr">
+                <h2 class="mb-5">Τεχνικές Δεξιότητες</h2>
+                
+                <!-- Dev Icons -->
+                <ul class="list-inline dev-icons mb-5">
+                    <li class="list-inline-item" title="C/C++"><i class="fas fa-code"></i></li>
+                    <li class="list-inline-item" title="Python"><i class="fab fa-python"></i></li>
+                    <li class="list-inline-item" title="JavaScript"><i class="fab fa-js-square"></i></li>
+                    <li class="list-inline-item" title="HTML5"><i class="fab fa-html5"></i></li>
+                    <li class="list-inline-item" title="CSS3"><i class="fab fa-css3-alt"></i></li>
+                    <li class="list-inline-item" title="Java"><i class="fab fa-java"></i></li>
+                    <li class="list-inline-item" title="Git"><i class="fab fa-git-alt"></i></li>
+                    <li class="list-inline-item" title="GitHub"><i class="fab fa-github"></i></li>
+                    <li class="list-inline-item" title="Linux"><i class="fab fa-linux"></i></li>
+                    <li class="list-inline-item" title="Raspberry Pi"><i class="fab fa-raspberry-pi"></i></li>
+                    <li class="list-inline-item" title="WordPress"><i class="fab fa-wordpress"></i></li>
                 </ul>
-
-
-                <table id="skills">
-                    <tr>
-                        <th>Operating Systems</th>
-                        <td>Windows, Linux</td>
-                    </tr>
-                    <tr>
-                        <th>Progamming Languages</th>
-                        <td>C, C++, C# .NET, Python, FBD </td>
-                    </tr>
-                    <tr>
-                        <th>Web Programming</th>
-                        <td>HTML5, CSS3, JavaScript, jQuery, NodeJS </td>
-                    </tr>
-                    <tr>
-                        <th>Software Development</th>
-                        <td>Visual Studio, Visual Code</td>
-                    </tr>
-                    <tr>
-                        <th>Siemens</th>
-                        <td>LOGO! Soft Comfort</td>
-                    </tr>
-                    <tr>
-                        <th>Engineering tools</th>
-                        <td>AutoCAD</td>
-                    </tr>
-                    <tr>
-                        <th>Database</th>
-                        <td>Oracle, Microsoft SQL Server, NoSQL</td>
-                    </tr>
-                    <tr>
-                        <th>Graphics design</th>
-                        <td>Adobe Photoshop, Adobe Premiere </td>
-                    </tr>
-                </table>
+                
+                <div class="glass-card">
+                    <p><strong>Γλώσσες Προγραμματισμού:</strong></p>
+                    <ul class="circle mb-3">
+                        <li>C, C++, C#, JavaScript</li>
+                    </ul>
+                    
+                    <p><strong>Embedded Systems & Hardware:</strong></p>
+                    <ul class="circle mb-3">
+                        <li>STM32, Arduino, Raspberry Pi</li>
+                        <li>CANopen, UART, SPI, I2C, UDP</li>
+                        <li>Siemens LOGO! PLC</li>
+                    </ul>
+                    
+                    <p><strong>Εργαλεία & Frameworks:</strong></p>
+                    <ul class="circle mb-3">
+                        <li>IAR Embedded Workbench, Visual Studio</li>
+                        <li>Qt Framework, OpenCV</li>
+                        <li>Visual Code, Processing, Unity 3D</li>
+                        <li>Git, Jira</li>
+                    </ul>
+                    
+                    <p><strong>Λειτουργικά Συστήματα:</strong></p>
+                    <ul class="circle mb-3">
+                        <li>Linux, Windows</li>
+                    </ul>
+                    
+                    <p><strong>Web & Content Management:</strong></p>
+                    <ul class="circle mb-0">
+                        <li>WordPress, WooCommerce, PHP</li>
+                        <li>HTML/CSS, Responsive Design</li>
+                        <li>Custom Themes Development</li>
+                    </ul>
+                </div>
+                </div>
+                
+                <div data-lang="en" style="display: none;">
+                <h2 class="mb-5">Technical Skills</h2>
+                
+                <!-- Dev Icons -->
+                <ul class="list-inline dev-icons mb-5">
+                    <li class="list-inline-item" title="C/C++"><i class="fas fa-code"></i></li>
+                    <li class="list-inline-item" title="Python"><i class="fab fa-python"></i></li>
+                    <li class="list-inline-item" title="JavaScript"><i class="fab fa-js-square"></i></li>
+                    <li class="list-inline-item" title="HTML5"><i class="fab fa-html5"></i></li>
+                    <li class="list-inline-item" title="CSS3"><i class="fab fa-css3-alt"></i></li>
+                    <li class="list-inline-item" title="Java"><i class="fab fa-java"></i></li>
+                    <li class="list-inline-item" title="Git"><i class="fab fa-git-alt"></i></li>
+                    <li class="list-inline-item" title="GitHub"><i class="fab fa-github"></i></li>
+                    <li class="list-inline-item" title="Linux"><i class="fab fa-linux"></i></li>
+                    <li class="list-inline-item" title="Raspberry Pi"><i class="fab fa-raspberry-pi"></i></li>
+                    <li class="list-inline-item" title="WordPress"><i class="fab fa-wordpress"></i></li>
+                </ul>
+                
+                <div class="glass-card">
+                    <p><strong>Programming Languages:</strong></p>
+                    <ul class="circle mb-3">
+                        <li>C, C++, C#, JavaScript</li>
+                    </ul>
+                    
+                    <p><strong>Embedded Systems & Hardware:</strong></p>
+                    <ul class="circle mb-3">
+                        <li>STM32, Arduino, Raspberry Pi</li>
+                        <li>CANopen, UART, SPI, I2C, UDP</li>
+                        <li>Siemens LOGO! PLC</li>
+                    </ul>
+                    
+                    <p><strong>Tools & Frameworks:</strong></p>
+                    <ul class="circle mb-3">
+                        <li>IAR Embedded Workbench, Visual Studio</li>
+                        <li>Qt Framework, OpenCV</li>
+                        <li>Visual Code, Processing, Unity 3D</li>
+                        <li>Git, Jira</li>
+                    </ul>
+                    
+                    <p><strong>Operating Systems:</strong></p>
+                    <ul class="circle mb-3">
+                        <li>Linux, Windows</li>
+                    </ul>
+                    
+                    <p><strong>Web & Content Management:</strong></p>
+                    <ul class="circle mb-0">
+                        <li>WordPress, WooCommerce, PHP</li>
+                        <li>HTML/CSS, Responsive Design</li>
+                        <li>Custom Themes Development</li>
+                    </ul>
+                </div>
+                </div>
             </div>
         </section>
 
-
         <hr class="m-0">
 
+        <!-- Interests Section -->
         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="interests">
             <div class="w-100">
-                <h2 class="mb-5">Interests</h2>
-                <p>Apart from a developer, I enjoy most of my time being outdoors. In the winter, I am an avid skier.
-                    During the warmer months, I enjoy mountain biking.
-                </p>
-                <p class="mb-0">When forced indoors, I follow a number of sci-fi and fantasy genre movies and television
-                    shows, I am an aspiring chef, and I spend a large amount of my free time exploring the latest
-                    technology advancements in the front-end web development
-                    world.
-                </p>
+                <!-- Greek Interests -->
+                <div data-lang="gr">
+                <h2 class="mb-5">Γλώσσες & Ενδιαφέροντα</h2>
+                <div class="glass-card mb-4">
+                    <p><strong>Γλώσσες:</strong> Ελληνικά (μητρική), Αγγλικά (επαγγελματική ευχέρεια), Γερμανικά (βασικά)</p>
+                    <p class="mb-0"><strong>Ενδιαφέροντα:</strong> Εκτός από τον προγραμματισμό, αγαπώ τις υπαίθριες δραστηριότητες όπως σκι και ποδηλασία βουνού. Στον ελεύθερο χρόνο μου παρακολουθώ sci-fi σειρές, μαγειρεύω και παραμένω ενημερωμένος με τις τελευταίες τάσεις στην ανάπτυξη web εφαρμογών.</p>
+                </div>
+                </div>
+
+                <!-- English Interests -->
+                <div data-lang="en" style="display: none;">
+                <h2 class="mb-5">Languages & Interests</h2>
+                <div class="glass-card">
+                    <p><strong>Languages:</strong> Greek (native), English (business fluent), German (basic)</p>
+                    <p class="mb-0"><strong>Interests:</strong> Beyond programming, I love outdoor activities like skiing and mountain biking. In my free time, I watch sci-fi series, cook, and stay updated with the latest trends in web application development.</p>
+                </div>
+                </div>
             </div>
         </section>
 
-        <hr class="m-0">
+    </div>
 
-        <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="awards">
-            <div class="w-100">
-                <h2 class="mb-5">Awards</h2>
-                <ul class="fa-ul mb-0">
-                    <li>
-                        <i class="fa-li fa fa-trophy text-warning"></i> 1
-                        <sup>st</sup>For the project “Funicular” on 7th student construction in Athens
-                    </li>
-                    <li>
-                    <li>
-                        <i class="fa-li fa fa-trophy text-warning"></i> 1
-                        <sup>st</sup>First prize from <a href="http://www.i2fest.gr/?lang=en" target="_blank">i2fest</a>
-                        festival on computer-based systems
-                    </li>
-                    <li>
-                </ul>
+    <!-- OPTION C: Floating Contact Card -->
+    <div class="floating-contact-card" id="floatingContact">
+        <button class="floating-toggle" id="floatingToggle">
+            <i class="fas fa-address-card"></i>
+        </button>
+        <div class="floating-content" id="floatingContent">
+            <h5 class="mb-3"><i class="fas fa-id-card"></i> Contact Info</h5>
+            <div class="floating-item">
+                <i class="fas fa-envelope text-primary"></i>
+                <a href="mailto:zisoglou@hotmail.gr">zisoglou@hotmail.gr</a>
             </div>
-        </section>
-
+            <div class="floating-item">
+                <i class="fas fa-phone text-primary"></i>
+                <span>+30 6982344561</span>
+            </div>
+            <div class="floating-item">
+                <i class="fas fa-birthday-cake text-primary"></i>
+                <span>02.02.1989</span>
+            </div>
+            <div class="floating-item">
+                <i class="fas fa-flag text-primary"></i>
+                <span id="nationalityFloating">Ελληνική</span>
+            </div>
+            <div class="floating-social mt-3">
+                <a href="https://www.linkedin.com/in/athanasios-zisoglou-a3841561" target="_blank" title="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com/ZiSo89" target="_blank" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://zisoglou.wordpress.com" target="_blank" title="WordPress">
+                    <i class="fab fa-wordpress-simple"></i>
+                </a>
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap core JavaScript -->
@@ -561,8 +886,11 @@
     <!-- Plugin JavaScript -->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for this template -->
-    <script src="js/resume.min.js"></script>
+    <!-- Translations -->
+    <script src="js/translations.js"></script>
+
+    <!-- Custom scripts -->
+    <script src="js/resume-modern.js"></script>
 
 </body>
 
