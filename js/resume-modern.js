@@ -1,7 +1,64 @@
 /**
  * Modern Resume - Interactive JavaScript
- * Features: Dark Mode, Smooth Scrolling, Animations
+ * Features: Dark Mode, Smooth Scrolling, Animations, Performance Optimizations
  */
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+/**
+ * Debounce function to limit rate of function execution
+ * Improves performance for scroll, resize, and input events
+ */
+function debounce(func, wait = 100) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func.apply(this, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+/**
+ * Throttle function for even more controlled execution
+ * Ensures function runs at most once per specified time period
+ */
+function throttle(func, limit = 100) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+
+// ============================================
+// DOM CACHE - Cache frequently accessed elements
+// ============================================
+const DOMCache = {
+    sideNav: null,
+    navLinks: null,
+    sections: null,
+    backToTop: null,
+    languageToggle: null,
+    darkModeToggle: null,
+    
+    // Initialize cache after DOM is loaded
+    init: function() {
+        this.sideNav = document.getElementById('sideNav');
+        this.navLinks = document.querySelectorAll('.nav-link');
+        this.sections = document.querySelectorAll('.resume-section');
+        this.backToTop = document.getElementById('backToTop');
+        this.languageToggle = document.getElementById('languageToggle');
+        this.darkModeToggle = document.getElementById('darkModeToggle');
+    }
+};
 
 // ============================================
 // STATE MANAGEMENT
@@ -12,6 +69,10 @@ let isDarkMode = false;
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize DOM cache first for performance
+    DOMCache.init();
+    
+    // Initialize features
     initLoadingScreen();
     initDarkMode();
     initSmoothScrolling();
@@ -22,8 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initContactForm();
     initFloatingContact();
     initMobileNavCollapse();
+    initScrollRevealAnimations(); // Scroll reveal animations
+    initProgressBarsAnimation(); // Progress bars animation
     
     console.log('🚀 Modern Resume initialized successfully!');
+    console.log('⚡ Performance optimizations active: Debounce, DOM caching');
 });
 
 // ============================================
@@ -174,14 +238,16 @@ function initBackToTop() {
     backToTop.title = 'Back to Top';
     document.body.appendChild(backToTop);
     
-    // Show/hide on scroll
-    window.addEventListener('scroll', function() {
+    // Show/hide on scroll with debounce for performance
+    const handleBackToTopScroll = debounce(() => {
         if (window.pageYOffset > 300) {
             backToTop.classList.add('show');
         } else {
             backToTop.classList.remove('show');
         }
-    });
+    }, 100);
+    
+    window.addEventListener('scroll', handleBackToTopScroll);
     
     // Scroll to top on click
     backToTop.addEventListener('click', function() {
@@ -243,17 +309,20 @@ function initScrollAnimations() {
 // NAVIGATION HIGHLIGHT
 // ============================================
 function initNavHighlight() {
-    const sections = document.querySelectorAll('section.resume-section');
-    const navLinks = document.querySelectorAll('.nav-link');
+    // Use cached DOM elements for better performance
+    const sections = DOMCache.sections || document.querySelectorAll('section.resume-section');
+    const navLinks = DOMCache.navLinks || document.querySelectorAll('.nav-link');
     
-    window.addEventListener('scroll', () => {
+    // Update active nav link based on scroll position
+    const updateActiveNavLink = () => {
+        const scrollPos = window.pageYOffset;
         let current = '';
         
         sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
+            const sectionTop = section.offsetTop - 100;
+            const sectionBottom = sectionTop + section.clientHeight;
             
-            if (window.pageYOffset >= sectionTop - 100) {
+            if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
                 current = section.getAttribute('id');
             }
         });
@@ -264,7 +333,14 @@ function initNavHighlight() {
                 link.classList.add('active');
             }
         });
-    });
+    };
+    
+    // Debounce scroll event for performance
+    const debouncedUpdateNav = debounce(updateActiveNavLink, 100);
+    window.addEventListener('scroll', debouncedUpdateNav);
+    
+    // Initial call to set active link on page load
+    updateActiveNavLink();
 }
 
 // ============================================
@@ -418,6 +494,77 @@ function loadGitHubContributions() {
             </a>
         `;
     }
+}
+
+// ============================================
+// SCROLL REVEAL ANIMATIONS WITH INTERSECTION OBSERVER
+// ============================================
+function initScrollRevealAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const fadeInObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in-visible');
+                
+                // Stagger animations for timeline items
+                if (entry.target.classList.contains('timeline-item')) {
+                    const items = entry.target.querySelectorAll('li');
+                    items.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'translateX(0)';
+                        }, index * 100);
+                    });
+                }
+                
+                // Unobserve after animation to improve performance
+                fadeInObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe all elements that should animate
+    const elementsToAnimate = document.querySelectorAll(
+        '.resume-section, .timeline-item, .project-card, .certification-card, .wordpress-card'
+    );
+    
+    elementsToAnimate.forEach(el => {
+        el.classList.add('fade-in-animation');
+        fadeInObserver.observe(el);
+    });
+}
+
+// ============================================
+// SKILLS PROGRESS BARS ANIMATION
+// ============================================
+function initProgressBarsAnimation() {
+    const progressBars = document.querySelectorAll('.progress-bar');
+    
+    if (progressBars.length === 0) return; // Exit if no progress bars found
+    
+    const progressObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const bar = entry.target;
+                const width = bar.getAttribute('data-width');
+                
+                // Animate the progress bar
+                setTimeout(() => {
+                    bar.style.width = width + '%';
+                }, 100);
+                
+                // Unobserve after animation
+                progressObserver.unobserve(bar);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    // Observe all progress bars
+    progressBars.forEach(bar => progressObserver.observe(bar));
 }
 
 // ============================================

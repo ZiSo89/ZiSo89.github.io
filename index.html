@@ -4,21 +4,33 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Athanasios Zisoglou - Software Engineer with 8+ years in embedded systems, software development, and product integration. Specializing in C/C++, embedded software, and quality assurance.">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Athanasios Zisoglou - Software Engineer with 11+ years in embedded systems, automation, PLC programming, and software development. Specializing in C/C++, embedded software, and quality assurance.">
     <meta name="author" content="Athanasios Zisoglou">
-    <meta name="keywords" content="Software Engineer, Embedded Systems, C++, C Programming, STM32, Software Development, Testing, Quality Assurance">
+    <meta name="keywords" content="Software Engineer, Embedded Systems, C++, PLC Programming, Automation Systems, STM32, Software Development, Testing, Quality Assurance, RTOS">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ziso89.github.io">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Athanasios Zisoglou - Software Engineer">
-    <meta property="og:description" content="Software Engineer specializing in embedded systems and software development">
-    <meta property="og:type" content="website">
+    <meta property="og:description" content="Software Engineer with 11+ years in embedded systems, automation, and software development">
+    <meta property="og:image" content="https://ziso89.github.io/img/profile2.jpg">
     <meta property="og:url" content="https://ziso89.github.io">
+    <meta property="og:type" content="website">
     
-    <title>Athanasios Zisoglou - Software Engineer</title>
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Athanasios Zisoglou - Software Engineer">
+    <meta name="twitter:description" content="Software Engineer with 11+ years in embedded systems and automation">
+    <meta name="twitter:image" content="https://ziso89.github.io/img/profile2.jpg">
+    
+    <title>Athanasios Zisoglou - Software Engineer | Embedded Systems & Automation</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@400;600;700;800&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Bootstrap core CSS -->
@@ -844,39 +856,254 @@
                     <li class="list-inline-item" title="Raspberry Pi"><i class="fab fa-raspberry-pi"></i></li>
                     <li class="list-inline-item" title="WordPress"><i class="fab fa-wordpress"></i></li>
                 </ul>
-                
-                <div class="glass-card">
-                    <p><strong>Γλώσσες Προγραμματισμού:</strong></p>
-                    <ul class="circle mb-3">
-                        <li>C, C++, C#, JavaScript</li>
-                    </ul>
-                    
-                    <p><strong>Embedded Systems & Hardware:</strong></p>
-                    <ul class="circle mb-3">
-                        <li>STM32, Arduino, Raspberry Pi</li>
-                        <li>CANopen, UART, SPI, I2C, UDP</li>
-                        <li>Siemens LOGO! PLC</li>
-                    </ul>
-                    
-                    <p><strong>Εργαλεία & Frameworks:</strong></p>
-                    <ul class="circle mb-3">
-                        <li>IAR Embedded Workbench, Visual Studio</li>
-                        <li>Qt Framework, OpenCV</li>
-                        <li>Visual Code, Processing, Unity 3D</li>
-                        <li>Git, Jira</li>
-                    </ul>
-                    
-                    <p><strong>Λειτουργικά Συστήματα:</strong></p>
-                    <ul class="circle mb-3">
-                        <li>Linux, Windows</li>
-                    </ul>
-                    
-                    <p><strong>Web & Content Management:</strong></p>
-                    <ul class="circle mb-0">
-                        <li>WordPress, WooCommerce, PHP</li>
-                        <li>HTML/CSS, Responsive Design</li>
-                        <li>Custom Themes Development</li>
-                    </ul>
+
+                <!-- Skills Progress Bars -->
+                <div class="skills-container mb-5">
+                    <!-- Programming Languages -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-code"></i> Προγραμματισμός</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">C/C++</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Python</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">JavaScript</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">C#</span>
+                                <span class="skill-percent">75%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="75"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Embedded Systems -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-microchip"></i> Embedded Systems</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">STM32</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">PLC Programming</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">RTOS</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">CANopen</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tools & Frameworks -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-tools"></i> Εργαλεία & Frameworks</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Git/GitHub</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Qt Framework</span>
+                                <span class="skill-percent">75%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="75"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">OpenCV</span>
+                                <span class="skill-percent">70%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="70"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Linux</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Web Development -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-globe"></i> Web Development</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">HTML/CSS</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">WordPress</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">PHP</span>
+                                <span class="skill-percent">70%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="70"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Responsive Design</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Protocols & Communication -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-network-wired"></i> Πρωτόκολλα & Επικοινωνία</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">CANopen</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">UART/SPI/I2C</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">UDP/TCP</span>
+                                <span class="skill-percent">75%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="75"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Modbus</span>
+                                <span class="skill-percent">70%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="70"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Development Tools -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-laptop-code"></i> Development Tools</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">IAR Embedded Workbench</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Visual Studio</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">VS Code</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Jira</span>
+                                <span class="skill-percent">75%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="75"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
                 
@@ -897,39 +1124,254 @@
                     <li class="list-inline-item" title="Raspberry Pi"><i class="fab fa-raspberry-pi"></i></li>
                     <li class="list-inline-item" title="WordPress"><i class="fab fa-wordpress"></i></li>
                 </ul>
-                
-                <div class="glass-card">
-                    <p><strong>Programming Languages:</strong></p>
-                    <ul class="circle mb-3">
-                        <li>C, C++, C#, JavaScript</li>
-                    </ul>
-                    
-                    <p><strong>Embedded Systems & Hardware:</strong></p>
-                    <ul class="circle mb-3">
-                        <li>STM32, Arduino, Raspberry Pi</li>
-                        <li>CANopen, UART, SPI, I2C, UDP</li>
-                        <li>Siemens LOGO! PLC</li>
-                    </ul>
-                    
-                    <p><strong>Tools & Frameworks:</strong></p>
-                    <ul class="circle mb-3">
-                        <li>IAR Embedded Workbench, Visual Studio</li>
-                        <li>Qt Framework, OpenCV</li>
-                        <li>Visual Code, Processing, Unity 3D</li>
-                        <li>Git, Jira</li>
-                    </ul>
-                    
-                    <p><strong>Operating Systems:</strong></p>
-                    <ul class="circle mb-3">
-                        <li>Linux, Windows</li>
-                    </ul>
-                    
-                    <p><strong>Web & Content Management:</strong></p>
-                    <ul class="circle mb-0">
-                        <li>WordPress, WooCommerce, PHP</li>
-                        <li>HTML/CSS, Responsive Design</li>
-                        <li>Custom Themes Development</li>
-                    </ul>
+
+                <!-- Skills Progress Bars -->
+                <div class="skills-container mb-5">
+                    <!-- Programming Languages -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-code"></i> Programming</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">C/C++</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Python</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">JavaScript</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">C#</span>
+                                <span class="skill-percent">75%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="75"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Embedded Systems -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-microchip"></i> Embedded Systems</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">STM32</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">PLC Programming</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">RTOS</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">CANopen</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tools & Frameworks -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-tools"></i> Tools & Frameworks</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Git/GitHub</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Qt Framework</span>
+                                <span class="skill-percent">75%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="75"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">OpenCV</span>
+                                <span class="skill-percent">70%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="70"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Linux</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Web Development -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-globe"></i> Web Development</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">HTML/CSS</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">WordPress</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">PHP</span>
+                                <span class="skill-percent">70%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="70"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Responsive Design</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Protocols & Communication -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-network-wired"></i> Protocols & Communication</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">CANopen</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">UART/SPI/I2C</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">UDP/TCP</span>
+                                <span class="skill-percent">75%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="75"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Modbus</span>
+                                <span class="skill-percent">70%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="70"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Development Tools -->
+                    <div class="skill-category">
+                        <h4><i class="fas fa-laptop-code"></i> Development Tools</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">IAR Embedded Workbench</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Visual Studio</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">VS Code</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Jira</span>
+                                <span class="skill-percent">75%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" data-width="75"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
             </div>
@@ -1011,6 +1453,75 @@
 
     <!-- Custom scripts -->
     <script src="js/resume-modern.js"></script>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Athanasios Zisoglou",
+        "alternateName": "Αθανάσιος Ζησόγλου",
+        "jobTitle": "Software Commissioning Engineer",
+        "worksFor": {
+            "@type": "Organization",
+            "name": "Knapp AG",
+            "url": "https://www.knapp.com"
+        },
+        "email": "zisoglou@hotmail.gr",
+        "telephone": "+30-6982344561",
+        "url": "https://ziso89.github.io",
+        "sameAs": [
+            "https://www.linkedin.com/in/athanasios-zisoglou-a3841561",
+            "https://github.com/ZiSo89"
+        ],
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Kavala",
+            "addressCountry": "GR"
+        },
+        "birthDate": "1989-02-02",
+        "knowsLanguage": [
+            {
+                "@type": "Language",
+                "name": "Greek",
+                "alternateName": "el"
+            },
+            {
+                "@type": "Language",
+                "name": "English",
+                "alternateName": "en"
+            },
+            {
+                "@type": "Language",
+                "name": "German",
+                "alternateName": "de"
+            }
+        ],
+        "hasCredential": [
+            {
+                "@type": "EducationalOccupationalCredential",
+                "credentialCategory": "degree",
+                "educationalLevel": "Bachelor's degree",
+                "name": "B.Sc. in Computer Engineering",
+                "recognizedBy": {
+                    "@type": "Organization",
+                    "name": "Technological Educational Institute of Eastern Macedonia and Thrace"
+                }
+            }
+        ],
+        "knowsAbout": [
+            "C/C++ Programming",
+            "Embedded Systems",
+            "PLC Programming",
+            "Automation Systems",
+            "Software Quality Assurance",
+            "JavaScript",
+            "Python",
+            "Linux/Unix Systems",
+            "RTOS Development"
+        ]
+    }
+    </script>
 
 </body>
 
