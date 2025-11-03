@@ -269,7 +269,7 @@ p.lead {
 /* OPTION C: Floating Contact Card */
 .floating-contact-card {
     position: fixed;
-    bottom: 100px;
+    bottom: 130px;
     right: 30px;
     z-index: 998;
 }
@@ -404,7 +404,7 @@ p.lead {
     }
     
     .floating-contact-card {
-        bottom: 80px;
+        bottom: 110px;
         right: 20px;
     }
     
