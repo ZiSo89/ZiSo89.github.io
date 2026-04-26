@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FastDelivery — Portfolio Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --amber: #F59E0B;
+    --amber-light: #FCD34D;
+    --amber-dark: #B45309;
+    --bg: #0A0A0B;
+    --bg2: #111113;
+    --bg3: #18181B;
+    --border: rgba(245,158,11,0.15);
+    --text: #F4F4F5;
+    --text-muted: #71717A;
+    --text-dim: #A1A1AA;
+    --green: #22C55E;
+    --blue: #3B82F6;
+    --purple: #A855F7;
+    --red: #EF4444;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,10,11,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    color: var(--amber);
+    letter-spacing: -0.03em;
+  }
+
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-dim); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--amber); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 7rem 2.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(ellipse, rgba(245,158,11,0.12) 0%, transparent 70%);
+    top: -100px; left: -200px;
+    pointer-events: none;
+    animation: pulse 6s ease-in-out infinite;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(ellipse, rgba(59,130,246,0.07) 0%, transparent 70%);
+    bottom: 0; right: -100px;
+    pointer-events: none;
+    animation: pulse 8s ease-in-out 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+  }
+
+  .hero-label {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--amber); font-weight: 500;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-label::before {
+    content: ''; display: block;
+    width: 32px; height: 1px; background: var(--amber);
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .hero-title .accent {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--amber);
+  }
+
+  .hero-desc {
+    font-size: 1.15rem; font-weight: 300;
+    color: var(--text-dim);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 6px;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary {
+    background: var(--amber); color: #000;
+  }
+  .btn-primary:hover { background: var(--amber-light); transform: translateY(-2px); }
+  .btn-ghost {
+    background: transparent; color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .btn-ghost:hover { border-color: var(--amber); color: var(--amber); transform: translateY(-2px); }
+
+  .hero-stats {
+    margin-top: 4rem;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .stat-item {
+    padding: 1.75rem;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem; font-weight: 800;
+    color: var(--amber); line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 2.5rem; }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--amber); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--amber); }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+  .section-subtitle {
+    color: var(--text-dim); font-weight: 300;
+    font-size: 1.05rem; max-width: 520px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ── TECH STACK ── */
+  #stack { background: var(--bg2); }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .stack-item {
+    background: var(--bg2);
+    padding: 1.75rem;
+    transition: background 0.2s;
+  }
+  .stack-item:hover { background: var(--bg3); }
+
+  .stack-icon {
+    font-size: 2rem; margin-bottom: 1rem;
+    display: block;
+  }
+  .stack-role {
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--text-muted); margin-bottom: 0.4rem;
+  }
+  .stack-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1.05rem;
+    color: var(--text); margin-bottom: 0.5rem;
+  }
+  .stack-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+
+  /* ── ARCHITECTURE ── */
+  #architecture { background: var(--bg); }
+
+  .arch-diagram {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 3rem;
+  }
+
+  .arch-layer {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    background: var(--bg2);
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .arch-layer:hover { border-color: var(--amber); transform: translateY(-4px); }
+
+  .arch-layer-icon { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
+  .arch-layer-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 0.95rem;
+    color: var(--amber); margin-bottom: 0.5rem;
+  }
+  .arch-layer ul { list-style: none; }
+  .arch-layer ul li {
+    font-size: 0.78rem; color: var(--text-dim);
+    padding: 0.2rem 0; border-bottom: 1px solid var(--border);
+  }
+  .arch-layer ul li:last-child { border-bottom: none; }
+
+  .arch-arrow {
+    font-size: 1.5rem; color: var(--amber);
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  /* ── FEATURES ── */
+  #features { background: var(--bg2); }
+
+  .features-tabs {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .tab-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.82rem; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab-btn:hover { border-color: var(--amber); color: var(--amber); }
+  .tab-btn.active { background: var(--amber); color: #000; border-color: var(--amber); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+
+  .feature-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .feature-card:hover { border-color: var(--amber); transform: translateY(-3px); }
+  .feature-icon { font-size: 1.75rem; margin-bottom: 0.75rem; display: block; }
+  .feature-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+  .feature-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.55; }
+
+  /* ── DATABASE ── */
+  #database { background: var(--bg); }
+
+  .db-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+
+  .db-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .db-card:hover { border-color: var(--amber); }
+
+  .db-header {
+    padding: 1rem 1.25rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(245,158,11,0.05);
+  }
+  .db-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .db-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 0.9rem;
+    color: var(--amber);
+  }
+  .db-count { margin-left: auto; font-size: 0.7rem; color: var(--text-muted); }
+  .db-fields { padding: 1rem 1.25rem; }
+  .db-field {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.78rem;
+  }
+  .db-field:last-child { border-bottom: none; }
+  .db-field-name { color: var(--text-dim); font-family: monospace; }
+  .db-field-type {
+    font-size: 0.68rem; padding: 0.15rem 0.5rem;
+    border-radius: 4px; font-family: monospace;
+  }
+  .type-str { background: rgba(34,197,94,0.15); color: var(--green); }
+  .type-num { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .type-bool { background: rgba(168,85,247,0.15); color: var(--purple); }
+  .type-ref { background: rgba(245,158,11,0.15); color: var(--amber); }
+  .type-date { background: rgba(239,68,68,0.15); color: var(--red); }
+  .type-obj { background: rgba(251,191,36,0.12); color: #FBB724; }
+
+  /* ── ORDER FLOW ── */
+  #flow { background: var(--bg2); }
+
+  .flow-container {
+    position: relative;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+
+  .flow-track {
+    display: flex;
+    gap: 0;
+    min-width: 900px;
+    position: relative;
+  }
+
+  .flow-step {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center;
+    position: relative;
+  }
+
+  .flow-step::after {
+    content: '→';
+    position: absolute; right: -12px; top: 22px;
+    color: var(--amber); font-size: 1.2rem; z-index: 2;
+  }
+  .flow-step:last-child::after { display: none; }
+
+  .flow-bubble {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    border: 2px solid;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    background: var(--bg);
+    margin-bottom: 0.75rem;
+    position: relative; z-index: 1;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .flow-step:hover .flow-bubble { transform: scale(1.15); }
+
+  .flow-name { font-size: 0.68rem; text-align: center; color: var(--text-dim); max-width: 80px; line-height: 1.3; }
+  .flow-actor { font-size: 0.6rem; text-align: center; margin-top: 0.3rem; padding: 0.15rem 0.5rem; border-radius: 100px; }
+
+  /* ── API ── */
+  #api { background: var(--bg); }
+
+  .api-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .api-table th {
+    text-align: left; padding: 0.75rem 1rem;
+    font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted); border-bottom: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+  }
+  .api-table td { padding: 0.65rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .api-table tr:hover td { background: rgba(245,158,11,0.03); }
+
+  .method-badge {
+    display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; font-family: monospace;
+  }
+  .get { background: rgba(34,197,94,0.15); color: var(--green); }
+  .post { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .put { background: rgba(245,158,11,0.15); color: var(--amber); }
+  .delete { background: rgba(239,68,68,0.15); color: var(--red); }
+
+  .endpoint { font-family: monospace; color: var(--text-dim); font-size: 0.8rem; }
+  .role-badge {
+    display: inline-block; padding: 0.1rem 0.45rem; border-radius: 4px;
+    font-size: 0.65rem; letter-spacing: 0.05em;
+  }
+
+  /* ── REALTIME ── */
+  #realtime { background: var(--bg2); }
+
+  .socket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  @media (max-width: 640px) { .socket-grid { grid-template-columns: 1fr; } }
+
+  .socket-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .socket-card-header {
+    padding: 1rem 1.25rem;
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .socket-dot { width: 7px; height: 7px; border-radius: 50%; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+  .socket-event {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .socket-event:last-child { border-bottom: none; }
+  .event-name { font-family: monospace; font-size: 0.8rem; color: var(--amber); }
+  .event-desc { font-size: 0.78rem; color: var(--text-dim); }
+  .event-dir { font-size: 0.65rem; padding: 0.1rem 0.4rem; border-radius: 3px; flex-shrink: 0; }
+  .dir-in { background: rgba(34,197,94,0.15); color: var(--green); }
+  .dir-out { background: rgba(59,130,246,0.15); color: var(--blue); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 4rem 2.5rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem; font-weight: 800;
+    color: var(--amber); letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+  }
+  .footer-sub { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 2rem; }
+  .footer-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: var(--amber); text-decoration: none;
+    font-size: 0.9rem; font-weight: 500;
+    border: 1px solid var(--border);
+    padding: 0.75rem 1.75rem; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .footer-link:hover { background: rgba(245,158,11,0.1); border-color: var(--amber); }
+  .footer-copy { margin-top: 3rem; font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .revealed { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.25rem; }
+    .hero { padding: 6rem 1.25rem 3rem; }
+    .arch-diagram { grid-template-columns: 1fr; }
+    .arch-arrow { transform: rotate(90deg); padding: 0.5rem 0; }
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+    .stat-item:nth-child(2) { border-right: none; }
+    .stat-item { border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+    .stat-item:nth-child(3), .stat-item:nth-child(4) { border-bottom: none; }
+    .stat-item:nth-child(4) { border-right: none; }
+    .flow-track { min-width: 700px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">⚡ FastDelivery</div>
+  <div class="nav-links">
+    <a href="#stack">Stack</a>
+    <a href="#architecture">Αρχιτεκτονική</a>
+    <a href="#features">Features</a>
+    <a href="#database">Database</a>
+    <a href="#flow">Order Flow</a>
+    <a href="#api">API</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-label">Full-Stack Project — 2024/2025</div>
+  <h1 class="hero-title">Fast<br><span class="accent">Delivery</span></h1>
+  <p class="hero-desc">
+    Πλήρης πλατφόρμα διαχείρισης παραδόσεων για τοπικές επιχειρήσεις. Web admin panel, store dashboards, driver & customer mobile apps — με real-time order tracking.
+  </p>
+  <div class="hero-cta">
+    <a href="https://github.com/ZiSo89/FastDelivery" target="_blank" class="btn btn-primary">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.6.07-.6 1 .07 1.52 1.02 1.52 1.02.89 1.52 2.33 1.08 2.9.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.7.11 2.5.33 1.9-1.29 2.74-1.02 2.74-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.41-.01 2.74 0 .27.18.58.69.48A10.01 10.01 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
+      GitHub Repo
+    </a>
+    <a href="#architecture" class="btn btn-ghost">Δες την Αρχιτεκτονική →</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-label">User Roles</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Platforms</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">40+</div>
+      <div class="stat-label">API Endpoints</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">13</div>
+      <div class="stat-label">Order Statuses</div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="stack">
+  <div class="section-label">01 — Tech Stack</div>
+  <h2 class="section-title reveal">Τεχνολογίες<br>& Εργαλεία</h2>
+  <p class="section-subtitle reveal">Modern full-stack architecture με proven technologies για production-ready εφαρμογές.</p>
+
+  <div class="stack-grid reveal">
+    <div class="stack-item">
+      <span class="stack-icon">🟩</span>
+      <div class="stack-role">Backend</div>
+      <div class="stack-name">Node.js + Express</div>
+      <div class="stack-desc">RESTful API με MVC pattern, JWT auth, middleware pipeline και modular route structure.</div>
+    </div>
+    <div class="stack-item">
+      <span class="stack-icon">🍃</span>
+      <div class="stack-role">Database</div>
+      <div class="stack-name">MongoDB Atlas</div>
+      <div class="stack-desc">NoSQL με Mongoose ODM. Geospatial indexes (2dsphere), compound indexes, denormalization για performance.</div>
+    </div>
+    <div class="stack-item">
+      <span class="stack-icon">⚛️</span>
+      <div class="stack-role">Frontend Web</div>
+      <div class="stack-name">React.js</div>
+      <div class="stack-desc">SPA με Context API, React Bootstrap, Recharts για dashboards. PWA support με service worker.</div>
+    </div>
+    <div class="stack-item">
+      <span class="stack-icon">📱</span>
+      <div class="stack-role">Mobile</div>
+      <div class="stack-name">React Native (Expo)</div>
+      <div class="stack-desc">Cross-platform mobile apps για Customer & Driver. Expo prebuild για native Android APK builds.</div>
+    </div>
+    <div class="stack-item">
+      <span class="stack-icon">🔌</span>
+      <div class="stack-role">Real-time</div>
+      <div class="stack-name">Socket.IO</div>
+      <div class="stack-desc">Bidirectional event-based communication. Room-based architecture για targeted notifications per order/role.</div>
+    </div>
+    <div class="stack-item">
+      <span class="stack-icon">🗺️</span>
+      <div class="stack-role">Maps & Location</div>
+      <div class="stack-name">Google Maps API</div>
+      <div class="stack-desc">Geocoding διευθύνσεων, react-native-maps για live driver tracking. GeoJSON για location storage.</div>
+    </div>
+    <div class="stack-item">
+      <span class="stack-icon">🔐</span>
+      <div class="stack-role">Security</div>
+      <div class="stack-name">JWT + bcrypt</div>
+      <div class="stack-desc">Role-based access control, token expiry (30d), bcrypt password hashing, email verification flow.</div>
+    </div>
+    <div class="stack-item">
+      <span class="stack-icon">☁️</span>
+      <div class="stack-role">Hosting</div>
+      <div class="stack-name">Render</div>
+      <div class="stack-desc">Backend ως Web Service, Frontend ως Static Site. CI/CD μέσω GitHub integration.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="section-label">02 — Αρχιτεκτονική</div>
+  <h2 class="section-title reveal">System<br>Architecture</h2>
+  <p class="section-subtitle reveal">Monorepo με 3 ανεξάρτητα packages: backend, frontend web, και mobile apps. Κοινό API — διαφορετικά clients.</p>
+
+  <div class="arch-diagram reveal">
+    <div class="arch-layer">
+      <span class="arch-layer-icon">📱</span>
+      <div class="arch-layer-name">Mobile Apps</div>
+      <ul>
+        <li>Customer App</li>
+        <li>Driver App</li>
+        <li>React Native Expo</li>
+        <li>Expo Push Notifications</li>
+      </ul>
+    </div>
+    <div class="arch-arrow">⇄</div>
+    <div class="arch-layer" style="border-color: var(--amber);">
+      <span class="arch-layer-icon">⚙️</span>
+      <div class="arch-layer-name">API Server</div>
+      <ul>
+        <li>Node.js + Express</li>
+        <li>Socket.IO</li>
+        <li>JWT Auth</li>
+        <li>Controllers / Routes</li>
+      </ul>
+    </div>
+    <div class="arch-arrow">⇄</div>
+    <div class="arch-layer">
+      <span class="arch-layer-icon">🌐</span>
+      <div class="arch-layer-name">Web App</div>
+      <ul>
+        <li>Admin Dashboard</li>
+        <li>Store Panel</li>
+        <li>React.js + PWA</li>
+        <li>Recharts Graphs</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="arch-diagram reveal" style="margin-top: 1rem;">
+    <div class="arch-layer">
+      <span class="arch-layer-icon">🍃</span>
+      <div class="arch-layer-name">MongoDB Atlas</div>
+      <ul>
+        <li>8 Collections</li>
+        <li>Geospatial indexes</li>
+        <li>Mongoose ODM</li>
+        <li>Auto-snapshots</li>
+      </ul>
+    </div>
+    <div class="arch-arrow">⇄</div>
+    <div class="arch-layer">
+      <span class="arch-layer-icon">📧</span>
+      <div class="arch-layer-name">Email Service</div>
+      <ul>
+        <li>Brevo (Sendinblue)</li>
+        <li>Resend (fallback)</li>
+        <li>Email Verification</li>
+        <li>Password Reset</li>
+      </ul>
+    </div>
+    <div class="arch-arrow">⇄</div>
+    <div class="arch-layer">
+      <span class="arch-layer-icon">🗺️</span>
+      <div class="arch-layer-name">External APIs</div>
+      <ul>
+        <li>Google Maps Geocoding</li>
+        <li>Google Maps Navigation</li>
+        <li>Expo Push Service</li>
+        <li>Firebase Storage</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">03 — Features</div>
+  <h2 class="section-title reveal">4 Roles,<br>1 Platform</h2>
+  <p class="section-subtitle reveal">Κάθε τύπος χρήστη έχει το δικό του tailored interface με ακριβώς αυτά που χρειάζεται.</p>
+
+  <div class="features-tabs reveal">
+    <button class="tab-btn active" onclick="showTab('admin')">👨‍💼 Admin</button>
+    <button class="tab-btn" onclick="showTab('store')">🏪 Store</button>
+    <button class="tab-btn" onclick="showTab('driver')">🚗 Driver</button>
+    <button class="tab-btn" onclick="showTab('customer')">👤 Customer</button>
+  </div>
+
+  <div id="tab-admin" class="tab-content active">
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">Real-time Dashboard</div>
+      <div class="feature-desc">Στατιστικά παραγγελιών, εσόδων και drivers σε πραγματικό χρόνο. Recharts για visualizations.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">✅</span>
+      <div class="feature-title">Approval Workflows</div>
+      <div class="feature-desc">Έγκριση/απόρριψη νέων stores και drivers πριν αποκτήσουν πρόσβαση στο σύστημα.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🚗</span>
+      <div class="feature-title">Driver Assignment</div>
+      <div class="feature-desc">Ανάθεση παραγγελιών σε διαθέσιμους drivers χειροκίνητα ή αυτόματα.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💰</span>
+      <div class="feature-title">Financial Reports</div>
+      <div class="feature-desc">Μηνιαία έσοδα, delivery fees, έξοδα. Λογιστικά αρχεία 5 ετών.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">⚙️</span>
+      <div class="feature-title">System Settings</div>
+      <div class="feature-desc">Delivery fees, ωράρια λειτουργίας, τύποι καταστημάτων με dynamic emoji icons.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">👥</span>
+      <div class="feature-title">User Management</div>
+      <div class="feature-desc">Διαχείριση stores, drivers, customers. Soft delete για GDPR compliance.</div>
+    </div>
+  </div>
+
+  <div id="tab-store" class="tab-content">
+    <div class="feature-card">
+      <span class="feature-icon">📦</span>
+      <div class="feature-title">Order Management</div>
+      <div class="feature-desc">Accept/reject παραγγελίες, ορισμός τιμής προϊόντων, ενημέρωση status (preparing / ready).</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔔</span>
+      <div class="feature-title">Real-time Notifications</div>
+      <div class="feature-desc">Socket.IO push για νέες παραγγελίες. Instant ειδοποίηση χωρίς refresh.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📋</span>
+      <div class="feature-title">Order History</div>
+      <div class="feature-desc">Πλήρες ιστορικό παραγγελιών με status timeline και χρονοσήμανση.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">👤</span>
+      <div class="feature-title">Profile Management</div>
+      <div class="feature-desc">Διαχείριση επιχειρηματικού προφίλ, ωρών λειτουργίας, περιοχών εξυπηρέτησης.</div>
+    </div>
+  </div>
+
+  <div id="tab-driver" class="tab-content">
+    <div class="feature-card">
+      <span class="feature-icon">📍</span>
+      <div class="feature-title">GPS Order Assignment</div>
+      <div class="feature-desc">Παραγγελίες βάσει τοποθεσίας. Real-time GPS tracking με broadcast στον πελάτη.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🗺️</span>
+      <div class="feature-title">Turn-by-Turn Navigation</div>
+      <div class="feature-desc">Google Maps navigation για pickup και delivery locations απευθείας από την εφαρμογή.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📡</span>
+      <div class="feature-title">Live Location Broadcast</div>
+      <div class="feature-desc">Συνεχής αποστολή τοποθεσίας μέσω Socket.IO. Ο πελάτης βλέπει τον driver live στον χάρτη.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💼</span>
+      <div class="feature-title">Availability Toggle</div>
+      <div class="feature-desc">On/Off για διαθεσιμότητα. Ένας driver = μία παραγγελία τη φορά.</div>
+    </div>
+  </div>
+
+  <div id="tab-customer" class="tab-content">
+    <div class="feature-card">
+      <span class="feature-icon">🏪</span>
+      <div class="feature-title">Browse Stores</div>
+      <div class="feature-desc">Εξερεύνηση τοπικών καταστημάτων με φιλτράρισμα ανά τύπο (φαγητό, φαρμακείο, κ.α.).</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📝</span>
+      <div class="feature-title">Voice & Text Orders</div>
+      <div class="feature-desc">Παραγγελίες με κείμενο ή φωνή (voice recording → Firebase Storage URL).</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🗺️</span>
+      <div class="feature-title">Live Driver Tracking</div>
+      <div class="feature-desc">Real-time χάρτης με τη θέση του driver κατά τη διάρκεια της παράδοσης.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔔</span>
+      <div class="feature-title">Push Notifications</div>
+      <div class="feature-desc">Expo push notifications για κάθε αλλαγή status παραγγελίας.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DATABASE -->
+<section id="database">
+  <div class="section-label">04 — Database Design</div>
+  <h2 class="section-title reveal">MongoDB<br>Schema Design</h2>
+  <p class="section-subtitle reveal">8 collections με strategic denormalization, geospatial indexes και Singleton pattern για settings.</p>
+
+  <div class="db-grid reveal">
+    <div class="db-card">
+      <div class="db-header">
+        <div class="db-dot" style="background:#22C55E"></div>
+        <div class="db-name">orders</div>
+        <div class="db-count">Κεντρική collection</div>
+      </div>
+      <div class="db-fields">
+        <div class="db-field"><span class="db-field-name">orderNumber</span><span class="db-field-type type-str">String (unique)</span></div>
+        <div class="db-field"><span class="db-field-name">customer</span><span class="db-field-type type-obj">Embedded</span></div>
+        <div class="db-field"><span class="db-field-name">deliveryLocation</span><span class="db-field-type type-obj">GeoJSON</span></div>
+        <div class="db-field"><span class="db-field-name">storeId</span><span class="db-field-type type-ref">→ stores</span></div>
+        <div class="db-field"><span class="db-field-name">driverId</span><span class="db-field-type type-ref">→ drivers</span></div>
+        <div class="db-field"><span class="db-field-name">status</span><span class="db-field-type type-str">Enum (13)</span></div>
+        <div class="db-field"><span class="db-field-name">statusHistory</span><span class="db-field-type type-obj">Array</span></div>
+        <div class="db-field"><span class="db-field-name">totalPrice</span><span class="db-field-type type-num">Number</span></div>
+      </div>
+    </div>
+
+    <div class="db-card">
+      <div class="db-header">
+        <div class="db-dot" style="background:#3B82F6"></div>
+        <div class="db-name">stores</div>
+        <div class="db-count">Επιχειρήσεις</div>
+      </div>
+      <div class="db-fields">
+        <div class="db-field"><span class="db-field-name">businessName</span><span class="db-field-type type-str">String</span></div>
+        <div class="db-field"><span class="db-field-name">afm</span><span class="db-field-type type-str">String (9 ψηφία)</span></div>
+        <div class="db-field"><span class="db-field-name">location</span><span class="db-field-type type-obj">2dsphere</span></div>
+        <div class="db-field"><span class="db-field-name">storeType</span><span class="db-field-type type-str">Dynamic</span></div>
+        <div class="db-field"><span class="db-field-name">status</span><span class="db-field-type type-str">pending/approved</span></div>
+        <div class="db-field"><span class="db-field-name">isEmailVerified</span><span class="db-field-type type-bool">Boolean</span></div>
+      </div>
+    </div>
+
+    <div class="db-card">
+      <div class="db-header">
+        <div class="db-dot" style="background:#A855F7"></div>
+        <div class="db-name">drivers</div>
+        <div class="db-count">Διανομείς</div>
+      </div>
+      <div class="db-fields">
+        <div class="db-field"><span class="db-field-name">vehicle</span><span class="db-field-type type-str">String</span></div>
+        <div class="db-field"><span class="db-field-name">licensePlate</span><span class="db-field-type type-str">String</span></div>
+        <div class="db-field"><span class="db-field-name">isOnline</span><span class="db-field-type type-bool">Boolean</span></div>
+        <div class="db-field"><span class="db-field-name">currentOrder</span><span class="db-field-type type-ref">→ orders</span></div>
+        <div class="db-field"><span class="db-field-name">pushToken</span><span class="db-field-type type-str">Expo token</span></div>
+        <div class="db-field"><span class="db-field-name">status</span><span class="db-field-type type-str">pending/approved</span></div>
+      </div>
+    </div>
+
+    <div class="db-card">
+      <div class="db-header">
+        <div class="db-dot" style="background:#F59E0B"></div>
+        <div class="db-name">settings</div>
+        <div class="db-count">Singleton</div>
+      </div>
+      <div class="db-fields">
+        <div class="db-field"><span class="db-field-name">key</span><span class="db-field-type type-str">'main' (unique)</span></div>
+        <div class="db-field"><span class="db-field-name">defaultDeliveryFee</span><span class="db-field-type type-num">Number</span></div>
+        <div class="db-field"><span class="db-field-name">storeTypes</span><span class="db-field-type type-obj">Array (11)</span></div>
+        <div class="db-field"><span class="db-field-name">serviceHoursEnabled</span><span class="db-field-type type-bool">Boolean</span></div>
+        <div class="db-field"><span class="db-field-name">serviceHoursStart</span><span class="db-field-type type-str">HH:MM</span></div>
+      </div>
+    </div>
+
+    <div class="db-card">
+      <div class="db-header">
+        <div class="db-dot" style="background:#EF4444"></div>
+        <div class="db-name">customers</div>
+        <div class="db-count">Εγγεγραμμένοι</div>
+      </div>
+      <div class="db-fields">
+        <div class="db-field"><span class="db-field-name">phone</span><span class="db-field-type type-str">10 ψηφία</span></div>
+        <div class="db-field"><span class="db-field-name">location</span><span class="db-field-type type-obj">GeoJSON</span></div>
+        <div class="db-field"><span class="db-field-name">isDeleted</span><span class="db-field-type type-bool">Soft Delete</span></div>
+        <div class="db-field"><span class="db-field-name">pushToken</span><span class="db-field-type type-str">Expo token</span></div>
+        <div class="db-field"><span class="db-field-name">isEmailVerified</span><span class="db-field-type type-bool">Boolean</span></div>
+      </div>
+    </div>
+
+    <div class="db-card">
+      <div class="db-header">
+        <div class="db-dot" style="background:#71717A"></div>
+        <div class="db-name">monthlyexpenses</div>
+        <div class="db-count">Λογιστικά</div>
+      </div>
+      <div class="db-fields">
+        <div class="db-field"><span class="db-field-name">year</span><span class="db-field-type type-num">Number</span></div>
+        <div class="db-field"><span class="db-field-name">month</span><span class="db-field-type type-num">1–12</span></div>
+        <div class="db-field"><span class="db-field-name">amount</span><span class="db-field-type type-num">Number</span></div>
+        <div class="db-field"><span class="db-field-name">updatedBy</span><span class="db-field-type type-ref">→ admins</span></div>
+        <div class="db-field"><span class="db-field-name">notes</span><span class="db-field-type type-str">max 500 chars</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FLOW -->
+<section id="flow">
+  <div class="section-label">05 — Order Lifecycle</div>
+  <h2 class="section-title reveal">13-Step<br>Order Flow</h2>
+  <p class="section-subtitle reveal">Κάθε παραγγελία περνά από 13 πιθανά statuses με πλήρες audit trail (statusHistory) και role-based transitions.</p>
+
+  <div class="flow-container reveal">
+    <div class="flow-track">
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#71717A; color:#71717A">📝</div>
+        <div class="flow-name">pending_store</div>
+        <div class="flow-actor" style="background:rgba(113,113,122,0.15);color:#71717A">system</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#F59E0B; color:#F59E0B">💰</div>
+        <div class="flow-name">pricing</div>
+        <div class="flow-actor" style="background:rgba(245,158,11,0.15);color:#F59E0B">store</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#3B82F6; color:#3B82F6">👨‍💼</div>
+        <div class="flow-name">pending_admin</div>
+        <div class="flow-actor" style="background:rgba(59,130,246,0.15);color:#3B82F6">admin</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#A855F7; color:#A855F7">⏳</div>
+        <div class="flow-name">pending_customer</div>
+        <div class="flow-actor" style="background:rgba(168,85,247,0.15);color:#A855F7">customer</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#22C55E; color:#22C55E">✅</div>
+        <div class="flow-name">confirmed</div>
+        <div class="flow-actor" style="background:rgba(34,197,94,0.15);color:#22C55E">customer</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#F59E0B; color:#F59E0B">📋</div>
+        <div class="flow-name">assigned</div>
+        <div class="flow-actor" style="background:rgba(245,158,11,0.15);color:#F59E0B">admin</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#22C55E; color:#22C55E">🚗</div>
+        <div class="flow-name">accepted_driver</div>
+        <div class="flow-actor" style="background:rgba(34,197,94,0.15);color:#22C55E">driver</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#3B82F6; color:#3B82F6">👨‍🍳</div>
+        <div class="flow-name">preparing</div>
+        <div class="flow-actor" style="background:rgba(59,130,246,0.15);color:#3B82F6">store</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#F59E0B; color:#F59E0B">🛵</div>
+        <div class="flow-name">in_delivery</div>
+        <div class="flow-actor" style="background:rgba(245,158,11,0.15);color:#F59E0B">driver</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble" style="border-color:#22C55E; color:#22C55E">🏁</div>
+        <div class="flow-name">completed</div>
+        <div class="flow-actor" style="background:rgba(34,197,94,0.15);color:#22C55E">driver</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- API -->
+<section id="api">
+  <div class="section-label">06 — REST API</div>
+  <h2 class="section-title reveal">40+ Endpoints<br>Documented</h2>
+  <p class="section-subtitle reveal">Versioned API (<code style="color:var(--amber)">/api/v1</code>) με role-based access control και JWT authentication.</p>
+
+  <div class="reveal" style="overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; overflow: hidden;">
+    <table class="api-table">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Περιγραφή</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="method-badge post">POST</span></td><td class="endpoint">/auth/login</td><td>Login (όλοι οι ρόλοι)</td><td><span class="role-badge" style="background:rgba(113,113,122,0.15);color:#A1A1AA">Public</span></td></tr>
+        <tr><td><span class="method-badge post">POST</span></td><td class="endpoint">/auth/customer/register</td><td>Εγγραφή πελάτη</td><td><span class="role-badge" style="background:rgba(113,113,122,0.15);color:#A1A1AA">Public</span></td></tr>
+        <tr><td><span class="method-badge post">POST</span></td><td class="endpoint">/auth/store/register</td><td>Εγγραφή καταστήματος</td><td><span class="role-badge" style="background:rgba(113,113,122,0.15);color:#A1A1AA">Public</span></td></tr>
+        <tr><td><span class="method-badge get">GET</span></td><td class="endpoint">/admin/stats</td><td>Dashboard statistics</td><td><span class="role-badge" style="background:rgba(59,130,246,0.15);color:#3B82F6">Admin</span></td></tr>
+        <tr><td><span class="method-badge put">PUT</span></td><td class="endpoint">/admin/stores/:id/approve</td><td>Approve/reject store</td><td><span class="role-badge" style="background:rgba(59,130,246,0.15);color:#3B82F6">Admin</span></td></tr>
+        <tr><td><span class="method-badge put">PUT</span></td><td class="endpoint">/admin/orders/:id/assign-driver</td><td>Ανάθεση driver</td><td><span class="role-badge" style="background:rgba(59,130,246,0.15);color:#3B82F6">Admin</span></td></tr>
+        <tr><td><span class="method-badge post">POST</span></td><td class="endpoint">/orders</td><td>Δημιουργία παραγγελίας</td><td><span class="role-badge" style="background:rgba(168,85,247,0.15);color:#A855F7">Customer</span></td></tr>
+        <tr><td><span class="method-badge get">GET</span></td><td class="endpoint">/orders/:num/status</td><td>Παρακολούθηση παραγγελίας</td><td><span class="role-badge" style="background:rgba(113,113,122,0.15);color:#A1A1AA">Public</span></td></tr>
+        <tr><td><span class="method-badge put">PUT</span></td><td class="endpoint">/store/orders/:id/accept</td><td>Accept/reject παραγγελία</td><td><span class="role-badge" style="background:rgba(245,158,11,0.15);color:#F59E0B">Store</span></td></tr>
+        <tr><td><span class="method-badge put">PUT</span></td><td class="endpoint">/store/orders/:id/price</td><td>Ορισμός τιμής</td><td><span class="role-badge" style="background:rgba(245,158,11,0.15);color:#F59E0B">Store</span></td></tr>
+        <tr><td><span class="method-badge put">PUT</span></td><td class="endpoint">/driver/orders/:id/status</td><td>Ενημέρωση status</td><td><span class="role-badge" style="background:rgba(34,197,94,0.15);color:#22C55E">Driver</span></td></tr>
+        <tr><td><span class="method-badge put">PUT</span></td><td class="endpoint">/driver/availability</td><td>Toggle διαθεσιμότητα</td><td><span class="role-badge" style="background:rgba(34,197,94,0.15);color:#22C55E">Driver</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- REALTIME -->
+<section id="realtime" style="padding-bottom: 6rem;">
+  <div class="section-label">07 — Real-time</div>
+  <h2 class="section-title reveal">Socket.IO<br>Events</h2>
+  <p class="section-subtitle reveal">Room-based architecture: κάθε user συνδέεται στο δικό του room για targeted, efficient communication.</p>
+
+  <div class="socket-grid reveal">
+    <div class="socket-card">
+      <div class="socket-card-header" style="color: var(--green);">
+        <div class="socket-dot" style="background: var(--green);"></div>
+        Client → Server
+      </div>
+      <div class="socket-event">
+        <span class="event-dir dir-in">→</span>
+        <div>
+          <div class="event-name">join</div>
+          <div class="event-desc">Είσοδος σε room (role:userId)</div>
+        </div>
+      </div>
+      <div class="socket-event">
+        <span class="event-dir dir-in">→</span>
+        <div>
+          <div class="event-name">join_order</div>
+          <div class="event-desc">Παρακολούθηση συγκεκριμένης παραγγελίας</div>
+        </div>
+      </div>
+      <div class="socket-event">
+        <span class="event-dir dir-in">→</span>
+        <div>
+          <div class="event-name">driver:location_update</div>
+          <div class="event-desc">GPS coordinates από driver app</div>
+        </div>
+      </div>
+    </div>
+    <div class="socket-card">
+      <div class="socket-card-header" style="color: var(--blue);">
+        <div class="socket-dot" style="background: var(--blue);"></div>
+        Server → Client
+      </div>
+      <div class="socket-event">
+        <span class="event-dir dir-out">←</span>
+        <div>
+          <div class="event-name">driver:location</div>
+          <div class="event-desc">Live θέση driver → customer map</div>
+        </div>
+      </div>
+      <div class="socket-event">
+        <span class="event-dir dir-out">←</span>
+        <div>
+          <div class="event-name">order:status_updated</div>
+          <div class="event-desc">Status αλλαγή σε όλους τους participants</div>
+        </div>
+      </div>
+      <div class="socket-event">
+        <span class="event-dir dir-out">←</span>
+        <div>
+          <div class="event-name">new_order</div>
+          <div class="event-desc">Νέα παραγγελία → store notification</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-title">FastDelivery</div>
+  <p class="footer-sub">Full-stack delivery management platform · Node.js · React · React Native · MongoDB · Socket.IO</p>
+  <a href="https://github.com/ZiSo89/FastDelivery" target="_blank" class="footer-link">
+    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.6.07-.6 1 .07 1.52 1.02 1.52 1.02.89 1.52 2.33 1.08 2.9.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.7.11 2.5.33 1.9-1.29 2.74-1.02 2.74-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.41-.01 2.74 0 .27.18.58.69.48A10.01 10.01 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
+    github.com/ZiSo89/FastDelivery
+  </a>
+  <div class="footer-copy">Built with Node.js · React · React Native · MongoDB Atlas · Socket.IO · Google Maps API</div>
+</footer>
+
+<script>
+  // Tab switching
+  function showTab(id) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
