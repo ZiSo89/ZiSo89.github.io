@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organotis Vafea Pro — Portfolio Case Study</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #111827;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    main { max-width: 900px; margin: 0 auto; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    h1, h2 { color: var(--accent); margin-bottom: 0.75rem; }
+    p, li { color: var(--muted); }
+    ul { padding-left: 1.2rem; }
+    .pill {
+      display: inline-block;
+      margin: 0.25rem 0.4rem 0.25rem 0;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--accent);
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="card">
+      <h1>Organotis Vafea Pro</h1>
+      <p>A practical business organizer for professional painters, built as a desktop-oriented web application that helps manage customers, workers, jobs, inventory, pricing, and reporting in one place.</p>
+      <p>From the repository structure and setup notes, the product is clearly designed around daily operational workflows rather than a generic admin dashboard.</p>
+    </div>
+
+    <div class="card">
+      <h2>Stack</h2>
+      <div>
+        <span class="pill">Electron</span>
+        <span class="pill">PHP</span>
+        <span class="pill">MySQL</span>
+        <span class="pill">JavaScript</span>
+        <span class="pill">HTML/CSS</span>
+        <span class="pill">Google Maps</span>
+      </div>
+      <ul>
+        <li>The project is packaged as an Electron desktop application, with the main entry point in electron-main.js.</li>
+        <li>The backend is PHP-based and is intended to run behind Apache/Nginx or Plesk.</li>
+        <li>The database layer uses a MySQL database named painter_app with utf8mb4 encoding.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Architecture</h2>
+      <p>The architecture is intentionally simple and practical: a PHP backend exposes API endpoints for business logic, a MySQL database stores the operational data, and a browser-based frontend provides the main experience. The deployment notes show a web-server-friendly setup that works both on local/VPS hosting and on Plesk-based production environments.</p>
+      <p>This makes the product well suited to small business use, where reliability and ease of deployment matter more than a highly abstract microservice design.</p>
+    </div>
+
+    <div class="card">
+      <h2>Features</h2>
+      <ul>
+        <li>Customer management for the painter’s business contacts</li>
+        <li>Worker management for crew and team coordination</li>
+        <li>Job and work-order handling</li>
+        <li>Inventory and stock tracking</li>
+        <li>Quotes, offers, and pricing flow</li>
+        <li>Google Maps integration for location-aware workflows</li>
+        <li>Statistics and reporting views</li>
+        <li>Dark/light theme support and UTF-8 Greek language readiness</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Database</h2>
+      <p>The repository setup explicitly references a MySQL database named painter_app, using utf8mb4 and utf8mb4_unicode_ci. That indicates the application was designed with multilingual business usage in mind, especially for Greek-language data and operational records.</p>
+      <p>The data model appears to center on core business objects such as customers, workers, jobs, inventory, quotes, and reports rather than on a generic content-management structure.</p>
+    </div>
+
+    <div class="card">
+      <h2>Flow</h2>
+      <p>A typical session starts with authentication, followed by managing the core business entities: customers, workers, and jobs. From there, the user can move into pricing and inventory decisions, then review reports and operational output.</p>
+      <p>The product is designed to support a practical day-to-day work rhythm: create the job, track the necessary resources, coordinate work, and keep the business information organized in one place.</p>
+    </div>
+  </main>
+</body>
+</html>

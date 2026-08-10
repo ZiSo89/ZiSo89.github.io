@@ -1,740 +1,591 @@
 from docx import Document
 from docx.shared import Pt, RGBColor, Inches
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
-from docx.enum.style import WD_STYLE_TYPE
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 import os
 
-def set_cell_border(cell, **kwargs):
-    """
-    Set cell borders
-    """
-    tc = cell._tc
-    tcPr = tc.get_or_add_tcPr()
-    
-    tcBorders = tcPr.first_child_of_type(OxmlElement('w:tcBorders'))
-    if tcBorders is None:
-        tcBorders = OxmlElement('w:tcBorders')
-        tcPr.append(tcBorders)
-    
-    for edge in ('top', 'left', 'bottom', 'right'):
-        if edge in kwargs:
-            edge_data = kwargs.get(edge)
-            if edge_data:
-                tag = 'w:{}'.format(edge)
-                element = tcBorders.find(qn(tag))
-                if element is None:
-                    element = OxmlElement(tag)
-                    tcBorders.append(element)
-                for key in ['sz', 'val', 'color', 'space', 'shadow']:
-                    if key in edge_data:
-                        element.set(qn('w:{}'.format(key)), str(edge_data[key]))
+# ─── Helpers ──────────────────────────────────────────────────────────────────
 
-def create_modern_cv(language='greek'):
-    """
-    Create a modern, styled CV document
-    """
+def add_run(para, text, bold=False, italic=False, size=10, color=None, name='Calibri'):
+    run = para.add_run(text)
+    run.font.name = name
+    run.font.size = Pt(size)
+    run.font.bold = bold
+    run.font.italic = italic
+    if color:
+        run.font.color.rgb = color
+    return run
+
+def add_heading_styled(doc, text, level=2, color=None, size=13):
+    h = doc.add_heading(text, level=level)
+    for run in h.runs:
+        run.font.name = 'Calibri'
+        run.font.size = Pt(size)
+        if color:
+            run.font.color.rgb = color
+    return h
+
+def add_separator(doc):
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(0)
+    p.paragraph_format.space_after = Pt(0)
+    run = p.add_run('─' * 110)
+    run.font.size = Pt(7)
+    run.font.color.rgb = RGBColor(200, 200, 200)
+
+def add_experience_block(doc, exp, BLUE, DGRAY, MGRAY, is_first=False):
+    """Render a single experience entry."""
+    if not is_first:
+        doc.add_paragraph().paragraph_format.space_after = Pt(2)
+
+    # Title | Company
+    job_para = doc.add_paragraph()
+    job_para.paragraph_format.space_after = Pt(0)
+    add_run(job_para, exp['title'] + '  ', bold=True, size=11, color=DGRAY)
+    add_run(job_para, exp['company'], bold=True, size=11, color=BLUE)
+
+    # Period
+    per_para = doc.add_paragraph(exp['period'])
+    per_para.paragraph_format.space_before = Pt(1)
+    per_para.paragraph_format.space_after = Pt(2)
+    per_para.runs[0].font.italic = True
+    per_para.runs[0].font.size = Pt(9)
+    per_para.runs[0].font.color.rgb = MGRAY
+
+    # Key achievement (highlight)
+    if exp.get('achievement'):
+        ach_para = doc.add_paragraph()
+        ach_para.paragraph_format.space_before = Pt(0)
+        ach_para.paragraph_format.space_after = Pt(3)
+        ach_para.paragraph_format.left_indent = Inches(0.1)
+        add_run(ach_para, '► ', bold=True, size=9.5, color=BLUE)
+        add_run(ach_para, exp['achievement'], bold=False, size=9.5, color=DGRAY)
+
+    # Bullet duties
+    for duty in exp['duties']:
+        b = doc.add_paragraph(style='List Bullet')
+        b.paragraph_format.space_before = Pt(0)
+        b.paragraph_format.space_after = Pt(1)
+        add_run(b, duty, size=9.5, color=MGRAY)
+
+    # Skills line
+    sk = doc.add_paragraph()
+    sk.paragraph_format.space_before = Pt(2)
+    sk.paragraph_format.space_after = Pt(0)
+    add_run(sk, 'Skills: ', bold=True, size=8.5, color=DGRAY)
+    add_run(sk, exp['skills'], size=8.5, color=BLUE)
+
+
+# ─── Main generator ───────────────────────────────────────────────────────────
+
+def create_cv(language='greek'):
     doc = Document()
-    
-    # Set document margins
-    sections = doc.sections
-    for section in sections:
-        section.top_margin = Inches(0.5)
-        section.bottom_margin = Inches(0.5)
-        section.left_margin = Inches(0.7)
-        section.right_margin = Inches(0.7)
-    
-    # Define colors
-    primary_color = RGBColor(0, 102, 204)  # Blue
-    secondary_color = RGBColor(68, 68, 68)  # Dark gray
-    text_color = RGBColor(51, 51, 51)      # Lighter gray
-    
+
+    # Margins
+    for section in doc.sections:
+        section.top_margin    = Inches(0.55)
+        section.bottom_margin = Inches(0.55)
+        section.left_margin   = Inches(0.75)
+        section.right_margin  = Inches(0.75)
+
+    # Colours
+    BLUE  = RGBColor(0x00, 0x7A, 0xCC)   # primary accent
+    DGRAY = RGBColor(0x33, 0x33, 0x33)   # dark text
+    MGRAY = RGBColor(0x55, 0x55, 0x55)   # body text
+    GREEN = RGBColor(0x16, 0xA3, 0x4A)   # available badge
+
+    # ── HEADER ────────────────────────────────────────────────────────────────
     if language == 'greek':
-        # === HEADER - GREEK ===
-        # Name
-        name = doc.add_heading('ΑΘΑΝΑΣΙΟΣ ΖΗΣΟΓΛΟΥ', level=1)
-        name.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        for run in name.runs:
-            run.font.name = 'Calibri'
-            run.font.size = Pt(24)
-            run.font.bold = True
-            run.font.color.rgb = primary_color
-        
-        # Contact info
-        contact = doc.add_paragraph()
-        contact.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        contact_run = contact.add_run('📧 zisoglou@hotmail.gr  |  📱 +30 6982344561  |  📅 02.02.1989  |  🇬🇷 Ελληνική')
-        contact_run.font.name = 'Calibri'
-        contact_run.font.size = Pt(10)
-        contact_run.font.color.rgb = secondary_color
-        
-        # Social links
-        social = doc.add_paragraph()
-        social.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        social_run = social.add_run('🔗 LinkedIn: linkedin.com/in/zisoglou  |  💻 GitHub: github.com/zisoglou')
-        social_run.font.name = 'Calibri'
-        social_run.font.size = Pt(9)
-        social_run.font.color.rgb = primary_color
-        
-        # Add line separator
-        doc.add_paragraph('_' * 100)
-        
-        # === ΠΕΡΙΛΗΨΗ ===
-        summary_heading = doc.add_heading('ΠΕΡΙΛΗΨΗ', level=2)
-        for run in summary_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        summary = doc.add_paragraph(
-            'Μηχανικός Λογισμικού με πάνω από 11 χρόνια εμπειρίας στην ανάπτυξη λογισμικού, '
-            'τα ενσωματωμένα συστήματα και τη διασύνδεση προϊόντων. Διαθέτω συνδυασμό ισχυρών '
-            'αναλυτικών ικανοτήτων και πρακτικής εμπειρίας στον προγραμματισμό, τη δοκιμή και '
-            'την υποστήριξη προϊόντων λογισμικού. Επικεντρώνομαι στην ποιότητα, την αποδοτικότητα '
-            'και τη συνεχή βελτίωση των διαδικασιών ανάπτυξης.'
+        name_text = 'ΑΘΑΝΑΣΙΟΣ ΖΗΣΟΓΛΟΥ'
+        title_text = 'Embedded Software Engineer'
+        contact_line = 'zisoglou@hotmail.gr  |  linkedin.com/in/athanasios-zisoglou-a3841561  |  github.com/ZiSo89'
+        available_text = '● Ανοιχτός σε ευκαιρίες'
+    else:
+        name_text = 'ATHANASIOS ZISOGLOU'
+        title_text = 'Embedded Software Engineer'
+        contact_line = 'zisoglou@hotmail.gr  |  linkedin.com/in/athanasios-zisoglou-a3841561  |  github.com/ZiSo89'
+        available_text = '● Open to opportunities'
+
+    name_para = doc.add_heading(name_text, level=1)
+    name_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    for run in name_para.runs:
+        run.font.name = 'Calibri'
+        run.font.size = Pt(22)
+        run.font.bold = True
+        run.font.color.rgb = DGRAY
+
+    title_para = doc.add_paragraph()
+    title_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    title_para.paragraph_format.space_before = Pt(0)
+    title_para.paragraph_format.space_after = Pt(2)
+    add_run(title_para, title_text, bold=False, size=12, color=BLUE)
+
+    avail_para = doc.add_paragraph()
+    avail_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    avail_para.paragraph_format.space_before = Pt(0)
+    avail_para.paragraph_format.space_after = Pt(3)
+    av_run = add_run(avail_para, available_text, bold=True, size=9, color=GREEN)
+
+    contact_para = doc.add_paragraph()
+    contact_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    contact_para.paragraph_format.space_before = Pt(0)
+    contact_para.paragraph_format.space_after = Pt(4)
+    add_run(contact_para, contact_line, size=9, color=MGRAY)
+
+    add_separator(doc)
+
+    # ── SUMMARY ───────────────────────────────────────────────────────────────
+    if language == 'greek':
+        add_heading_styled(doc, 'ΠΕΡΙΛΗΨΗ', level=2, color=BLUE, size=12)
+        summary_text = (
+            'Embedded Software Engineer με πάνω από 11 χρόνια εμπειρίας σε BMS firmware, '
+            'C/C++ συστήματα, βιομηχανικό αυτοματισμό και διαδραστικές εγκαταστάσεις. '
+            'Τελευταία ανέλαβε commissioning μεγάλης κλίμακας συστήματος αυτοματισμού '
+            'αποθήκης στην Knapp AG (Ιούν. 2025 – Φεβ. 2026). Εστιάζει στην ποιότητα, '
+            'την αποδοτικότητα διαδικασιών και τη συνεχή βελτίωση στην παράδοση λογισμικού.'
         )
-        summary.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        for run in summary.runs:
-            run.font.name = 'Calibri'
-            run.font.size = Pt(11)
-            run.font.color.rgb = text_color
-        
-        # === ΕΜΠΕΙΡΙΑ ===
-        exp_heading = doc.add_heading('ΕΜΠΕΙΡΙΑ', level=2)
-        for run in exp_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        experiences_gr = [
+    else:
+        add_heading_styled(doc, 'PROFESSIONAL SUMMARY', level=2, color=BLUE, size=12)
+        summary_text = (
+            'Embedded Software Engineer with 11+ years of experience across BMS firmware, '
+            'C/C++ systems, industrial automation, and interactive installations. Most recently '
+            'commissioned a large-scale warehouse automation system at Knapp AG '
+            '(Jun 2025 – Feb 2026). Focused on quality, process efficiency, and continuous '
+            'improvement in software delivery and performance.'
+        )
+
+    s = doc.add_paragraph(summary_text)
+    s.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    s.paragraph_format.space_after = Pt(4)
+    for run in s.runs:
+        run.font.name = 'Calibri'
+        run.font.size = Pt(10)
+        run.font.color.rgb = MGRAY
+
+    add_separator(doc)
+
+    # ── EXPERIENCE ────────────────────────────────────────────────────────────
+    if language == 'greek':
+        add_heading_styled(doc, 'ΕΜΠΕΙΡΙΑ', level=2, color=BLUE, size=12)
+        experiences = [
             {
                 'title': 'Software Commissioning Engineer',
                 'company': 'Knapp AG',
-                'period': 'Ιούνιος 2025 – Σήμερα',
+                'period': 'Ιούνιος 2025 – Φεβρουάριος 2026',
+                'achievement': 'Παρέδωσε software commissioning για μεγάλης κλίμακας σύστημα αυτοματισμού αποθήκης· ηγήθηκε λειτουργικών δοκιμών και εκπαίδευσης πελατών πριν από το go-live.',
                 'duties': [
                     'Παραμετροποίηση και βελτιστοποίηση λογισμικού βάσει απαιτήσεων πελατών',
                     'Εκτέλεση δοκιμών με προσομοιωτές και επιτόπιες δοκιμές ολοκλήρωσης',
-                    'Υποστήριξη πελατών κατά τη φάση έναρξης λειτουργίας και εκπαίδευσης'
+                    'Υποστήριξη πελατών κατά τη φάση έναρξης λειτουργίας και εκπαίδευσης',
                 ],
-                'skills': 'C++, Automation Systems, Software Configuration, Testing'
+                'skills': 'C++, Automation Systems, Integration Testing, Customer Training',
             },
             {
                 'title': 'Embedded Software Engineer',
                 'company': 'Sunlight Group Storage Systems',
                 'period': 'Ιούνιος 2022 – Σεπτέμβριος 2024',
+                'achievement': 'Παρέδωσε BMS firmware για 3 νέες σειρές προϊόντων εντός χρονοδιαγράμματος.',
                 'duties': [
                     'Ανάπτυξη και δοκιμή BMS λογισμικού για νέα προϊόντα ενεργειακής αποθήκευσης',
                     'Ανάλυση και βελτίωση υφιστάμενων modules σύμφωνα με απαιτήσεις πελατών',
-                    'Επίλυση σφαλμάτων και βελτίωση ποιότητας μέσω code review'
+                    'Μείωση ελαττωμάτων post-release με εισαγωγή συστηματικής διαδικασίας peer code review',
                 ],
-                'skills': 'C, STM32, CANopen, IAR Embedded Workbench'
+                'skills': 'C, STM32, CANopen, IAR Embedded Workbench, RTOS',
             },
             {
                 'title': 'Software Developer',
                 'company': 'Interactive Displays GmbH',
                 'period': 'Μάρτιος 2020 – Φεβρουάριος 2022',
+                'achievement': 'Το προϊόν Mirotouch παραδόθηκε σε 10+ πελάτες σε όλη την Ευρώπη.',
                 'duties': [
                     'Ανάπτυξη προϊόντων αφής με χρήση OpenCV και Qt framework',
                     'Προγραμματισμός μικροελεγκτών (Arduino, Raspberry Pi)',
-                    'Επεξεργασία εικόνας βάθους με Intel RealSense'
+                    'Ενσωμάτωση κάμερας βάθους Intel RealSense για ανίχνευση χειρονομιών',
                 ],
-                'skills': 'C++, Qt, OpenCV, Linux, Visual Studio'
+                'skills': 'C++, Qt, OpenCV, Linux, Raspberry Pi, Intel RealSense',
             },
             {
                 'title': 'Software Engineer',
                 'company': 'Intralot',
                 'period': 'Οκτώβριος 2019 – Φεβρουάριος 2020',
+                'achievement': None,
                 'duties': [
                     'Παροχή υπηρεσιών υποστήριξης 3ου επιπέδου για εφαρμογές λογισμικού',
-                    'Αυτοματοποίηση ελέγχων εφαρμογών',
-                    'Αντιμετώπιση προβλημάτων και ανάπτυξη μόνιμων διορθώσεων'
+                    'Αντιμετώπιση προβλημάτων και ανάπτυξη μόνιμων διορθώσεων λογισμικού',
                 ],
-                'skills': 'C, UNIX/Linux, Jira'
+                'skills': 'C, UNIX/Linux, Jira',
             },
             {
                 'title': 'Software Developer',
                 'company': 'Kurt Hüttinger GmbH',
                 'period': 'Ιανουάριος 2017 – Απρίλιος 2019',
+                'achievement': 'Συνεισέφερε σε 50+ εγκαταστάσεις μουσείων σε 8 χώρες της ΕΕ.',
                 'duties': [
-                    'Συμμετοχή σε 50+ έργα διαδραστικών εκθεμάτων σε μουσεία επιστήμης',
-                    'Ανάπτυξη εφαρμογών σε Arduino, Raspberry Pi και desktop περιβάλλοντα',
-                    'Δημιουργία multimedia διαδραστικών εγκαταστάσεων'
+                    'Ανάπτυξη ενσωματωμένων και multimedia εφαρμογών με Arduino και Raspberry Pi',
+                    'Υλοποίηση διαδραστικών εκθεμάτων για Μουσεία Επιστήμης & Τεχνολογίας',
                 ],
-                'skills': 'Embedded Systems, Sensors, RS485, UART, SPI, I2C'
+                'skills': 'Embedded Systems, Sensors, LED Control, RS485, UART, SPI, I2C',
             },
             {
-                'title': 'Electronic & Electrician',
+                'title': 'Ηλεκτρονικός & Ηλεκτρολόγος – Τμήμα Service & Εγκαταστάσεων',
                 'company': 'Kurt Hüttinger GmbH',
                 'period': 'Αύγουστος 2015 – Ιανουάριος 2017',
+                'achievement': None,
                 'duties': [
-                    'Εγκατάσταση και συντήρηση ηλεκτρονικών συστημάτων σε Μουσεία Επιστήμης & Τεχνολογίας (75% ταξίδια στην ΕΕ)',
-                    'Συμμετοχή στον σχεδιασμό έργων και συντονισμός τεχνικών για την ανάπτυξη συστημάτων',
-                    'Εκτέλεση ηλεκτρονικών ελέγχων, αντιμετώπιση προβλημάτων και αναβαθμίσεις βάσει προδιαγραφών πελατών'
+                    'Εγκατάσταση και συντήρηση συστημάτων σε Μουσεία Επιστήμης σε όλη την ΕΕ (75% ταξίδια)',
+                    'Εκτέλεση ηλεκτρονικών δοκιμών, troubleshooting και αναβαθμίσεις',
                 ],
-                'skills': 'Siemens Logo! PLC, C, JavaScript, Hardware Integration, On-site Commissioning'
+                'skills': 'Siemens Logo! PLC, C, JavaScript, Hardware Integration, On-site Commissioning',
             },
             {
-                'title': 'Junior Software Developer (Πρακτική)',
+                'title': 'Πρακτική – Junior Software Developer',
                 'company': 'Kurt Hüttinger GmbH',
                 'period': 'Οκτώβριος 2014 – Μάιος 2015',
+                'achievement': None,
                 'duties': [
-                    'Έρευνα σε διεπαφές επικοινωνίας μεταξύ PC συστημάτων και PLC controllers',
-                    'Πρωτοτυπία και υλοποίηση νέων διεπαφών για διαδραστικά εκθέματα μουσείων',
-                    'Απόκτηση πρώτης διεθνούς εμπειρίας σε γερμανική ομάδα μηχανικών'
+                    'Έρευνα σε διεπαφές PC–PLC και πρωτοτυποποίηση νέων λύσεων για εκθέματα μουσείων',
+                    'Πρώτη διεθνής εμπειρία σε διεπιστημονική γερμανική ομάδα μηχανικών',
                 ],
-                'skills': 'PLC Programming, Prototyping, Technical Documentation, Teamwork'
+                'skills': 'PLC Programming, Prototyping, Technical Documentation',
             },
             {
-                'title': 'Junior Computer & Network Technician (Πρακτική)',
+                'title': 'Πρακτική – Junior Computer & Network Technician',
                 'company': 'Prisma Electronics',
                 'period': 'Απρίλιος 2014 – Αύγουστος 2014',
+                'achievement': None,
                 'duties': [
-                    'Υποστήριξη σε ρύθμιση δικτύων, συντήρηση υπολογιστών και αντιμετώπιση προβλημάτων',
-                    'Υποστήριξη της ομάδας IT στις καθημερινές λειτουργίες για ομαλή τεχνική απόδοση',
-                    'Παροχή τεχνικής υποστήριξης σε πελάτες'
+                    'Υποστήριξη σε ρύθμιση δικτύων, συντήρηση PC και troubleshooting συστημάτων',
                 ],
-                'skills': 'Networking, Hardware Setup, Troubleshooting, Customer Support'
-            }
-        ]
-        
-        for exp in experiences_gr:
-            # Job title and company
-            job_para = doc.add_paragraph()
-            job_title = job_para.add_run(exp['title'] + ' | ')
-            job_title.font.name = 'Calibri'
-            job_title.font.size = Pt(12)
-            job_title.font.bold = True
-            job_title.font.color.rgb = secondary_color
-            
-            company = job_para.add_run(exp['company'])
-            company.font.name = 'Calibri'
-            company.font.size = Pt(12)
-            company.font.color.rgb = primary_color
-            company.font.bold = True
-            
-            # Period
-            period_para = doc.add_paragraph(exp['period'])
-            period_para.runs[0].font.name = 'Calibri'
-            period_para.runs[0].font.size = Pt(10)
-            period_para.runs[0].font.italic = True
-            period_para.runs[0].font.color.rgb = secondary_color
-            
-            # Duties
-            for duty in exp['duties']:
-                duty_para = doc.add_paragraph(duty, style='List Bullet')
-                for run in duty_para.runs:
-                    run.font.name = 'Calibri'
-                    run.font.size = Pt(10)
-                    run.font.color.rgb = text_color
-            
-            # Skills
-            skills_para = doc.add_paragraph()
-            skills_label = skills_para.add_run('Skills: ')
-            skills_label.font.name = 'Calibri'
-            skills_label.font.size = Pt(9)
-            skills_label.font.bold = True
-            skills_label.font.color.rgb = secondary_color
-            
-            skills_text = skills_para.add_run(exp['skills'])
-            skills_text.font.name = 'Calibri'
-            skills_text.font.size = Pt(9)
-            skills_text.font.color.rgb = primary_color
-            
-            # Add spacing
-            doc.add_paragraph()
-        
-        # === ΕΚΠΑΙΔΕΥΣΗ ===
-        edu_heading = doc.add_heading('ΕΚΠΑΙΔΕΥΣΗ', level=2)
-        for run in edu_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        education_items = [
-            ('B.Sc. Μηχανικός Υπολογιστών', 'ΤΕΙ Ανατολικής Μακεδονίας & Θράκης', '2007–2015'),
-            ('Erasmus Exchange Program', 'Akademia Techniczno-Humanistyczna, Πολωνία', '2011–2012'),
-            ('MOOC - Τεχνητή Νοημοσύνη', 'Coursera', '2023–Σήμερα')
-        ]
-        
-        for degree, institution, period in education_items:
-            edu_para = doc.add_paragraph()
-            edu_degree = edu_para.add_run(degree + ' | ')
-            edu_degree.font.name = 'Calibri'
-            edu_degree.font.size = Pt(11)
-            edu_degree.font.bold = True
-            edu_degree.font.color.rgb = secondary_color
-            
-            edu_inst = edu_para.add_run(institution)
-            edu_inst.font.name = 'Calibri'
-            edu_inst.font.size = Pt(11)
-            edu_inst.font.color.rgb = primary_color
-            
-            edu_period = edu_para.add_run(' (' + period + ')')
-            edu_period.font.name = 'Calibri'
-            edu_period.font.size = Pt(10)
-            edu_period.font.italic = True
-            edu_period.font.color.rgb = secondary_color
-        
-        # === ΤΕΧΝΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ ===
-        skills_heading = doc.add_heading('ΤΕΧΝΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ', level=2)
-        for run in skills_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        # Create a table for skills
-        skills_table = doc.add_table(rows=5, cols=2)
-        skills_data = [
-            ('Γλώσσες:', 'C, C++, C#, JavaScript, Python (Βασικό)'),
-            ('Embedded:', 'STM32, Arduino, Raspberry Pi, CANopen, UART, SPI, I2C'),
-            ('Εργαλεία:', 'Visual Studio, VS Code, IAR, Qt, OpenCV, Git, Jira'),
-            ('Συστήματα:', 'Linux, Windows'),
-            ('Automation:', 'Siemens Logo! PLC, KNAPP Automation Systems')
-        ]
-        
-        for i, (category, skills) in enumerate(skills_data):
-            row = skills_table.rows[i]
-            # Category cell
-            row.cells[0].text = category
-            row.cells[0].paragraphs[0].runs[0].font.bold = True
-            row.cells[0].paragraphs[0].runs[0].font.size = Pt(10)
-            row.cells[0].paragraphs[0].runs[0].font.color.rgb = secondary_color
-            row.cells[0].width = Inches(1.2)
-            
-            # Skills cell
-            row.cells[1].text = skills
-            row.cells[1].paragraphs[0].runs[0].font.size = Pt(10)
-            row.cells[1].paragraphs[0].runs[0].font.color.rgb = text_color
-        
-        # === ΕΡΓΑ ===
-        projects_heading = doc.add_heading('ΕΡΓΑ', level=2)
-        for run in projects_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        projects = [
-            {
-                'name': 'Mirotouch',
-                'company': 'Interactive Displays GmbH',
-                'desc': 'Καινοτόμο προϊόν που μετατρέπει κάθε οθόνη σε επιφάνεια αφής με χρήση Intel RealSense',
-                'tech': 'C++, Qt, OpenCV, Linux'
+                'skills': 'Networking, Hardware Setup, Troubleshooting',
             },
-            {
-                'name': 'Automated Coffee Machine',
-                'company': 'Πτυχιακή Εργασία',
-                'desc': 'Αυτόματη μηχανή καφέ που ελέγχεται μέσω Bluetooth Android εφαρμογής',
-                'tech': 'Arduino (C++), Java, Atmega328'
-            }
         ]
-        
-        for proj in projects:
-            proj_para = doc.add_paragraph()
-            proj_name = proj_para.add_run(proj['name'] + ' - ')
-            proj_name.font.name = 'Calibri'
-            proj_name.font.size = Pt(11)
-            proj_name.font.bold = True
-            proj_name.font.color.rgb = secondary_color
-            
-            proj_company = proj_para.add_run(proj['company'])
-            proj_company.font.name = 'Calibri'
-            proj_company.font.size = Pt(10)
-            proj_company.font.italic = True
-            proj_company.font.color.rgb = primary_color
-            
-            desc_para = doc.add_paragraph(proj['desc'])
-            for run in desc_para.runs:
-                run.font.name = 'Calibri'
-                run.font.size = Pt(10)
-                run.font.color.rgb = text_color
-            
-            tech_para = doc.add_paragraph('Tech: ' + proj['tech'])
-            tech_para.runs[0].font.name = 'Calibri'
-            tech_para.runs[0].font.size = Pt(9)
-            tech_para.runs[0].font.color.rgb = primary_color
-            tech_para.runs[0].font.italic = True
-        
-        # === ΓΛΩΣΣΕΣ & ΕΝΔΙΑΦΕΡΟΝΤΑ ===
-        lang_heading = doc.add_heading('ΓΛΩΣΣΕΣ & ΕΝΔΙΑΦΕΡΟΝΤΑ', level=2)
-        for run in lang_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        # Languages
-        lang_para = doc.add_paragraph()
-        lang_label = lang_para.add_run('Γλώσσες: ')
-        lang_label.font.name = 'Calibri'
-        lang_label.font.size = Pt(10)
-        lang_label.font.bold = True
-        lang_label.font.color.rgb = secondary_color
-        
-        lang_text = lang_para.add_run('Ελληνικά (Μητρική), Αγγλικά (Άριστα), Γερμανικά (Βασικά)')
-        lang_text.font.name = 'Calibri'
-        lang_text.font.size = Pt(10)
-        lang_text.font.color.rgb = text_color
-        
-        # Interests
-        int_para = doc.add_paragraph()
-        int_label = int_para.add_run('Ενδιαφέροντα: ')
-        int_label.font.name = 'Calibri'
-        int_label.font.size = Pt(10)
-        int_label.font.bold = True
-        int_label.font.color.rgb = secondary_color
-        
-        int_text = int_para.add_run('Υπαίθριες δραστηριότητες (σκι, ποδηλασία βουνού), sci-fi σειρές, μαγειρική, νέες τεχνολογίες web development')
-        int_text.font.name = 'Calibri'
-        int_text.font.size = Pt(10)
-        int_text.font.color.rgb = text_color
-        
-    else:  # English version
-        # === HEADER - ENGLISH ===
-        # Name
-        name = doc.add_heading('ATHANASIOS ZISOGLOU', level=1)
-        name.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        for run in name.runs:
-            run.font.name = 'Calibri'
-            run.font.size = Pt(24)
-            run.font.bold = True
-            run.font.color.rgb = primary_color
-        
-        # Contact info
-        contact = doc.add_paragraph()
-        contact.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        contact_run = contact.add_run('📧 zisoglou@hotmail.gr  |  📱 +30 6982344561  |  📅 02.02.1989  |  🇬🇷 Greek')
-        contact_run.font.name = 'Calibri'
-        contact_run.font.size = Pt(10)
-        contact_run.font.color.rgb = secondary_color
-        
-        # Social links
-        social = doc.add_paragraph()
-        social.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        social_run = social.add_run('🔗 LinkedIn: linkedin.com/in/zisoglou  |  💻 GitHub: github.com/zisoglou')
-        social_run.font.name = 'Calibri'
-        social_run.font.size = Pt(9)
-        social_run.font.color.rgb = primary_color
-        
-        # Add line separator
-        doc.add_paragraph('_' * 100)
-        
-        # === PROFESSIONAL SUMMARY ===
-        summary_heading = doc.add_heading('PROFESSIONAL SUMMARY', level=2)
-        for run in summary_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        summary = doc.add_paragraph(
-            'Software Engineer with over 11 years of experience in software development, '
-            'embedded systems, and product integration. Combines strong analytical thinking '
-            'with hands-on coding and testing expertise. Focused on quality, process efficiency, '
-            'and continuous improvement in software delivery and performance.'
-        )
-        summary.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        for run in summary.runs:
-            run.font.name = 'Calibri'
-            run.font.size = Pt(11)
-            run.font.color.rgb = text_color
-        
-        # === PROFESSIONAL EXPERIENCE ===
-        exp_heading = doc.add_heading('PROFESSIONAL EXPERIENCE', level=2)
-        for run in exp_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        experiences_en = [
+    else:
+        add_heading_styled(doc, 'PROFESSIONAL EXPERIENCE', level=2, color=BLUE, size=12)
+        experiences = [
             {
                 'title': 'Software Commissioning Engineer',
                 'company': 'Knapp AG',
-                'period': 'June 2025 – Present',
+                'period': 'June 2025 – February 2026',
+                'achievement': 'Delivered software commissioning for a large-scale warehouse automation system; led functional tests and customer training before go-live.',
                 'duties': [
                     'Configured and optimized software based on specific customer requirements',
                     'Executed simulation and on-site integration testing ensuring high software reliability',
-                    'Supported clients during commissioning and training phases'
+                    'Supported clients during commissioning and training phases',
                 ],
-                'skills': 'C++, Automation Systems, Software Configuration, Testing'
+                'skills': 'C++, Automation Systems, Integration Testing, Customer Training',
             },
             {
                 'title': 'Embedded Software Engineer',
                 'company': 'Sunlight Group Storage Systems',
                 'period': 'June 2022 – September 2024',
+                'achievement': 'Delivered BMS firmware for 3 new product lines on schedule.',
                 'duties': [
                     'Developed and tested BMS software for new energy storage products',
-                    'Analyzed and extended existing modules based on client needs',
-                    'Fixed bugs and improved software quality through peer code reviews'
+                    'Analyzed and extended existing modules based on client requirements',
+                    'Reduced post-release defects by introducing a systematic peer code review process',
                 ],
-                'skills': 'C, STM32, CANopen, IAR Embedded Workbench'
+                'skills': 'C, STM32, CANopen, IAR Embedded Workbench, RTOS',
             },
             {
                 'title': 'Software Developer',
                 'company': 'Interactive Displays GmbH',
                 'period': 'March 2020 – February 2022',
+                'achievement': 'Mirotouch product shipped to 10+ clients across Europe.',
                 'duties': [
                     'Designed and implemented touch-enabled systems using OpenCV and Qt',
                     'Developed microcontroller applications (Arduino, Raspberry Pi)',
-                    'Integrated Intel RealSense depth cameras for gesture detection'
+                    'Integrated Intel RealSense depth cameras for gesture and touch detection',
                 ],
-                'skills': 'C++, Qt, OpenCV, Linux, Visual Studio'
+                'skills': 'C++, Qt, OpenCV, Linux, Raspberry Pi, Intel RealSense',
             },
             {
                 'title': 'Software Engineer',
                 'company': 'Intralot',
                 'period': 'October 2019 – February 2020',
+                'achievement': None,
                 'duties': [
                     'Delivered 3rd-level software support and implemented automation controls',
                     'Diagnosed and resolved software issues by deploying permanent fixes',
-                    'Automated application testing and monitoring processes'
                 ],
-                'skills': 'C, UNIX/Linux, Jira'
+                'skills': 'C, UNIX/Linux, Jira',
             },
             {
                 'title': 'Software Developer',
                 'company': 'Kurt Hüttinger GmbH',
                 'period': 'January 2017 – April 2019',
+                'achievement': 'Contributed to 50+ museum installations across 8 EU countries.',
                 'duties': [
-                    'Contributed to 50+ interactive exhibition projects across Europe',
                     'Developed embedded and multimedia applications using Arduino and Raspberry Pi',
-                    'Created interactive multimedia installations for science museums'
+                    'Built interactive exhibit software for Science & Technology Museums across Europe',
                 ],
-                'skills': 'Embedded Systems, Sensors, RS485, UART, SPI, I2C'
+                'skills': 'Embedded Systems, Sensors, LED Control, RS485, UART, SPI, I2C',
             },
             {
-                'title': 'Electronic & Electrician in Service & Installation',
+                'title': 'Electronic & Electrician – Service & Installation Dept.',
                 'company': 'Kurt Hüttinger GmbH',
                 'period': 'August 2015 – January 2017',
+                'achievement': None,
                 'duties': [
-                    'Installed and serviced electronic and software systems for Science & Technology Museums across the EU (75% travel)',
-                    'Participated in project planning and coordinated field technicians for system deployment and maintenance',
-                    'Executed electronic testing, troubleshooting, and upgrades based on client specifications'
+                    'Installed and serviced systems for Science & Technology Museums across the EU (75% travel)',
+                    'Executed electronic testing, troubleshooting, and upgrades based on client specifications',
                 ],
-                'skills': 'Siemens Logo! PLC, C, JavaScript, Hardware Integration, On-site Commissioning'
+                'skills': 'Siemens Logo! PLC, C, JavaScript, Hardware Integration, On-site Commissioning',
             },
             {
-                'title': 'Internship as Junior Software Developer',
+                'title': 'Internship – Junior Software Developer',
                 'company': 'Kurt Hüttinger GmbH',
                 'period': 'October 2014 – May 2015',
+                'achievement': None,
                 'duties': [
-                    'Conducted research on communication interfaces between PC systems and PLC controllers',
-                    'Prototyped and implemented new interfaces for interactive science museum exhibits',
-                    'Gained first international experience working in a cross-functional German engineering team'
+                    'Researched PC–PLC communication interfaces; prototyped new solutions for interactive museum exhibits',
+                    'Gained first international experience in a cross-functional German engineering team',
                 ],
-                'skills': 'PLC Programming, Prototyping, Technical Documentation, Teamwork'
+                'skills': 'PLC Programming, Prototyping, Technical Documentation',
             },
             {
-                'title': 'Paid Internship as Junior Computer & Network Technician',
+                'title': 'Internship – Junior Computer & Network Technician',
                 'company': 'Prisma Electronics',
                 'period': 'April 2014 – August 2014',
+                'achievement': None,
                 'duties': [
-                    'Assisted in network configuration, PC maintenance, and system troubleshooting tasks',
-                    'Supported IT team with daily operations ensuring smooth technical performance',
-                    'Provided technical support to customers and internal users'
+                    'Assisted in network configuration, PC maintenance, and system troubleshooting',
                 ],
-                'skills': 'Networking, Hardware Setup, Troubleshooting, Customer Support'
-            }
+                'skills': 'Networking, Hardware Setup, Troubleshooting',
+            },
         ]
-        
-        for exp in experiences_en:
-            # Job title and company
-            job_para = doc.add_paragraph()
-            job_title = job_para.add_run(exp['title'] + ' | ')
-            job_title.font.name = 'Calibri'
-            job_title.font.size = Pt(12)
-            job_title.font.bold = True
-            job_title.font.color.rgb = secondary_color
-            
-            company = job_para.add_run(exp['company'])
-            company.font.name = 'Calibri'
-            company.font.size = Pt(12)
-            company.font.color.rgb = primary_color
-            company.font.bold = True
-            
-            # Period
-            period_para = doc.add_paragraph(exp['period'])
-            period_para.runs[0].font.name = 'Calibri'
-            period_para.runs[0].font.size = Pt(10)
-            period_para.runs[0].font.italic = True
-            period_para.runs[0].font.color.rgb = secondary_color
-            
-            # Duties
-            for duty in exp['duties']:
-                duty_para = doc.add_paragraph(duty, style='List Bullet')
-                for run in duty_para.runs:
-                    run.font.name = 'Calibri'
-                    run.font.size = Pt(10)
-                    run.font.color.rgb = text_color
-            
-            # Skills
-            skills_para = doc.add_paragraph()
-            skills_label = skills_para.add_run('Skills: ')
-            skills_label.font.name = 'Calibri'
-            skills_label.font.size = Pt(9)
-            skills_label.font.bold = True
-            skills_label.font.color.rgb = secondary_color
-            
-            skills_text = skills_para.add_run(exp['skills'])
-            skills_text.font.name = 'Calibri'
-            skills_text.font.size = Pt(9)
-            skills_text.font.color.rgb = primary_color
-            
-            # Add spacing
-            doc.add_paragraph()
-        
-        # === EDUCATION ===
-        edu_heading = doc.add_heading('EDUCATION', level=2)
-        for run in edu_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        education_items_en = [
-            ('B.Sc. in Computer Engineering', 'Eastern Macedonia & Thrace Institute of Technology, Greece', '2007–2015'),
-            ('Erasmus Exchange Program', 'Akademia Techniczno-Humanistyczna, Poland', '2011–2012'),
-            ('MOOC - Artificial Intelligence', 'Coursera', '2023–Present')
+
+    for i, exp in enumerate(experiences):
+        add_experience_block(doc, exp, BLUE, DGRAY, MGRAY, is_first=(i == 0))
+
+    add_separator(doc)
+
+    # ── EDUCATION ─────────────────────────────────────────────────────────────
+    if language == 'greek':
+        add_heading_styled(doc, 'ΕΚΠΑΙΔΕΥΣΗ', level=2, color=BLUE, size=12)
+        education = [
+            {
+                'degree': 'B.Sc. Μηχανικός Υπολογιστών',
+                'institution': 'ΤΕΙ Ανατολικής Μακεδονίας & Θράκης, Ελλάδα',
+                'period': '2007 – 2015',
+                'notes': ['Τεχνητή Νοημοσύνη & Ρομποτική, Ενσωματωμένα Συστήματα, C++, PLC'],
+            },
+            {
+                'degree': 'Erasmus Exchange Program  [Erasmus+]',
+                'institution': 'Akademia Techniczno-Humanistyczna, Πολωνία',
+                'period': '2011 – 2012',
+                'notes': ['Εστίαση στα ενσωματωμένα συστήματα – διεθνής ακαδημαϊκή εμπειρία'],
+            },
+            {
+                'degree': 'Συνεχής Εκπαίδευση',
+                'institution': 'Coursera – Online Learning Platform',
+                'period': '2023 – σήμερα',
+                'notes': [
+                    'Machine Learning Specialization – Andrew Ng, Stanford University',
+                    'Deep Learning Specialization – DeepLearning.AI',
+                    'AI For Everyone – Andrew Ng, DeepLearning.AI',
+                ],
+            },
         ]
-        
-        for degree, institution, period in education_items_en:
-            edu_para = doc.add_paragraph()
-            edu_degree = edu_para.add_run(degree + ' | ')
-            edu_degree.font.name = 'Calibri'
-            edu_degree.font.size = Pt(11)
-            edu_degree.font.bold = True
-            edu_degree.font.color.rgb = secondary_color
-            
-            edu_inst = edu_para.add_run(institution)
-            edu_inst.font.name = 'Calibri'
-            edu_inst.font.size = Pt(11)
-            edu_inst.font.color.rgb = primary_color
-            
-            edu_period = edu_para.add_run(' (' + period + ')')
-            edu_period.font.name = 'Calibri'
-            edu_period.font.size = Pt(10)
-            edu_period.font.italic = True
-            edu_period.font.color.rgb = secondary_color
-        
-        # === TECHNICAL SKILLS ===
-        skills_heading = doc.add_heading('TECHNICAL SKILLS', level=2)
-        for run in skills_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        # Create a table for skills
-        skills_table = doc.add_table(rows=5, cols=2)
-        skills_data_en = [
-            ('Languages:', 'C, C++, C#, JavaScript, Python (Basic)'),
-            ('Embedded:', 'STM32, Arduino, Raspberry Pi, CANopen, UART, SPI, I2C'),
-            ('Tools:', 'Visual Studio, VS Code, IAR, Qt, OpenCV, Git, Jira'),
-            ('Systems:', 'Linux, Windows'),
-            ('Automation:', 'Siemens Logo! PLC, KNAPP Automation Systems')
+    else:
+        add_heading_styled(doc, 'EDUCATION', level=2, color=BLUE, size=12)
+        education = [
+            {
+                'degree': 'B.Sc. in Computer Engineering',
+                'institution': 'Eastern Macedonia & Thrace Institute of Technology, Greece',
+                'period': '2007 – 2015',
+                'notes': ['Artificial Intelligence & Robotics, Embedded Systems, C++, Industrial PLC Automation'],
+            },
+            {
+                'degree': 'Erasmus Exchange Program  [Erasmus+]',
+                'institution': 'Akademia Techniczno-Humanistyczna, Poland',
+                'period': '2011 – 2012',
+                'notes': ['Focused on embedded systems development – international academic experience'],
+            },
+            {
+                'degree': 'Continuing Education',
+                'institution': 'Coursera – Online Learning Platform',
+                'period': '2023 – Present',
+                'notes': [
+                    'Machine Learning Specialization – Andrew Ng, Stanford University',
+                    'Deep Learning Specialization – DeepLearning.AI',
+                    'AI For Everyone – Andrew Ng, DeepLearning.AI',
+                ],
+            },
         ]
-        
-        for i, (category, skills) in enumerate(skills_data_en):
-            row = skills_table.rows[i]
-            # Category cell
-            row.cells[0].text = category
-            row.cells[0].paragraphs[0].runs[0].font.bold = True
-            row.cells[0].paragraphs[0].runs[0].font.size = Pt(10)
-            row.cells[0].paragraphs[0].runs[0].font.color.rgb = secondary_color
-            row.cells[0].width = Inches(1.2)
-            
-            # Skills cell
-            row.cells[1].text = skills
-            row.cells[1].paragraphs[0].runs[0].font.size = Pt(10)
-            row.cells[1].paragraphs[0].runs[0].font.color.rgb = text_color
-        
-        # === SELECTED PROJECTS ===
-        projects_heading = doc.add_heading('SELECTED PROJECTS', level=2)
-        for run in projects_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        projects_en = [
+
+    for edu in education:
+        ep = doc.add_paragraph()
+        ep.paragraph_format.space_before = Pt(3)
+        ep.paragraph_format.space_after = Pt(0)
+        add_run(ep, edu['degree'] + '  ', bold=True, size=10.5, color=DGRAY)
+        add_run(ep, edu['institution'], size=10.5, color=BLUE)
+        add_run(ep, '  (' + edu['period'] + ')', italic=True, size=9, color=MGRAY)
+        for note in edu['notes']:
+            np_ = doc.add_paragraph(style='List Bullet')
+            np_.paragraph_format.space_before = Pt(0)
+            np_.paragraph_format.space_after = Pt(1)
+            add_run(np_, note, size=9, color=MGRAY)
+
+    add_separator(doc)
+
+    # ── SKILLS ────────────────────────────────────────────────────────────────
+    if language == 'greek':
+        add_heading_styled(doc, 'ΤΕΧΝΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ', level=2, color=BLUE, size=12)
+        tiers = [
+            ('Expert',     'C, C++, STM32, IAR, Git, CANopen, FBD'),
+            ('Proficient', 'JavaScript, Qt, OpenCV, RTOS, Linux, C#/.NET, Siemens SIMATIC Step 7, Soft Comfort'),
+            ('Familiar',   'React.js, Node.js, MongoDB, Python'),
+        ]
+        learning_label = 'Μαθαίνω τώρα:'
+        learning_text  = 'AI/ML — Machine Learning Specialization & Deep Learning Specialization (Coursera)'
+    else:
+        add_heading_styled(doc, 'TECHNICAL SKILLS', level=2, color=BLUE, size=12)
+        tiers = [
+            ('Expert',     'C, C++, STM32, IAR, Git, CANopen, FBD'),
+            ('Proficient', 'JavaScript, Qt, OpenCV, RTOS, Linux, C#/.NET, Siemens SIMATIC Step 7, Soft Comfort'),
+            ('Familiar',   'React.js, Node.js, MongoDB, Python'),
+        ]
+        learning_label = 'Currently learning:'
+        learning_text  = 'AI/ML — Machine Learning Specialization & Deep Learning Specialization (Coursera)'
+
+    tier_colors = [BLUE, RGBColor(0x63, 0x66, 0xF1), MGRAY]
+    for (tier_name, skills_text), color in zip(tiers, tier_colors):
+        tp = doc.add_paragraph()
+        tp.paragraph_format.space_before = Pt(2)
+        tp.paragraph_format.space_after = Pt(1)
+        add_run(tp, tier_name + ':  ', bold=True, size=9.5, color=color)
+        add_run(tp, skills_text, size=9.5, color=MGRAY)
+
+    lp = doc.add_paragraph()
+    lp.paragraph_format.space_before = Pt(4)
+    lp.paragraph_format.space_after = Pt(0)
+    add_run(lp, learning_label + '  ', bold=True, size=9.5, color=RGBColor(0x16, 0xA3, 0x4A))
+    add_run(lp, learning_text, size=9.5, color=MGRAY)
+
+    add_separator(doc)
+
+    # ── PROJECTS ──────────────────────────────────────────────────────────────
+    if language == 'greek':
+        add_heading_styled(doc, 'ΕΡΓΑ', level=2, color=BLUE, size=12)
+        projects = [
             {
                 'name': 'Mirotouch',
-                'company': 'Interactive Displays GmbH',
-                'desc': 'Innovative product turning any screen into a touch surface using Intel RealSense depth camera',
-                'tech': 'C++, Qt, OpenCV, Linux'
+                'sub': 'Interactive Displays GmbH',
+                'desc': 'Καινοτόμο προϊόν που μετατρέπει κάθε οθόνη σε επιφάνεια αφής με Intel RealSense και Raspberry Pi. Παραδόθηκε σε 10+ πελάτες στην Ευρώπη.',
+                'tech': 'C++, Qt, OpenCV, Linux, Intel RealSense',
+                'link': 'https://vimeo.com/453252636',
+            },
+            {
+                'name': 'FastDelivery',
+                'sub': 'Full-Stack Project  |  40+ REST API endpoints, 4 user roles, Real-time tracking via Socket.IO',
+                'desc': 'Πλήρης πλατφόρμα διαχείρισης παραδόσεων: web admin panel, store dashboards, mobile apps για οδηγούς & πελάτες με live order tracking.',
+                'tech': 'Node.js, Express, MongoDB, React.js, React Native, Socket.IO, Google Maps API, JWT',
+                'link': 'https://github.com/ZiSo89/FastDelivery',
             },
             {
                 'name': 'Automated Coffee Machine',
-                'company': 'Diploma Thesis',
-                'desc': 'Fully automated coffee maker controlled via Bluetooth Android app',
-                'tech': 'Arduino (C++), Java, Atmega328'
-            }
+                'sub': 'Πτυχιακή Εργασία',
+                'desc': 'Αυτόματη μηχανή καφέ που ελέγχεται μέσω Bluetooth από Android εφαρμογή.',
+                'tech': 'Arduino (C++), Java, Atmega328, Bluetooth',
+                'link': 'http://coffemake.wordpress.com/',
+            },
         ]
-        
-        for proj in projects_en:
-            proj_para = doc.add_paragraph()
-            proj_name = proj_para.add_run(proj['name'] + ' - ')
-            proj_name.font.name = 'Calibri'
-            proj_name.font.size = Pt(11)
-            proj_name.font.bold = True
-            proj_name.font.color.rgb = secondary_color
-            
-            proj_company = proj_para.add_run(proj['company'])
-            proj_company.font.name = 'Calibri'
-            proj_company.font.size = Pt(10)
-            proj_company.font.italic = True
-            proj_company.font.color.rgb = primary_color
-            
-            desc_para = doc.add_paragraph(proj['desc'])
-            for run in desc_para.runs:
-                run.font.name = 'Calibri'
-                run.font.size = Pt(10)
-                run.font.color.rgb = text_color
-            
-            tech_para = doc.add_paragraph('Tech: ' + proj['tech'])
-            tech_para.runs[0].font.name = 'Calibri'
-            tech_para.runs[0].font.size = Pt(9)
-            tech_para.runs[0].font.color.rgb = primary_color
-            tech_para.runs[0].font.italic = True
-        
-        # === LANGUAGES & INTERESTS ===
-        lang_heading = doc.add_heading('LANGUAGES & INTERESTS', level=2)
-        for run in lang_heading.runs:
-            run.font.color.rgb = primary_color
-            run.font.size = Pt(14)
-        
-        # Languages
-        lang_para = doc.add_paragraph()
-        lang_label = lang_para.add_run('Languages: ')
-        lang_label.font.name = 'Calibri'
-        lang_label.font.size = Pt(10)
-        lang_label.font.bold = True
-        lang_label.font.color.rgb = secondary_color
-        
-        lang_text = lang_para.add_run('Greek (Native), English (Business Fluent), German (Basic)')
-        lang_text.font.name = 'Calibri'
-        lang_text.font.size = Pt(10)
-        lang_text.font.color.rgb = text_color
-        
-        # Interests
-        int_para = doc.add_paragraph()
-        int_label = int_para.add_run('Interests: ')
-        int_label.font.name = 'Calibri'
-        int_label.font.size = Pt(10)
-        int_label.font.bold = True
-        int_label.font.color.rgb = secondary_color
-        
-        int_text = int_para.add_run('Outdoor activities (skiing, mountain biking), sci-fi series, cooking, exploring latest web development trends')
-        int_text.font.name = 'Calibri'
-        int_text.font.size = Pt(10)
-        int_text.font.color.rgb = text_color
-    
+    else:
+        add_heading_styled(doc, 'SELECTED PROJECTS', level=2, color=BLUE, size=12)
+        projects = [
+            {
+                'name': 'Mirotouch',
+                'sub': 'Interactive Displays GmbH',
+                'desc': 'Innovative product turning any screen into a touch surface using Intel RealSense depth camera and Raspberry Pi. Shipped to 10+ clients across Europe.',
+                'tech': 'C++, Qt, OpenCV, Linux, Intel RealSense',
+                'link': 'https://vimeo.com/453252636',
+            },
+            {
+                'name': 'FastDelivery',
+                'sub': 'Full-Stack Project  |  40+ REST API endpoints, 4 user roles, Real-time tracking via Socket.IO',
+                'desc': 'Full delivery management platform: web admin panel, store dashboards, driver & customer mobile apps with live order tracking.',
+                'tech': 'Node.js, Express, MongoDB, React.js, React Native, Socket.IO, Google Maps API, JWT',
+                'link': 'https://github.com/ZiSo89/FastDelivery',
+            },
+            {
+                'name': 'Automated Coffee Machine',
+                'sub': 'Diploma Thesis',
+                'desc': 'Fully automated coffee maker controlled via Bluetooth Android app.',
+                'tech': 'Arduino (C++), Java, Atmega328, Bluetooth',
+                'link': 'http://coffemake.wordpress.com/',
+            },
+        ]
+
+    for proj in projects:
+        pp = doc.add_paragraph()
+        pp.paragraph_format.space_before = Pt(4)
+        pp.paragraph_format.space_after = Pt(0)
+        add_run(pp, proj['name'] + '  ', bold=True, size=10.5, color=DGRAY)
+        add_run(pp, proj['sub'], italic=True, size=9.5, color=BLUE)
+
+        dp = doc.add_paragraph(proj['desc'])
+        dp.paragraph_format.space_before = Pt(1)
+        dp.paragraph_format.space_after = Pt(1)
+        dp.runs[0].font.size = Pt(9.5)
+        dp.runs[0].font.color.rgb = MGRAY
+        dp.runs[0].font.name = 'Calibri'
+
+        tp = doc.add_paragraph()
+        tp.paragraph_format.space_before = Pt(0)
+        tp.paragraph_format.space_after = Pt(1)
+        add_run(tp, 'Tech: ', bold=True, size=8.5, color=DGRAY)
+        add_run(tp, proj['tech'], size=8.5, color=BLUE)
+        add_run(tp, '  —  ' + proj['link'], size=8.5, color=MGRAY)
+
+    add_separator(doc)
+
+    # ── LANGUAGES & INTERESTS ─────────────────────────────────────────────────
+    if language == 'greek':
+        add_heading_styled(doc, 'ΓΛΩΣΣΕΣ & ΕΝΔΙΑΦΕΡΟΝΤΑ', level=2, color=BLUE, size=12)
+        lang_line = 'Ελληνικά (μητρική), Αγγλικά (επαγγελματική ευχέρεια), Γερμανικά (βασικά)'
+        int_line  = 'Υπαίθριες δραστηριότητες (σκι, ποδηλασία βουνού), sci-fi σειρές, μαγειρική, τεχνολογίες web development'
+        lang_label_text = 'Γλώσσες: '
+        int_label_text  = 'Ενδιαφέροντα: '
+    else:
+        add_heading_styled(doc, 'LANGUAGES & INTERESTS', level=2, color=BLUE, size=12)
+        lang_line = 'Greek (native), English (business fluent), German (basic)'
+        int_line  = 'Outdoor activities (skiing, mountain biking), sci-fi series, cooking, latest web development trends'
+        lang_label_text = 'Languages: '
+        int_label_text  = 'Interests: '
+
+    lp = doc.add_paragraph()
+    lp.paragraph_format.space_before = Pt(2)
+    lp.paragraph_format.space_after = Pt(1)
+    add_run(lp, lang_label_text, bold=True, size=10, color=DGRAY)
+    add_run(lp, lang_line, size=10, color=MGRAY)
+
+    ip = doc.add_paragraph()
+    ip.paragraph_format.space_before = Pt(0)
+    ip.paragraph_format.space_after = Pt(0)
+    add_run(ip, int_label_text, bold=True, size=10, color=DGRAY)
+    add_run(ip, int_line, size=10, color=MGRAY)
+
     return doc
 
-# Create both versions
-print("="*60)
-print("📄 CV Generator - Complete Professional History (2014-2025)")
-print("="*60)
 
-print("\n📄 Δημιουργία Ελληνικού CV...")
-greek_doc = create_modern_cv('greek')
-greek_doc.save('Zisoglou-Athanasios-CV-GR.docx')
-print("✅ Zisoglou-Athanasios-CV-GR.docx - Δημιουργήθηκε!")
+# ─── Entry point ──────────────────────────────────────────────────────────────
 
-print("\n📄 Creating English CV...")
-english_doc = create_modern_cv('english')
-english_doc.save('Zisoglou-Athanasios-CV-EN.docx')
-print("✅ Zisoglou-Athanasios-CV-EN.docx - Created!")
+if __name__ == '__main__':
+    print("=" * 60)
+    print("  CV Generator — Athanasios Zisoglou (2026)")
+    print("=" * 60)
 
-print("\n" + "="*60)
-print("🎉 Και τα δύο CVs δημιουργήθηκαν επιτυχώς!")
-print("="*60)
-print("\n📁 Files created:")
-print("   • Zisoglou-Athanasios-CV-GR.docx (Greek)")
-print("   • Zisoglou-Athanasios-CV-EN.docx (English)")
-print("\n📊 Πλήρης εμπειρία 11 ετών (2014-2025) με 8 θέσεις εργασίας!")
-print("="*60)
+    print("\nDημιουργία Ελληνικού CV...")
+    gr = create_cv('greek')
+    gr.save('Zisoglou-Athanasios-CV-GR.docx')
+    print("  ✓ Zisoglou-Athanasios-CV-GR.docx")
+
+    print("\nCreating English CV...")
+    en = create_cv('english')
+    en.save('Zisoglou-Athanasios-CV-EN.docx')
+    print("  ✓ Zisoglou-Athanasios-CV-EN.docx")
+
+    print("\n" + "=" * 60)
+    print("  Done! Both CVs saved in the files/ directory.")
+    print("=" * 60)
