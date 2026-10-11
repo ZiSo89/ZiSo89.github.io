@@ -1,9 +1,12 @@
+from datetime import datetime
 from docx import Document
 from docx.shared import Pt, RGBColor, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 import os
+
+CURRENT_YEAR = datetime.now().year
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -98,12 +101,12 @@ def create_cv(language='greek'):
     # ── HEADER ────────────────────────────────────────────────────────────────
     if language == 'greek':
         name_text = 'ΑΘΑΝΑΣΙΟΣ ΖΗΣΟΓΛΟΥ'
-        title_text = 'Embedded Software Engineer'
+        title_text = 'Embedded Software Engineer | Firmware Development & Automation'
         contact_line = 'zisoglou@hotmail.gr  |  linkedin.com/in/athanasios-zisoglou-a3841561  |  github.com/ZiSo89'
         available_text = '● Ανοιχτός σε ευκαιρίες'
     else:
         name_text = 'ATHANASIOS ZISOGLOU'
-        title_text = 'Embedded Software Engineer'
+        title_text = 'Embedded Software Engineer | Firmware Development & Automation'
         contact_line = 'zisoglou@hotmail.gr  |  linkedin.com/in/athanasios-zisoglou-a3841561  |  github.com/ZiSo89'
         available_text = '● Open to opportunities'
 
@@ -139,20 +142,20 @@ def create_cv(language='greek'):
     if language == 'greek':
         add_heading_styled(doc, 'ΠΕΡΙΛΗΨΗ', level=2, color=BLUE, size=12)
         summary_text = (
-            'Embedded Software Engineer με πάνω από 11 χρόνια εμπειρίας σε BMS firmware, '
-            'C/C++ συστήματα, βιομηχανικό αυτοματισμό και διαδραστικές εγκαταστάσεις. '
-            'Τελευταία ανέλαβε commissioning μεγάλης κλίμακας συστήματος αυτοματισμού '
-            'αποθήκης στην Knapp AG (Ιούν. 2025 – Φεβ. 2026). Εστιάζει στην ποιότητα, '
-            'την αποδοτικότητα διαδικασιών και τη συνεχή βελτίωση στην παράδοση λογισμικού.'
+            'Embedded Software Engineer με πολυετή εμπειρία σε Firmware Development, '
+            'βιομηχανικό αυτοματισμό και διαδραστικά εκθέματα. Έχω αναπτύξει συστήματα BMS, '
+            'εφαρμογές πραγματικού χρόνου και λύσεις hardware/software, ενώ έχω υλοποιήσει '
+            'AI-assisted full-stack προϊόντα. Διαθέτω ισχυρό υπόβαθρο σε commissioning, '
+            'εγκαταστάσεις και τεχνική υποστήριξη.'
         )
     else:
         add_heading_styled(doc, 'PROFESSIONAL SUMMARY', level=2, color=BLUE, size=12)
         summary_text = (
-            'Embedded Software Engineer with 11+ years of experience across BMS firmware, '
-            'C/C++ systems, industrial automation, and interactive installations. Most recently '
-            'commissioned a large-scale warehouse automation system at Knapp AG '
-            '(Jun 2025 – Feb 2026). Focused on quality, process efficiency, and continuous '
-            'improvement in software delivery and performance.'
+            'Embedded Software Engineer with extensive experience in Firmware Development, '
+            'industrial automation, and interactive exhibits. I have developed BMS systems, '
+            'real-time applications, and hardware/software solutions, while also delivering '
+            'AI-assisted full-stack products. I bring a strong foundation in commissioning, '
+            'installations, and technical support.'
         )
 
     s = doc.add_paragraph(summary_text)
@@ -169,6 +172,17 @@ def create_cv(language='greek'):
     if language == 'greek':
         add_heading_styled(doc, 'ΕΜΠΕΙΡΙΑ', level=2, color=BLUE, size=12)
         experiences = [
+            {
+                'title': 'FTTH Field Engineer',
+                'company': 'Alpha Pliroforiki S.A.',
+                'period': 'Ιούνιος 2026 – Παρόν',
+                'achievement': 'Εκτέλεση εγκαταστάσεων, δρομολόγησης και τερματισμού FTTH δικτύων σε οικιστικές εγκαταστάσεις για τη Nova telecommunications.',
+                'duties': [
+                    'Εγκατάσταση, δρομολόγηση και τερματισμός οπτικών καλωδίων FTTH σε σπίτια και κτίρια',
+                    'Δοκιμές σήματος, ενεργοποίηση δικτύου και τεχνική αντιμετώπιση προβλημάτων σε οικιστικές τοποθεσίες',
+                ],
+                'skills': 'FTTH / Fiber Optics, Telecom Infrastructure, Signal Testing, On-Site Troubleshooting',
+            },
             {
                 'title': 'Software Commissioning Engineer',
                 'company': 'Knapp AG',
@@ -263,6 +277,17 @@ def create_cv(language='greek'):
     else:
         add_heading_styled(doc, 'PROFESSIONAL EXPERIENCE', level=2, color=BLUE, size=12)
         experiences = [
+            {
+                'title': 'FTTH Field Engineer',
+                'company': 'Alpha Pliroforiki S.A.',
+                'period': 'June 2026 – Present',
+                'achievement': 'Executed on-site installation, routing, and termination of FTTH fiber optic networks for Nova telecommunications.',
+                'duties': [
+                    'Installed, routed, and terminated FTTH fiber cables in residential and multi-dwelling locations',
+                    'Performed signal testing, network activation, and technical troubleshooting in residential locations',
+                ],
+                'skills': 'FTTH / Fiber Optics, Telecom Infrastructure, Signal Testing, On-Site Troubleshooting',
+            },
             {
                 'title': 'Software Commissioning Engineer',
                 'company': 'Knapp AG',
@@ -434,20 +459,20 @@ def create_cv(language='greek'):
         add_heading_styled(doc, 'ΤΕΧΝΙΚΕΣ ΔΕΞΙΟΤΗΤΕΣ', level=2, color=BLUE, size=12)
         tiers = [
             ('Expert',     'C, C++, STM32, IAR, Git, CANopen, FBD'),
-            ('Proficient', 'JavaScript, Qt, OpenCV, RTOS, Linux, C#/.NET, Siemens SIMATIC Step 7, Soft Comfort'),
-            ('Familiar',   'React.js, Node.js, MongoDB, Python'),
+            ('Proficient', 'JavaScript, Qt, OpenCV, RTOS, Linux, SQL, C#/.NET, Siemens SIMATIC Step 7, Soft Comfort'),
+            ('Familiar',   'React.js, Node.js, MongoDB, Python, Java'),
         ]
         learning_label = 'Μαθαίνω τώρα:'
-        learning_text  = 'AI/ML — Machine Learning Specialization & Deep Learning Specialization (Coursera)'
+        learning_text  = 'AI-assisted development — GitHub Copilot, Claude Code, Cursor, και AI/ML με Coursera'
     else:
         add_heading_styled(doc, 'TECHNICAL SKILLS', level=2, color=BLUE, size=12)
         tiers = [
             ('Expert',     'C, C++, STM32, IAR, Git, CANopen, FBD'),
-            ('Proficient', 'JavaScript, Qt, OpenCV, RTOS, Linux, C#/.NET, Siemens SIMATIC Step 7, Soft Comfort'),
-            ('Familiar',   'React.js, Node.js, MongoDB, Python'),
+            ('Proficient', 'JavaScript, Qt, OpenCV, RTOS, Linux, SQL, C#/.NET, Siemens SIMATIC Step 7, Soft Comfort'),
+            ('Familiar',   'React.js, Node.js, MongoDB, Python, Java'),
         ]
         learning_label = 'Currently learning:'
-        learning_text  = 'AI/ML — Machine Learning Specialization & Deep Learning Specialization (Coursera)'
+        learning_text  = 'AI-assisted development — GitHub Copilot, Claude Code, Cursor, plus AI/ML study via Coursera'
 
     tier_colors = [BLUE, RGBColor(0x63, 0x66, 0xF1), MGRAY]
     for (tier_name, skills_text), color in zip(tiers, tier_colors):
@@ -484,6 +509,13 @@ def create_cv(language='greek'):
                 'link': 'https://github.com/ZiSo89/FastDelivery',
             },
             {
+                'name': 'Organotis Vafea Pro',
+                'sub': 'Business Organizer | PHP/MySQL | Electron/PWA target',
+                'desc': 'Προϊόν για επαγγελματίες βαφείς με διαχείριση πελατών, εργατών, εργασιών, αποθέματος, προσφορών και reporting.',
+                'tech': 'PHP, MySQL, JavaScript, Electron, PWA, Google Maps',
+                'link': 'https://github.com/ZiSo89/organotis-vafea-pro',
+            },
+            {
                 'name': 'Automated Coffee Machine',
                 'sub': 'Πτυχιακή Εργασία',
                 'desc': 'Αυτόματη μηχανή καφέ που ελέγχεται μέσω Bluetooth από Android εφαρμογή.',
@@ -507,6 +539,13 @@ def create_cv(language='greek'):
                 'desc': 'Full delivery management platform: web admin panel, store dashboards, driver & customer mobile apps with live order tracking.',
                 'tech': 'Node.js, Express, MongoDB, React.js, React Native, Socket.IO, Google Maps API, JWT',
                 'link': 'https://github.com/ZiSo89/FastDelivery',
+            },
+            {
+                'name': 'Organotis Vafea Pro',
+                'sub': 'Business Organizer | PHP/MySQL | Electron/PWA target',
+                'desc': 'A tool for professional painters with customer, worker, job, inventory, pricing, and reporting workflows.',
+                'tech': 'PHP, MySQL, JavaScript, Electron, PWA, Google Maps',
+                'link': 'https://github.com/ZiSo89/organotis-vafea-pro',
             },
             {
                 'name': 'Automated Coffee Machine',
@@ -573,7 +612,7 @@ def create_cv(language='greek'):
 
 if __name__ == '__main__':
     print("=" * 60)
-    print("  CV Generator — Athanasios Zisoglou (2026)")
+    print(f"  CV Generator — Athanasios Zisoglou ({CURRENT_YEAR})")
     print("=" * 60)
 
     print("\nDημιουργία Ελληνικού CV...")
